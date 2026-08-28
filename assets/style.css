@@ -1,0 +1,369 @@
+/* =======================================================
+   Kumkale Ortaokulu — Yaptırım Süreçleri Kiti — ortak stil
+   ======================================================= */
+:root{
+  --ink:#1a1a1a;
+  --line:#000;
+  --muted:#5a5a5a;
+  --paper:#ffffff;
+  --accent-bg:#f4f4f4;
+  --navy:#1F3864;
+  --navy-2:#2b4d82;
+  --amber-bg:#FFF6D9; --amber-line:#BF8F00; --amber-ink:#7F6000;
+  --page-bg:#e7e9ec;
+}
+
+*{ box-sizing: border-box; }
+
+html,body{ margin:0; padding:0; }
+
+body{
+  font-family: Georgia, "Times New Roman", "Noto Serif", serif;
+  color: var(--ink);
+  background: var(--page-bg);
+  padding: 22px 0 60px;
+}
+
+/* ---------------- Toolbar ---------------- */
+.toolbar{
+  max-width: 210mm;
+  margin: 0 auto 14px;
+  padding: 10px 14px;
+  display:flex;
+  gap:10px;
+  align-items:center;
+  justify-content:space-between;
+  font-family: Arial, Helvetica, sans-serif;
+  flex-wrap: wrap;
+}
+.toolbar .hint{ font-size:12.5px; color:#444; }
+.toolbar .btns{ display:flex; gap:8px; flex-wrap:wrap; }
+.toolbar a.back{
+  font-family: Arial, sans-serif;
+  font-size: 13px;
+  color: var(--navy);
+  text-decoration:none;
+  font-weight:600;
+}
+.toolbar a.back:hover{ text-decoration:underline; }
+.toolbar button{
+  font-family: Arial, sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 9px 16px;
+  border-radius: 6px;
+  border: 1px solid var(--navy);
+  background: var(--navy);
+  color: #fff;
+  cursor: pointer;
+}
+.toolbar button:hover{ background: var(--navy-2); }
+.toolbar button.secondary{ background:#fff; color: var(--navy); }
+.toolbar button.secondary:hover{ background:#eef2f7; }
+
+/* ---------------- Page / paper ---------------- */
+.page{
+  width: 210mm;
+  min-height: 297mm;
+  margin: 0 auto;
+  background: var(--paper);
+  padding: 16mm 18mm 14mm;
+  box-shadow: 0 0 14px rgba(0,0,0,0.22);
+  position: relative;
+}
+
+.school-line{
+  text-align:center;
+  font-weight:bold;
+  font-size: 13.5pt;
+  border:none;
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  width:100%;
+  padding: 2px 4px 6px;
+  outline:none;
+  font-family: inherit;
+  text-transform: uppercase;
+  cursor: text;
+}
+.school-line:focus{ background:#fbfbea; }
+.school-hint{
+  text-align:center;
+  font-size: 8.5pt;
+  color:#9a9a9a;
+  font-family: Arial, sans-serif;
+  margin-top: 2px;
+}
+.school-sub{
+  text-align:center;
+  font-size: 9.5pt;
+  color: var(--muted);
+  margin-top: 4px;
+  font-family: Arial, sans-serif;
+}
+
+.ek-tag{ text-align:center; font-weight:bold; font-size:11pt; margin: 14px 0 2px; color: var(--navy); font-family: Arial, sans-serif; letter-spacing: .5px;}
+h1{ text-align:center; font-size:15.5pt; letter-spacing:.5px; margin: 2px 0 4px; color: var(--navy); }
+.dayanak{ text-align:center; font-style:italic; font-size:9.5pt; color:var(--muted); margin-bottom:16px; font-family: Arial, sans-serif;}
+
+/* ---------------- Meta / field tables ---------------- */
+table.meta{ width:100%; border-collapse:collapse; margin-bottom:14px; font-size:11pt; }
+table.meta td{ border:1px solid var(--line); padding:6px 8px; vertical-align:middle; }
+table.meta td.label{ font-weight:bold; width:36%; background:var(--accent-bg); font-family: Arial, sans-serif; font-size: 10pt;}
+table.meta input[type=text], table.meta input[type=date], table.meta input[type=time], table.meta select{
+  width:100%; border:none; background:transparent; font-family:inherit; font-size:11pt; outline:none; padding:2px;
+}
+
+.section-title{ font-weight:bold; font-size:11pt; margin: 16px 0 6px; font-family: Arial, sans-serif; color:#333; }
+.section-sub{ font-size:9.5pt; color:var(--muted); margin: -3px 0 8px; font-family: Arial, sans-serif; font-style: italic;}
+
+/* ---------------- Autogrow textareas ---------------- */
+textarea{
+  width:100%;
+  border:1px solid var(--line);
+  font-family: inherit;
+  font-size: 11pt;
+  padding: 9px;
+  outline:none;
+  background: transparent;
+  resize: vertical;
+  overflow: hidden;
+  line-height: 1.5;
+  min-height: 42px;
+}
+textarea::placeholder{ color:#a8a8a8; font-style: italic; }
+@supports (field-sizing: content) {
+  textarea{ field-sizing: content; max-height: none; }
+}
+
+.para{ font-size:10.6pt; line-height:1.55; text-align:justify; margin:16px 0; font-family: Arial, sans-serif; color:#222;}
+
+/* ---------------- Checkbox groups ---------------- */
+.check-group{ font-size: 10.6pt; margin: 6px 0 14px; font-family: Arial, sans-serif; }
+.check-row, .radio-row{ display:flex; align-items:flex-start; gap:8px; margin: 6px 0; }
+.check-row input[type=checkbox], .radio-row input[type=radio]{ width:16px; height:16px; margin-top:2px; flex-shrink:0; accent-color: var(--navy); }
+.check-row label, .radio-row label{ line-height:1.4; cursor:pointer; }
+.check-row.inline-extra input[type=text]{ border:none; border-bottom:1px solid #999; font-family:inherit; font-size:10.4pt; outline:none; flex:1 1 160px; min-width:120px; padding:1px 2px;}
+select.field{
+  font-family: inherit; font-size: 11pt; padding: 5px 6px; border: 1px solid var(--line);
+  background: #fff; outline:none; width: 100%;
+}
+
+/* ---------------- Dynamic numbered list ---------------- */
+.dyn-list{ margin: 4px 0 16px; }
+.dyn-row{
+  display:flex;
+  align-items:flex-start;
+  gap:8px;
+  margin-bottom: 6px;
+}
+.dyn-num{
+  flex: 0 0 22px;
+  text-align:right;
+  font-weight:bold;
+  font-size: 10.6pt;
+  color: var(--navy);
+  padding-top: 9px;
+  opacity: 0;
+  transition: opacity .15s ease;
+  font-family: Arial, sans-serif;
+}
+.dyn-num.show{ opacity: 1; }
+.dyn-row textarea{ flex: 1 1 auto; }
+.dyn-remove{
+  flex: 0 0 auto;
+  border: none;
+  background: transparent;
+  color: #b3492f;
+  font-size: 17px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 6px 4px;
+  opacity: 0;
+  transition: opacity .15s ease;
+  font-family: Arial, sans-serif;
+}
+.dyn-row:hover .dyn-remove.show{ opacity: .8; }
+.dyn-remove.show{ opacity: .35; }
+.dyn-remove:hover{ opacity: 1 !important; }
+
+/* ---------------- Note / info boxes (dismissible) ---------------- */
+.note-box{
+  position: relative;
+  background: var(--amber-bg);
+  border: 1px solid var(--amber-line);
+  border-left: 5px solid var(--amber-line);
+  border-radius: 6px;
+  padding: 12px 34px 12px 14px;
+  margin: 16px 0;
+  font-family: Arial, sans-serif;
+}
+.note-box .note-title{ font-weight:bold; font-size: 10.3pt; color: var(--amber-ink); margin-bottom: 4px; }
+.note-box .note-text{ font-size: 9.8pt; color: #4a3b00; line-height: 1.5; }
+.note-close{
+  position:absolute;
+  top: 6px; right: 8px;
+  width: 22px; height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.06);
+  color: #6b5900;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  display:flex; align-items:center; justify-content:center;
+}
+.note-close:hover{ background: rgba(0,0,0,0.14); }
+
+/* ---------------- Signature blocks ---------------- */
+table.imza{ width:100%; border-collapse:collapse; margin-top:26px; font-size:10pt; }
+table.imza td{ width:33.33%; vertical-align:top; padding:0 6px; text-align:center; }
+.imza-box{ border:1px solid var(--line); height:66px; margin-bottom:4px; }
+.imza-name{ width:100%; border:none; border-bottom:1px dotted #888; text-align:center; font-family:inherit; font-size:9.5pt; outline:none; margin-bottom:4px; padding:2px; }
+.imza-label{ font-weight:bold; font-family: Arial, sans-serif; font-size: 9pt; }
+
+/* ---------------- Footer (normal flow, never overlaps) ---------------- */
+.foot{
+  margin-top: 30px;
+  display:flex;
+  justify-content:space-between;
+  font-size: 8.5pt;
+  color: var(--muted);
+  font-family: Arial, sans-serif;
+  border-top: 1px solid #ccc;
+  padding-top: 6px;
+  page-break-inside: avoid;
+}
+
+/* ---------------- Print ---------------- */
+@media print{
+  body{ background:none; margin:0; padding:0; }
+  .toolbar{ display:none; }
+  .page{ box-shadow:none; margin:0; width:auto; min-height:0; padding: 0; }
+  @page{ size: A4; margin: 13mm 15mm; }
+  textarea, input{ border-color:#000 !important; }
+  textarea{ overflow: visible !important; resize: none !important; }
+  .dyn-remove{ display:none; }
+  .note-close{ display:none; }
+  a.hotspot{ outline:none !important; }
+}
+
+@media (max-width: 780px){
+  .page{ width:100%; padding:16px; }
+  body{ padding:12px 8px 40px; }
+  table.imza{ font-size: 8.6pt; }
+}
+
+/* =======================================================
+   İdari Belge Şablonları — ek bileşenler
+   ======================================================= */
+
+/* ---- Nüsha (iki kopya) yapısı ---- */
+.nusha{ position: relative; }
+.nusha-label{
+  font-family: Arial, sans-serif; font-size: 9.5pt; font-weight:700; color:#fff;
+  background: var(--navy); display:inline-block; padding: 3px 10px; border-radius: 4px;
+  margin-bottom: 10px;
+}
+.nusha-divider{
+  border: none; border-top: 1px dashed #999; margin: 22px 0; position:relative;
+}
+.nusha-divider::after{
+  content: "✂ kesik çizgi"; position:absolute; top:-9px; left:50%; transform:translateX(-50%);
+  background: var(--paper); padding: 0 10px; font-family: Arial, sans-serif; font-size: 8.5pt; color:#999;
+}
+@media print{ .nusha-divider::after{ content: "✂"; } }
+
+/* ---- Mirror (canlı yansıyan salt-okunur alan) ---- */
+.mirror-span{
+  display:inline; font-family: inherit; color: inherit;
+}
+.mirror-span.empty{ color:#aaa; }
+td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em; }
+
+/* ---- Yazdırmada çerçevesiz (ekranda normal görünür) ---- */
+.print-borderless{ }
+@media print{
+  .print-borderless{ border: none !important; background: transparent !important; -webkit-appearance:none; }
+}
+
+/* ---- Satır içi, sabit genişliği olmayan düzenlenebilir alan ---- */
+.inline-fit{
+  display:inline-block;
+  min-width: 2.4em;
+  border-bottom: 1px solid #666;
+  padding: 0 3px;
+  outline:none;
+  font-family: inherit;
+  cursor: text;
+}
+.inline-fit:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; }
+.inline-fit:focus{ background:#fbfbea; }
+
+/* ---- Yıl kutuları (otomatik +1) ---- */
+.year-box{
+  width: 4.4em; text-align:center; font-family: inherit; font-size: 11pt;
+  border:none; border-bottom: 1px solid var(--line); outline:none; padding: 2px;
+}
+
+/* ---- Paragraf listesi (numarasız, manuel ekle/sil) ---- */
+.paragraph-list{ margin: 6px 0 14px; }
+.paragraph-list .p-row{ display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; }
+.paragraph-list textarea{
+  text-indent: 1.25cm; border:1px solid var(--line); flex:1 1 auto;
+}
+.paragraph-list .p-remove{
+  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer;
+  padding:8px 4px; opacity:.55;
+}
+.paragraph-list .p-remove:hover{ opacity:1; }
+.paragraph-list-add{
+  font-family: Arial, sans-serif; font-size:12.5px; font-weight:700; color: var(--navy);
+  background:#eef2f8; border:1px solid #c7d3e3; border-radius:6px; padding:6px 12px; cursor:pointer;
+}
+.paragraph-list-add:hover{ background:#dde6f3; }
+
+/* ---- Kapanış cümlesi (düzenlenebilir, varsayılana dönebilir) ---- */
+.closing-line{
+  text-indent: 1.25cm; font-size: 10.6pt; line-height:1.55; margin: 10px 0 18px;
+  outline:none; cursor:text; border-radius:3px;
+}
+.closing-line:focus{ background:#fbfbea; }
+
+/* ---- Ekler listesi (Ek-1, Ek-2..., çerçevesiz) ---- */
+.ekler-block{ width:50%; }
+.ekler-title{ font-weight:bold; font-size:11pt; margin: 14px 0 6px; font-family: Arial, sans-serif; color:#333; }
+.ek-row{ display:flex; align-items:baseline; gap:6px; margin-bottom:6px; }
+.ek-row .ek-no{ font-family: Arial, sans-serif; font-size:10.6pt; font-weight:700; color:var(--navy); flex:0 0 auto; }
+.ek-row input[type=text]{
+  flex:1 1 auto; border:none; border-bottom:1px solid #888; outline:none; font-family:inherit; font-size:10.8pt; padding:2px;
+}
+.ek-row .ek-remove{
+  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:15px; cursor:pointer; opacity:.5; padding: 2px 4px;
+}
+.ek-row .ek-remove:hover{ opacity:1; }
+.ekler-add{
+  font-family: Arial, sans-serif; font-size:12px; font-weight:700; color: var(--navy);
+  background:#eef2f8; border:1px solid #c7d3e3; border-radius:6px; padding:5px 10px; cursor:pointer;
+}
+.ekler-add:hover{ background:#dde6f3; }
+
+/* ---- Barkod alanı ---- */
+.barcode-box{
+  border: 2px dashed #999; border-radius:6px; min-height: 70px;
+  display:flex; align-items:center; justify-content:center; text-align:center;
+  font-family: Arial, sans-serif; font-size: 9.5pt; color:#888; padding: 8px;
+}
+
+/* ---- İki yarım genişlik yan yana bölüm ---- */
+.half-width{ width:50%; }
+
+/* ---- Kimlik/muhatap tablosu (persistent müdür alanı) ---- */
+.persist-field{ outline:none; cursor:text; border-radius:3px; display:inline-block; min-width: 2em; }
+.persist-field:focus{ background:#fbfbea; }
+.persist-field:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; }
+
+@media print{
+  .paragraph-list-add, .p-remove, .ekler-add, .ek-remove{ display:none !important; }
+  .nusha-label{ background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+}

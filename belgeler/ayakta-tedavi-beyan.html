@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayakta Tedavi Beyan Belgesi</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .page{ padding: 8mm 14mm 6mm; }
+  h1.doc-title{ text-align:center; font-size:12.5pt; margin:2px 0 2px; color:var(--navy); }
+  .doc-subtitle{ text-align:center; font-size:9.5pt; color:#555; font-family:Arial,sans-serif; margin-bottom:8px; }
+  .nusha-label{ margin-bottom: 4px; padding: 2px 8px; font-size:8.8pt; }
+  table.meta.compact{ margin-bottom: 6px; }
+  table.meta.compact td{ padding:2px 6px; font-size:9.3pt; }
+  table.meta.compact td.label{ font-size:8.6pt; }
+  table.meta.compact input, table.meta.compact select{ font-size:9.3pt; padding:1px; }
+  .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:8px 0; font-family:Arial,sans-serif; color:#222; }
+  .beyan-tarih{ font-family:inherit; }
+  table.imza.compact{ margin-top:6px; margin-bottom:0; }
+  table.imza.compact .field-line{ font-size:8.5pt; padding:1px; min-height:1.1em; }
+  table.imza.compact .imza-label{ font-size:7.6pt; }
+  .field-line{ display:block; text-align:center; border-bottom:1px dotted #888; padding:2px; min-height:1.2em; }
+  .field-line.bold{ font-weight:bold; border-bottom:none; }
+  .nusha-divider{ margin: 8px 0; }
+  .barcode-box{ min-height:54px; font-size:8.3pt; }
+  .two-col{ width:100%; border-collapse:collapse; margin-top:6px; }
+  .two-col td{ vertical-align:top; width:50%; padding:0 6px; }
+  .two-col td:first-child{ padding-left:0; }
+  .two-col td:last-child{ padding-right:0; }
+  @media print{ .page{ padding: 6mm 12mm 5mm; } }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından &quot;Yazdır / PDF Al&quot; ile A4 boyutunda PDF olarak kaydedin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="nusha">
+      <span class="nusha-label">1. NÜSHA</span>
+      <h1 class="doc-title">MİLLÎ EĞİTİM BAKANLIĞI PERSONELİ</h1>
+      <div class="doc-subtitle">Ayakta Tedavi Beyan Belgesi</div>
+    <table class="meta compact">
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Hastanın</td></tr>
+      <tr><td class="label" style="width:20%">Adı Soyadı</td><td><input type="text" data-mirror="a_ad" ></td></tr>
+      <tr><td class="label" style="width:20%">Aile Fertlerinin Yakınlığı</td><td><select data-mirror="a_yakinlik"><option value="">Seçiniz...</option><option>Kendisi</option><option>Eşi</option><option>Çocuğu</option><option>Annesi</option><option>Babası</option><option>Diğer</option></select></td></tr>
+      <tr><td class="label" style="width:20%">TC Kimlik No</td><td><input type="text" inputmode="numeric" maxlength="11" data-mirror="a_tc" ></td></tr>
+      <tr><td class="label" style="width:20%">Tedavi Olduğu Sağlık Kuruluşunun Adı</td><td><input type="text" data-mirror="a_kurulus" ></td></tr>
+      <tr><td class="label" style="width:20%">Sağlık Kurumuna Başvuru Tarihi</td><td><input type="date" data-mirror="a_basvuru" ></td></tr>
+      <tr><td class="label" style="width:20%">Ayakta Yapılan Tedavinin Bitiş Tarihi</td><td><input type="date" data-mirror="a_bitis" ></td></tr>
+    </table>
+    <div class="compact-para">
+      Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. <input type="date" class="print-borderless beyan-tarih" data-mirror="a_beyantarih" style="width:120px;">
+    </div>
+    <table class="two-col">
+      <tr>
+        <td>
+          <div style="font-size:8.3pt; font-family:Arial,sans-serif; color:#555; text-align:center; margin-bottom:4px;">(Sağlık kuruluşundan alınan barkodu bu alana yapıştırınız)</div>
+          <div class="barcode-box">Barkod</div>
+        </td>
+        <td>
+          <div class="field-line"><input style="border:none;width:100%;text-align:center;font-size:8.8pt;" type="text" data-mirror="a_bAd" ></div>
+          <div class="field-line bold"><input style="border:none;width:100%;text-align:center;font-size:8.3pt;font-weight:bold;" type="text" data-mirror="a_bUnvan" ></div>
+          <div class="field-line" style="border-bottom:none; margin-top:8px;">İmza: ......................................</div>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <hr class="nusha-divider">
+    <div class="nusha">
+      <span class="nusha-label">2. NÜSHA</span>
+      <h1 class="doc-title">MİLLÎ EĞİTİM BAKANLIĞI PERSONELİ</h1>
+      <div class="doc-subtitle">Ayakta Tedavi Beyan Belgesi</div>
+    <table class="meta compact">
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Hastanın</td></tr>
+      <tr><td class="label" style="width:20%">Adı Soyadı</td><td><span class="mirror-span" data-mirror-target="a_ad">……………</span></td></tr>
+      <tr><td class="label" style="width:20%">Aile Fertlerinin Yakınlığı</td><td><span class="mirror-span" data-mirror-target="a_yakinlik">……………</span></td></tr>
+      <tr><td class="label" style="width:20%">TC Kimlik No</td><td><span class="mirror-span" data-mirror-target="a_tc">……………</span></td></tr>
+      <tr><td class="label" style="width:20%">Tedavi Olduğu Sağlık Kuruluşunun Adı</td><td><span class="mirror-span" data-mirror-target="a_kurulus">……………</span></td></tr>
+      <tr><td class="label" style="width:20%">Sağlık Kurumuna Başvuru Tarihi</td><td><span class="mirror-span" data-mirror-target="a_basvuru">……………</span></td></tr>
+      <tr><td class="label" style="width:20%">Ayakta Yapılan Tedavinin Bitiş Tarihi</td><td><span class="mirror-span" data-mirror-target="a_bitis">……………</span></td></tr>
+    </table>
+    <div class="compact-para">
+      Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. <span class="mirror-span" data-mirror-target="a_beyantarih">……………</span>
+    </div>
+    <table class="two-col">
+      <tr>
+        <td>
+          <div style="font-size:8.3pt; font-family:Arial,sans-serif; color:#555; text-align:center; margin-bottom:4px;">(Sağlık kuruluşundan alınan barkodu bu alana yapıştırınız)</div>
+          <div class="barcode-box">Barkod</div>
+        </td>
+        <td>
+          <div class="field-line"><span class="mirror-span" data-mirror-target="a_bAd">……………</span></div>
+          <div class="field-line bold"><span class="mirror-span" data-mirror-target="a_bUnvan">……………</span></div>
+          <div class="field-line" style="border-bottom:none; margin-top:8px;">İmza: ......................................</div>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>

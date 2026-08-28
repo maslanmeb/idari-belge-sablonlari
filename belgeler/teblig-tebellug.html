@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tebliğ – Tebellüğ Belgesi</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  /* Bu belge iki nüshayı tek A4 sayfaya sığdırmak için sıkıştırılmış ölçüler kullanır */
+  .page{ padding: 8mm 14mm 6mm; }
+  h1.doc-title{ text-align:center; font-size:13pt; margin:4px 0 6px; color:var(--navy); }
+  .nusha-label{ margin-bottom: 4px; padding: 2px 8px; font-size:8.8pt; }
+  table.meta.compact{ margin-bottom: 6px; }
+  table.meta.compact td{ padding:2px 6px; font-size:9.3pt; }
+  table.meta.compact td.label{ font-size:8.6pt; }
+  table.meta.compact input{ font-size:9.3pt; padding:1px; }
+  .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:6px 0; font-family:Arial,sans-serif; color:#222; }
+  table.imza.compact{ margin-top:6px; margin-bottom:0; }
+  table.imza.compact .field-line{ font-size:8.5pt; padding:1px; min-height:1.1em; }
+  table.imza.compact .imza-label{ font-size:7.6pt; }
+  .field-line{ display:block; text-align:center; border-bottom:1px dotted #888; padding:2px; min-height:1.2em; }
+  .field-line.bold{ font-weight:bold; border-bottom:none; }
+  .nusha-divider{ margin: 8px 0; }
+  .school-line{ padding: 1px 4px 3px !important; }
+  @media print{ .page{ padding: 6mm 12mm 5mm; } }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından &quot;Yazdır / PDF Al&quot; ile A4 boyutunda PDF olarak kaydedin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="nusha">
+      <span class="nusha-label">1. NÜSHA — Kurumda Kalacak</span>
+      <div class="school-line" data-persist="okulAdi" contenteditable="true" spellcheck="false" style="font-size:11.5pt; margin-bottom:2px;"></div>
+      <h1 class="doc-title">TEBLİĞ &ndash; TEBELLÜĞ BELGESİ</h1>
+    <table class="meta compact">
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Tebellüğ Edenin</td></tr>
+      <tr><td class="label" style="width:15%">Adı Soyadı</td><td style="width:35.0%"><input type="text" data-mirror="t_ad" ></td><td class="label" style="width:15%">Görevi</td><td style="width:35.0%"><input type="text" data-mirror="t_gorev" ></td></tr>
+      <tr><td class="label" style="width:15%">Görev Yeri</td><td style="width:35.0%"><input type="text" data-mirror="t_gorevyeri" ></td><td class="label" style="width:15%">TC Kimlik No</td><td style="width:35.0%"><input type="text" inputmode="numeric" maxlength="11" data-mirror="t_tc" ></td></tr>
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Belgenin</td></tr>
+      <tr><td class="label" style="width:20%">Özü</td><td><input type="text" data-mirror="t_ozu" ></td></tr>
+      <tr><td class="label" style="width:15%">Tarihi</td><td style="width:35.0%"><input type="date" data-mirror="t_belgetarih" ></td><td class="label" style="width:15%">Sayısı</td><td style="width:35.0%"><input type="text" data-mirror="t_sayi" ></td></tr>
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Tebliğin</td></tr>
+      <tr><td class="label" style="width:20%">Edildiği Yer</td><td><input type="text" data-mirror="t_yer" ></td></tr>
+      <tr><td class="label" style="width:15%">Tarihi</td><td style="width:35.0%"><input type="date" data-mirror="t_tarih" ></td><td class="label" style="width:15%">Saati</td><td style="width:35.0%"><input type="time" data-mirror="t_saat" ></td></tr>
+    </table>
+    <div class="compact-para">
+      Yukarıda adı soyadı, görevi ve görev yeri yazılı bulunan kişiye; <span class="mirror-span" data-mirror-target="t_belgetarih">……………</span> tarihli,
+      <span class="mirror-span" data-mirror-target="t_sayi">……………</span> sayılı ve &ldquo;<span class="mirror-span" data-mirror-target="t_ozu">……………</span>&rdquo; konulu belge,
+      <span class="mirror-span" data-mirror-target="t_tarih">……………</span> günü, saat <span class="mirror-span" data-mirror-target="t_saat">……………</span>&rsquo;da tebliğ edilmiştir.
+    </div>
+    <table class="imza compact">
+      <tr>
+        <td>
+          <div class="imza-box" style="height:36px;"></div>
+          <div class="field-line persist-field" data-persist="muduAdi" contenteditable="true" data-placeholder="Adı SOYADI"></div>
+          <div class="field-line bold persist-field" data-persist="muduUnvani" contenteditable="true"></div>
+          <div class="imza-label">TEBLİĞ EDEN</div>
+        </td>
+        <td>
+          <div class="imza-box" style="height:36px;"></div>
+          <div class="field-line"><span class="mirror-span" data-mirror-target="t_ad">……………</span></div>
+          <div class="field-line bold"><span class="mirror-span" data-mirror-target="t_gorev">……………</span></div>
+          <div class="imza-label">TEBELLÜĞ EDEN</div>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <hr class="nusha-divider">
+    <div class="nusha">
+      <span class="nusha-label">2. NÜSHA — Tebellüğ Edende Kalacak</span>
+      <div class="school-line" data-persist="okulAdi" style="font-size:11.5pt; margin-bottom:2px; border-bottom:1px solid #000; text-align:center; font-weight:bold; text-transform:uppercase; padding-bottom:4px;"></div>
+      <h1 class="doc-title">TEBLİĞ &ndash; TEBELLÜĞ BELGESİ</h1>
+    <table class="meta compact">
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Tebellüğ Edenin</td></tr>
+      <tr><td class="label" style="width:15%">Adı Soyadı</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_ad">……………</span></td><td class="label" style="width:15%">Görevi</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_gorev">……………</span></td></tr>
+      <tr><td class="label" style="width:15%">Görev Yeri</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_gorevyeri">……………</span></td><td class="label" style="width:15%">TC Kimlik No</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_tc">……………</span></td></tr>
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Belgenin</td></tr>
+      <tr><td class="label" style="width:20%">Özü</td><td><span class="mirror-span" data-mirror-target="t_ozu">……………</span></td></tr>
+      <tr><td class="label" style="width:15%">Tarihi</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_belgetarih">……………</span></td><td class="label" style="width:15%">Sayısı</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_sayi">……………</span></td></tr>
+      <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Tebliğin</td></tr>
+      <tr><td class="label" style="width:20%">Edildiği Yer</td><td><span class="mirror-span" data-mirror-target="t_yer">……………</span></td></tr>
+      <tr><td class="label" style="width:15%">Tarihi</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_tarih">……………</span></td><td class="label" style="width:15%">Saati</td><td style="width:35.0%"><span class="mirror-span" data-mirror-target="t_saat">……………</span></td></tr>
+    </table>
+    <div class="compact-para">
+      Yukarıda adı soyadı, görevi ve görev yeri yazılı bulunan kişiye; <span class="mirror-span" data-mirror-target="t_belgetarih">……………</span> tarihli,
+      <span class="mirror-span" data-mirror-target="t_sayi">……………</span> sayılı ve &ldquo;<span class="mirror-span" data-mirror-target="t_ozu">……………</span>&rdquo; konulu belge,
+      <span class="mirror-span" data-mirror-target="t_tarih">……………</span> günü, saat <span class="mirror-span" data-mirror-target="t_saat">……………</span>&rsquo;da tebliğ edilmiştir.
+    </div>
+    <table class="imza compact">
+      <tr>
+        <td>
+          <div class="imza-box" style="height:36px;"></div>
+          <div class="field-line" data-persist="muduAdi"></div>
+          <div class="field-line bold" data-persist="muduUnvani"></div>
+          <div class="imza-label">TEBLİĞ EDEN</div>
+        </td>
+        <td>
+          <div class="imza-box" style="height:36px;"></div>
+          <div class="field-line"><span class="mirror-span" data-mirror-target="t_ad">……………</span></div>
+          <div class="field-line bold"><span class="mirror-span" data-mirror-target="t_gorev">……………</span></div>
+          <div class="imza-label">TEBELLÜĞ EDEN</div>
+        </td>
+      </tr>
+    </table>
+    </div>
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/app.js"></script>
+</body>
+</html>
