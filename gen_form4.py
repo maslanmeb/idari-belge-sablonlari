@@ -51,7 +51,7 @@ ekler = '''    <div class="ekler-block" data-ekler-block>
     </div>'''
 
 contact = '''    <table class="meta contact-table">
-      <tr><td class="label">TC Kimlik No</td><td><input type="text" inputmode="numeric" maxlength="11"></td></tr>
+      <tr><td class="label">TC Kimlik No</td><td><input type="text" inputmode="numeric" maxlength="11" placeholder="TC Kimlik No"></td></tr>
       <tr><td class="label">Telefon No</td><td><input type="text" placeholder="05xx xxx xx xx"></td></tr>
       <tr><td class="label">Adres</td><td><textarea rows="2" placeholder="Adres..."></textarea></td></tr>
     </table>'''

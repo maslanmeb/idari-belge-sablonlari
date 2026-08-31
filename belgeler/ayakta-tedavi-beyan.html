@@ -14,6 +14,7 @@
   table.meta.compact td{ padding:2px 6px; font-size:9.3pt; }
   table.meta.compact td.label{ font-size:8.6pt; }
   table.meta.compact input, table.meta.compact select{ font-size:9.3pt; padding:1px; }
+  table.meta.compact td .mirror-span{ font-size:9.3pt; padding:1px; min-height:auto; display:inline; }
   .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:8px 0; font-family:Arial,sans-serif; color:#222; }
   .beyan-tarih{ font-family:inherit; }
   table.imza.compact{ margin-top:6px; margin-bottom:0; }
@@ -48,15 +49,15 @@
       <div class="doc-subtitle">Ayakta Tedavi Beyan Belgesi</div>
     <table class="meta compact">
       <tr><td colspan="4" style="border:none; background:transparent; font-family:Arial,sans-serif; font-weight:bold; font-size:9.5pt; color:#333; padding:8px 2px 2px;">Hastanın</td></tr>
-      <tr><td class="label" style="width:20%">Adı Soyadı</td><td><input type="text" data-mirror="a_ad" ></td></tr>
+      <tr><td class="label" style="width:20%">Adı Soyadı</td><td><input type="text" data-mirror="a_ad" placeholder="Adı Soyadı"></td></tr>
       <tr><td class="label" style="width:20%">Aile Fertlerinin Yakınlığı</td><td><select data-mirror="a_yakinlik"><option value="">Seçiniz...</option><option>Kendisi</option><option>Eşi</option><option>Çocuğu</option><option>Annesi</option><option>Babası</option><option>Diğer</option></select></td></tr>
-      <tr><td class="label" style="width:20%">TC Kimlik No</td><td><input type="text" inputmode="numeric" maxlength="11" data-mirror="a_tc" ></td></tr>
-      <tr><td class="label" style="width:20%">Tedavi Olduğu Sağlık Kuruluşunun Adı</td><td><input type="text" data-mirror="a_kurulus" ></td></tr>
-      <tr><td class="label" style="width:20%">Sağlık Kurumuna Başvuru Tarihi</td><td><input type="date" data-mirror="a_basvuru" ></td></tr>
-      <tr><td class="label" style="width:20%">Ayakta Yapılan Tedavinin Bitiş Tarihi</td><td><input type="date" data-mirror="a_bitis" ></td></tr>
+      <tr><td class="label" style="width:20%">TC Kimlik No</td><td><input type="text" inputmode="numeric" maxlength="11" data-mirror="a_tc" placeholder="TC Kimlik No"></td></tr>
+      <tr><td class="label" style="width:20%">Tedavi Olduğu Sağlık Kuruluşunun Adı</td><td><input type="text" data-mirror="a_kurulus" placeholder="Sağlık kuruluşu adı"></td></tr>
+      <tr><td class="label" style="width:20%">Sağlık Kurumuna Başvuru Tarihi</td><td><input type="date" data-mirror="a_basvuru" placeholder=""></td></tr>
+      <tr><td class="label" style="width:20%">Ayakta Yapılan Tedavinin Bitiş Tarihi</td><td><input type="date" data-mirror="a_bitis" placeholder=""></td></tr>
     </table>
     <div class="compact-para">
-      Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. <input type="date" class="print-borderless beyan-tarih" data-mirror="a_beyantarih" style="width:120px;">
+      Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. <input type="date" class="date-inline" data-mirror="a_beyantarih" style="width:120px;">
     </div>
     <table class="two-col">
       <tr>
@@ -65,8 +66,8 @@
           <div class="barcode-box">Barkod</div>
         </td>
         <td>
-          <div class="field-line"><input style="border:none;width:100%;text-align:center;font-size:8.8pt;" type="text" data-mirror="a_bAd" ></div>
-          <div class="field-line bold"><input style="border:none;width:100%;text-align:center;font-size:8.3pt;font-weight:bold;" type="text" data-mirror="a_bUnvan" ></div>
+          <div class="field-line"><input type="text" data-mirror="a_bAd" placeholder="Adı SOYADI" style="border:none;width:100%;text-align:center;"></div>
+          <div class="field-line bold"><input type="text" data-mirror="a_bUnvan" placeholder="Unvanı" style="border:none;width:100%;text-align:center;font-weight:bold;"></div>
           <div class="field-line" style="border-bottom:none; margin-top:8px;">İmza: ......................................</div>
         </td>
       </tr>

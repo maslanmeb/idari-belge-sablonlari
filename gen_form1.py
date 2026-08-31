@@ -14,6 +14,8 @@ EXTRA_STYLE = """<style>
   table.meta.compact td{ padding:2px 6px; font-size:9.3pt; }
   table.meta.compact td.label{ font-size:8.6pt; }
   table.meta.compact input{ font-size:9.3pt; padding:1px; }
+  table.meta.compact td .mirror-span{ font-size:9.3pt; padding:1px; min-height:auto; display:inline; }
+  table.meta.compact textarea{ font-size:9.3pt; padding:2px; width:100%; border:none; resize:none; overflow:hidden; font-family:inherit; min-height:1.3em; }
   .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:6px 0; font-family:Arial,sans-serif; color:#222; }
   table.imza.compact{ margin-top:6px; margin-bottom:0; }
   table.imza.compact .field-line{ font-size:8.5pt; padding:1px; min-height:1.1em; }
@@ -26,18 +28,31 @@ EXTRA_STYLE = """<style>
 </style>
 """
 
+def ozu_field(editable):
+    if editable:
+        return '<textarea data-mirror="t_ozu" rows="1" placeholder="Belgenin konusu..."></textarea>'
+    return mirror_field("t_ozu")
+
+
 def teblig_table(editable):
     F = input_field if editable else mirror_field
+    ph = {
+        "t_ad": "Adı Soyadı", "t_gorev": "Görevi", "t_gorevyeri": "Görev yeri",
+        "t_tc": "TC Kimlik No", "t_sayi": "ör. 2026/45", "t_yer": "ör. Müdür Odası",
+    }
+    def E(key, kind="text"):
+        attrs = f'placeholder="{ph.get(key, "")}"'
+        return input_field(key, kind, attrs) if editable else mirror_field(key)
     rows = [
         subhead_row("Tebellüğ Edenin"),
-        field_row([("Adı Soyadı", F("t_ad")), ("Görevi", F("t_gorev"))]),
-        field_row([("Görev Yeri", F("t_gorevyeri")), ("TC Kimlik No", F("t_tc", "tc") if editable else mirror_field("t_tc"))]),
+        field_row([("Adı Soyadı", E("t_ad")), ("Görevi", E("t_gorev"))]),
+        field_row([("Görev Yeri", E("t_gorevyeri")), ("TC Kimlik No", E("t_tc", "tc"))]),
         subhead_row("Belgenin"),
-        field_row_single("Özü", F("t_ozu")),
-        field_row([("Tarihi", F("t_belgetarih", "date") if editable else mirror_field("t_belgetarih")), ("Sayısı", F("t_sayi"))]),
+        field_row_single("Özü", ozu_field(editable)),
+        field_row([("Tarihi", E("t_belgetarih", "date")), ("Sayısı", E("t_sayi"))]),
         subhead_row("Tebliğin"),
-        field_row_single("Edildiği Yer", F("t_yer")),
-        field_row([("Tarihi", F("t_tarih", "date") if editable else mirror_field("t_tarih")), ("Saati", F("t_saat", "time") if editable else mirror_field("t_saat"))]),
+        field_row_single("Edildiği Yer", E("t_yer")),
+        field_row([("Tarihi", E("t_tarih", "date")), ("Saati", E("t_saat", "time"))]),
     ]
     return '    <table class="meta compact">\n' + "\n".join(rows) + "\n    </table>"
 

@@ -15,11 +15,12 @@ const PERSIST_CONFIG = {
   muduUnvani: { storageKey: "idariBelge_muduUnvani", default: "Okul Müdürü" }
 };
 
-function setPersistValue(key, value) {
+function setPersistValue(key, value, skipEl) {
   const cfg = PERSIST_CONFIG[key];
   if (!cfg) return;
   localStorage.setItem(cfg.storageKey, value);
   document.querySelectorAll(`[data-persist="${key}"]`).forEach((el) => {
+    if (el === skipEl) return; // kullanıcının o an yazdığı alanı yeniden yazma (imleç sıçramasın)
     if (el.textContent !== value) el.textContent = value;
   });
 }
@@ -33,9 +34,19 @@ function initPersistentFields() {
       el.textContent = initial;
     });
     document.querySelectorAll(`[data-persist="${key}"][contenteditable="true"]`).forEach((el) => {
-      el.addEventListener("input", () => setPersistValue(key, el.textContent.trim()));
+      el.addEventListener("input", () => {
+        // Yazarken .trim() UYGULANMAZ: aksi hâlde araya boşluk eklenince imleç oynar.
+        setPersistValue(key, el.textContent, el);
+      });
       el.addEventListener("blur", () => {
-        if (!el.textContent.trim()) setPersistValue(key, cfg.default);
+        const trimmed = el.textContent.trim();
+        if (!trimmed) {
+          el.textContent = cfg.default;
+          setPersistValue(key, cfg.default);
+        } else if (trimmed !== el.textContent) {
+          el.textContent = trimmed;
+          setPersistValue(key, trimmed);
+        }
       });
       el.addEventListener("keydown", (e) => {
         if (e.key === "Enter") { e.preventDefault(); el.blur(); }

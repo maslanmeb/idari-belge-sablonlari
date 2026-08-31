@@ -295,6 +295,9 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
   padding: 0 3px;
   outline:none;
   font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  font-style: normal;
   cursor: text;
 }
 .inline-fit:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; }
@@ -326,9 +329,24 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 /* ---- Kapanış cümlesi (düzenlenebilir, varsayılana dönebilir) ---- */
 .closing-line{
   text-indent: 1.25cm; font-size: 10.6pt; line-height:1.55; margin: 10px 0 18px;
-  outline:none; cursor:text; border-radius:3px;
+  outline:none; cursor:text; border-radius:3px; font-family: inherit; font-weight: normal; font-style: normal;
 }
 .closing-line:focus{ background:#fbfbea; }
+
+/* ---- field-line içindeki input'lar da çevresiyle aynı yazı tipini kullanmalı ---- */
+.field-line{ font-family: inherit; }
+.field-line input{ font-family: inherit; font-size: inherit; font-weight: inherit; }
+
+/* ---- Kutu çerçevesi olmayan ama tıklanabilirliği belli eden satır-içi tarih alanı ---- */
+.date-inline{
+  border: none; border-bottom: 1px dotted #888; background: transparent;
+  font-family: inherit; font-size: inherit; padding: 0 2px; outline:none;
+}
+.date-inline:focus{ background:#fbfbea; }
+@media print{ .date-inline{ border-bottom: none !important; } }
+
+/* ---- Yazdırmada gizlenmesi gereken ekran-ipuçları ---- */
+@media print{ .school-hint{ display:none !important; } }
 
 /* ---- Ekler listesi (Ek-1, Ek-2..., çerçevesiz) ---- */
 .ekler-block{ width:50%; }
@@ -359,7 +377,7 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 .half-width{ width:50%; }
 
 /* ---- Kimlik/muhatap tablosu (persistent müdür alanı) ---- */
-.persist-field{ outline:none; cursor:text; border-radius:3px; display:inline-block; min-width: 2em; }
+.persist-field{ outline:none; cursor:text; border-radius:3px; display:inline-block; min-width: 2em; font-family: inherit; font-size: inherit; font-weight: inherit; font-style: normal; }
 .persist-field:focus{ background:#fbfbea; }
 .persist-field:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; }
 

@@ -14,6 +14,7 @@ EXTRA_STYLE = """<style>
   table.meta.compact td{ padding:2px 6px; font-size:9.3pt; }
   table.meta.compact td.label{ font-size:8.6pt; }
   table.meta.compact input, table.meta.compact select{ font-size:9.3pt; padding:1px; }
+  table.meta.compact td .mirror-span{ font-size:9.3pt; padding:1px; min-height:auto; display:inline; }
   .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:8px 0; font-family:Arial,sans-serif; color:#222; }
   .beyan-tarih{ font-family:inherit; }
   table.imza.compact{ margin-top:6px; margin-bottom:0; }
@@ -41,21 +42,24 @@ def yakinlik_select(editable):
 
 
 def beyan_table(editable):
-    F = input_field if editable else mirror_field
+    ph = {"a_ad": "Adı Soyadı", "a_tc": "TC Kimlik No", "a_kurulus": "Sağlık kuruluşu adı"}
+    def E(key, kind="text"):
+        attrs = f'placeholder="{ph.get(key, "")}"'
+        return input_field(key, kind, attrs) if editable else mirror_field(key)
     rows = [
         subhead_row("Hastanın"),
-        field_row_single("Adı Soyadı", F("a_ad")),
+        field_row_single("Adı Soyadı", E("a_ad")),
         field_row_single("Aile Fertlerinin Yakınlığı", yakinlik_select(editable)),
-        field_row_single("TC Kimlik No", F("a_tc", "tc") if editable else mirror_field("a_tc")),
-        field_row_single("Tedavi Olduğu Sağlık Kuruluşunun Adı", F("a_kurulus")),
-        field_row_single("Sağlık Kurumuna Başvuru Tarihi", F("a_basvuru", "date") if editable else mirror_field("a_basvuru")),
-        field_row_single("Ayakta Yapılan Tedavinin Bitiş Tarihi", F("a_bitis", "date") if editable else mirror_field("a_bitis")),
+        field_row_single("TC Kimlik No", E("a_tc", "tc")),
+        field_row_single("Tedavi Olduğu Sağlık Kuruluşunun Adı", E("a_kurulus")),
+        field_row_single("Sağlık Kurumuna Başvuru Tarihi", E("a_basvuru", "date")),
+        field_row_single("Ayakta Yapılan Tedavinin Bitiş Tarihi", E("a_bitis", "date")),
     ]
     return '    <table class="meta compact">\n' + "\n".join(rows) + "\n    </table>"
 
 
 def beyan_paragraph(editable):
-    tarih = (f'<input type="date" class="print-borderless beyan-tarih" data-mirror="a_beyantarih" style="width:120px;">'
+    tarih = (f'<input type="date" class="date-inline" data-mirror="a_beyantarih" style="width:120px;">'
              if editable else mirror_field("a_beyantarih"))
     return f'''    <div class="compact-para">
       Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. {tarih}
@@ -64,8 +68,12 @@ def beyan_paragraph(editable):
 
 def beyan_bottom(editable):
     if editable:
-        bad = '<div class="field-line">' + input_field("a_bAd").replace("<input", "<input style=\"border:none;width:100%;text-align:center;font-size:8.8pt;\"") + '</div>'
-        bunvan = '<div class="field-line bold">' + input_field("a_bUnvan").replace("<input", "<input style=\"border:none;width:100%;text-align:center;font-size:8.3pt;font-weight:bold;\"") + '</div>'
+        bad = ('<div class="field-line">'
+               + input_field("a_bAd", extra_attrs='placeholder="Adı SOYADI" style="border:none;width:100%;text-align:center;"')
+               + '</div>')
+        bunvan = ('<div class="field-line bold">'
+                  + input_field("a_bUnvan", extra_attrs='placeholder="Unvanı" style="border:none;width:100%;text-align:center;font-weight:bold;"')
+                  + '</div>')
     else:
         bad = f'<div class="field-line">{mirror_field("a_bAd")}</div>'
         bunvan = f'<div class="field-line bold">{mirror_field("a_bUnvan")}</div>'
