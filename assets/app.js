@@ -326,7 +326,8 @@ function formatTCDisplay(raw) {
   return [d.slice(0, 2), d.slice(2, 5), d.slice(5, 8), d.slice(8, 11)].filter((p) => p.length).join(" ");
 }
 function formatPhoneDisplay(raw) {
-  const d = onlyDigits(raw, 11);
+  let d = onlyDigits(raw, 11);
+  if (d && d.charAt(0) !== "0") d = ("0" + d).slice(0, 11); // 0 ile başlamıyorsa otomatik eklenir
   let out = d.slice(0, 4);
   if (d.length > 4) out += " - " + d.slice(4, 7);
   if (d.length > 7) out += " " + d.slice(7, 9);
