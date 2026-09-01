@@ -61,7 +61,7 @@ def beyan_table(editable):
 
 
 def beyan_paragraph(editable):
-    tarih = (f'<input type="date" class="date-inline" data-mirror="a_beyantarih" style="width:120px;">'
+    tarih = (f'<input type="date" class="date-inline" data-mirror="a_beyantarih" style="width:98px;">'
              if editable else mirror_field("a_beyantarih"))
     return f'''    <div class="compact-para">
       Yukarıda belirtmiş olduğum sağlık kuruluşunda ayakta tedavi yapıldığını beyan ederim. {tarih}
@@ -74,7 +74,7 @@ def beyan_bottom(editable):
                + input_field("a_bAd", extra_attrs='placeholder="Adı SOYADI" style="border:none;width:100%;text-align:center;"')
                + '</div>')
         bunvan = ('<div class="field-line bold">'
-                  + input_field("a_bUnvan", extra_attrs='placeholder="Unvanı" style="border:none;width:100%;text-align:center;font-weight:bold;"')
+                  + input_field("a_bUnvan", extra_attrs='placeholder="Unvanı" style="border:none;width:100%;text-align:center;"')
                   + '</div>')
     else:
         bad = f'<div class="field-line">{mirror_field("a_bAd")}</div>'

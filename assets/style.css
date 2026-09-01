@@ -341,8 +341,9 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 /* ---- Kutu çerçevesi olmayan ama tıklanabilirliği belli eden satır-içi tarih alanı ---- */
 .date-inline{
   border: none; border-bottom: 1px dotted #888; background: transparent;
-  font-family: inherit; font-size: inherit; padding: 0 2px; outline:none;
+  font-family: inherit; font-size: inherit; padding: 0; outline:none;
 }
+.date-inline::-webkit-calendar-picker-indicator{ padding:0; margin-left:2px; width:13px; height:13px; }
 .date-inline:focus{ background:#fbfbea; }
 @media print{ .date-inline{ border-bottom: none !important; } }
 
