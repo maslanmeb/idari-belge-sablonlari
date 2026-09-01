@@ -7,12 +7,12 @@ os.makedirs(OUT, exist_ok=True)
 
 EXTRA_STYLE = """<style>
   .ident-table td.label{ width:32%; }
-  .school-echo-cell{ font-family:inherit; font-size:11pt; }
-  .sig-block{ text-align:right; margin-top:18px; }
-  .sig-block .sig-date{ display:inline-block; min-width:110px; text-align:center; }
-  .sig-block .sig-line{ display:block; width:220px; margin-left:auto; border-bottom:1px solid #333; margin-top:24px; margin-bottom:4px; height:1px; }
-  .sig-block .sig-name{ text-align:right; font-weight:bold; font-size:10pt; }
-  .sig-block .sig-title{ text-align:right; font-size:9.3pt; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:22px; box-sizing:border-box; padding-left:10px; }
+  .sig-table{ width:80%; margin:0 auto; border-collapse:collapse; }
+  .sig-table td{ text-align:center; border:1px solid #ccc; padding:7px 8px; font-size:10pt; }
+  .sig-table .sig-name{ font-weight:bold; }
+  .sig-table input[type=date]{ text-align:center; border:none; width:100%; font-family:inherit; font-size:inherit; }
+  @media print{ .sig-table td{ border:none !important; } }
   .bottom-cols{ margin-top: 18px; }
   .half-width{ width:50%; }
   .contact-table{ margin-top:16px; }
@@ -30,15 +30,15 @@ ident_rows = [
         + '<input type="date" style="width:38%; display:inline-block;">' + "</td></tr>",
     field_row_single("GÖREVİ", input_field("p_gorev", extra_attrs='placeholder="Görevi"')),
     field_row_single("ÜNVANI", input_field("p_unvan", extra_attrs='placeholder="Unvanı"')),
-    '      <tr><td class="label">GÖREV YERİ</td><td class="school-echo-cell"><span data-persist="okulAdi"></span></td></tr>',
+    '      <tr><td class="label">GÖREV YERİ</td><td><input type="text" value="Kumkale Ortaokulu"></td></tr>',
     field_row_single("MEMURİYETE BAŞLAMA TARİHİ", '<input type="date">'),
     field_row_single("TC KİMLİK NO", input_field("p_tc", "tc", extra_attrs='placeholder="TC Kimlik No"')),
     field_row_single("DİLEKÇE KONUSU", input_field("p_konu", extra_attrs='placeholder="Dilekçe konusu"')),
 ]
 ident_table = '    <table class="meta ident-table">\n' + "\n".join(ident_rows) + "\n    </table>"
 
-school_line = ('    <div class="school-line" data-persist="okulAdi" contenteditable="true" '
-               'spellcheck="false" style="margin:16px 0 4px;"></div>\n'
+school_line = ('    <div class="school-line" contenteditable="true" '
+               'spellcheck="false" style="margin:16px 0 4px;">KUMKALE ORTAOKULU MÜDÜRLÜĞÜNE</div>\n'
                '    <div class="school-hint">↑ Farklı okul için bu satırı tıklayıp değiştirebilirsiniz</div>')
 
 paragraphs = '''    <div class="paragraph-list" id="pList1">
@@ -48,11 +48,12 @@ paragraphs = '''    <div class="paragraph-list" id="pList1">
 
 closing = '    <div class="closing-line" contenteditable="true">Gereğinin yapılmasını arz ederim.</div>'
 
-signature = f'''    <div class="sig-block">
-      <input type="date" class="print-borderless sig-date">
-      <span class="sig-line"></span>
-      <div class="sig-name">{mirror_field("p_ad")}</div>
-      <div class="sig-title">{mirror_field("p_unvan")}</div>
+signature = f'''    <div class="sig-wrap">
+      <table class="sig-table">
+        <tr><td><input type="date"></td></tr>
+        <tr><td class="sig-name">{mirror_field("p_ad")}</td></tr>
+        <tr><td>{mirror_field("p_unvan")}</td></tr>
+      </table>
     </div>'''
 
 ekler = '''    <div class="ekler-block" data-ekler-block>
@@ -72,7 +73,7 @@ bottom = f'''    <div class="bottom-cols half-width">
 {contact}
     </div>'''
 
-body = "\n".join(['    <h1 style="text-align:center; font-size:15pt; color:var(--navy); margin:6px 0 14px;">PERSONEL DİLEKÇESİ</h1>', ident_table, school_line, paragraphs, closing, signature, bottom])
+body = "\n".join([ident_table, school_line, paragraphs, closing, signature, bottom])
 
 html = page("Personel Dilekçe Şablonu", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "personel-dilekce.html"), "w", encoding="utf-8") as f:

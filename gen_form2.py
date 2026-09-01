@@ -22,6 +22,8 @@ EXTRA_STYLE = """<style>
   table.imza.compact .imza-label{ font-size:7.6pt; }
   .field-line{ display:block; text-align:center; border-bottom:1px dotted #888; padding:2px; min-height:1.2em; }
   .field-line.bold{ font-weight:bold; border-bottom:none; }
+  .two-col .field-line{ font-family: Arial, sans-serif; font-size: 10.3pt; }
+  .two-col .field-line.bold{ font-weight: normal; }
   .nusha-divider{ margin: 8px 0; }
   .barcode-box{ min-height:54px; font-size:8.3pt; }
   .two-col{ width:100%; border-collapse:collapse; margin-top:6px; }

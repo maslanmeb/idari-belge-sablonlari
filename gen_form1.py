@@ -15,10 +15,11 @@ EXTRA_STYLE = """<style>
   table.meta.compact td.label{ font-size:8.6pt; }
   table.meta.compact input{ font-size:9.3pt; padding:1px; }
   table.meta.compact td .mirror-span{ font-size:9.3pt; padding:1px; min-height:auto; display:inline; }
-  table.meta.compact textarea{ font-size:9.3pt; padding:2px; width:100%; border:none; resize:none; overflow:hidden; font-family:inherit; min-height:1.3em; }
+  table.meta.compact textarea{ font-size:9.3pt; padding:2px; width:100%; border:none; resize:none; overflow:hidden !important; font-family:inherit; min-height:1.3em; }
   .compact-para{ font-size:9.3pt; line-height:1.45; text-align:justify; margin:6px 0; font-family:Arial,sans-serif; color:#222; }
   table.imza.compact{ margin-top:6px; margin-bottom:0; }
   table.imza.compact .field-line{ font-size:8.5pt; padding:1px; min-height:1.1em; }
+  table.imza.compact .field-line .mirror-span{ font-size:8.5pt; display:inline; min-height:auto; padding:0; }
   table.imza.compact .imza-label{ font-size:7.6pt; }
   .field-line{ display:block; text-align:center; border-bottom:1px dotted #888; padding:2px; min-height:1.2em; }
   .field-line.bold{ font-weight:bold; border-bottom:none; }
@@ -48,7 +49,7 @@ def teblig_table(editable):
         field_row([("Adı Soyadı", E("t_ad")), ("Görevi", E("t_gorev"))]),
         field_row([("Görev Yeri", E("t_gorevyeri")), ("TC Kimlik No", E("t_tc", "tc"))]),
         subhead_row("Belgenin"),
-        field_row_single("Özü", ozu_field(editable)),
+        field_row_single("Özü", ozu_field(editable), colspan=3),
         field_row([("Tarihi", E("t_belgetarih", "date")), ("Sayısı", E("t_sayi"))]),
         subhead_row("Tebliğin"),
         field_row_single("Edildiği Yer", E("t_yer")),

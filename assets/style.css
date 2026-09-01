@@ -110,9 +110,10 @@ h1{ text-align:center; font-size:15.5pt; letter-spacing:.5px; margin: 2px 0 4px;
 table.meta{ width:100%; border-collapse:collapse; margin-bottom:14px; font-size:11pt; }
 table.meta td{ border:1px solid var(--line); padding:6px 8px; vertical-align:middle; }
 table.meta td.label{ font-weight:bold; width:36%; background:var(--accent-bg); font-family: Arial, sans-serif; font-size: 10pt;}
-table.meta input[type=text], table.meta input[type=date], table.meta input[type=time], table.meta select{
+table.meta input[type=text], table.meta input[type=date], table.meta input[type=time], table.meta input[type=email], table.meta select{
   width:100%; border:none; background:transparent; font-family:inherit; font-size:11pt; outline:none; padding:2px;
 }
+table.meta textarea{ border:none; background:transparent; padding:2px; }
 
 .section-title{ font-weight:bold; font-size:11pt; margin: 16px 0 6px; font-family: Arial, sans-serif; color:#333; }
 .section-sub{ font-size:9.5pt; color:var(--muted); margin: -3px 0 8px; font-family: Arial, sans-serif; font-style: italic;}
@@ -313,7 +314,7 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 .paragraph-list{ margin: 6px 0 14px; }
 .paragraph-list .p-row{ display:flex; align-items:flex-start; gap:8px; margin-bottom:8px; }
 .paragraph-list textarea{
-  text-indent: 1.25cm; border:1px solid var(--line); flex:1 1 auto;
+  text-indent: 1.25cm; border:1px solid var(--line); flex:1 1 auto; text-align: justify;
 }
 .paragraph-list .p-remove{
   flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer;
@@ -383,5 +384,7 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 
 @media print{
   .paragraph-list-add, .p-remove, .ekler-add, .ek-remove{ display:none !important; }
+  .paragraph-list textarea{ border:none !important; text-indent: 1.25cm; }
+  .ekler-empty .ekler-title{ display:none !important; }
   .nusha-label{ background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
 }

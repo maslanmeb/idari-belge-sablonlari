@@ -69,8 +69,9 @@ def input_field(key, kind="text", extra_attrs=""):
     return f'<input type="text" data-mirror="{key}" {extra_attrs}>'
 
 
-def field_row_single(label, html, label_w=20):
-    return f'      <tr><td class="label" style="width:{label_w}%">{label}</td><td>{html}</td></tr>'
+def field_row_single(label, html, label_w=20, colspan=1):
+    cs = f' colspan="{colspan}"' if colspan > 1 else ""
+    return f'      <tr><td class="label" style="width:{label_w}%">{label}</td><td{cs}>{html}</td></tr>'
 
 
 def signature_cell(label, name_html, title_html=None, box_height=36):
