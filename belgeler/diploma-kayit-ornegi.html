@@ -9,7 +9,9 @@
   .sig-wrap{ width:50%; margin-left:50%; margin-top:22px; box-sizing:border-box; padding-left:10px; }
   .sig-table{ width:80%; margin:0 auto; border-collapse:collapse; }
   .sig-table td{ text-align:center; border:1px solid #ccc; padding:7px 8px; font-size:10pt; }
-  .sig-table .sig-name{ font-weight:bold; min-height:1.3em; }
+  .sig-table .sig-name{ font-weight:bold; min-height:1.3em; outline:none; cursor:text; }
+  .sig-table .sig-name:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; font-weight:normal; }
+  .sig-table .sig-name:focus{ background:#fbfbea; }
   .sig-table .imza-lbl{ font-size:9pt; color:#666; font-family:Arial,sans-serif; }
   .sig-table input[type=date]{ text-align:center; border:none; width:100%; font-family:inherit; font-size:inherit; }
   @media print{ .sig-table td{ border:none !important; } }
@@ -49,7 +51,7 @@
     <div class="sig-wrap">
       <table class="sig-table">
         <tr><td><input type="date"></td></tr>
-        <tr><td class="sig-name inline-fit" contenteditable="true" data-placeholder="Ad SOYAD"></td></tr>
+        <tr><td class="sig-name" contenteditable="true" data-placeholder="Ad SOYAD"></td></tr>
         <tr><td class="imza-lbl">İmza</td></tr>
       </table>
     </div>
