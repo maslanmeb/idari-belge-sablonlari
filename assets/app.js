@@ -76,6 +76,7 @@ function initAutoGrow() {
 
 /* ---------- Yazdır / PDF Al ---------- */
 function printForm() {
+  if (typeof applyFieldFormatting === "function") applyFieldFormatting();
   document.querySelectorAll("textarea").forEach(autoGrow);
   requestAnimationFrame(() => {
     document.querySelectorAll("textarea").forEach(autoGrow);
@@ -313,6 +314,59 @@ function resetClosingLines() {
   });
 }
 
+/* ---------- Alan biçimlendirme: TC Kimlik No / Telefon / E-posta ----------
+   Kullanıcı nasıl yazarsa yazsın, alandan çıkınca (blur) ve yazdırmadan hemen
+   önce standart biçime dönüştürülür. Mirror ile bağlıysa hedef de güncellenir.
+*/
+function onlyDigits(s, maxLen) {
+  return s.replace(/\D/g, "").slice(0, maxLen);
+}
+function formatTCDisplay(raw) {
+  const d = onlyDigits(raw, 11);
+  return [d.slice(0, 2), d.slice(2, 5), d.slice(5, 8), d.slice(8, 11)].filter((p) => p.length).join(" ");
+}
+function formatPhoneDisplay(raw) {
+  const d = onlyDigits(raw, 11);
+  let out = d.slice(0, 4);
+  if (d.length > 4) out += " - " + d.slice(4, 7);
+  if (d.length > 7) out += " " + d.slice(7, 9);
+  if (d.length > 9) out += " " + d.slice(9, 11);
+  return out;
+}
+function applyFieldFormatting() {
+  document.querySelectorAll(".tc-field").forEach((el) => {
+    el.value = formatTCDisplay(el.value);
+    if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
+  });
+  document.querySelectorAll('input[type="tel"]').forEach((el) => {
+    el.value = formatPhoneDisplay(el.value);
+    if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
+  });
+  document.querySelectorAll('input[type="email"]').forEach((el) => {
+    el.value = el.value.toLowerCase();
+    if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
+  });
+}
+function initFieldFormatting() {
+  // Yazarken: sadece rakamları sınırlar (11 hane), boşluklu biçim alandan çıkınca uygulanır.
+  document.querySelectorAll(".tc-field, input[type=\"tel\"]").forEach((el) => {
+    el.addEventListener("input", () => {
+      const capped = onlyDigits(el.value, 11);
+      if (el.value !== capped) el.value = capped;
+    });
+    el.addEventListener("blur", () => {
+      el.value = el.classList.contains("tc-field") ? formatTCDisplay(el.value) : formatPhoneDisplay(el.value);
+      if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
+    });
+  });
+  document.querySelectorAll('input[type="email"]').forEach((el) => {
+    el.addEventListener("blur", () => {
+      el.value = el.value.toLowerCase();
+      if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
+    });
+  });
+}
+
 /* ---------- Formu temizle ---------- */
 function clearForm() {
   if (!confirm("Bu formdaki tüm bilgiler silinecek (okul adı ve müdür bilgileri dahil). Emin misiniz?")) return;
@@ -355,6 +409,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initAutoGrow();
   initNoteBoxes();
   initDynLists();
+  initFieldFormatting();
   initMirrors();
   initParagraphLists();
   initEkLists();

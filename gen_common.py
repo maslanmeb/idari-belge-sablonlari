@@ -65,7 +65,9 @@ def input_field(key, kind="text", extra_attrs=""):
     if kind == "time":
         return f'<input type="time" data-mirror="{key}" {extra_attrs}>'
     if kind == "tc":
-        return f'<input type="text" inputmode="numeric" maxlength="11" data-mirror="{key}" {extra_attrs}>'
+        return f'<input type="text" inputmode="numeric" class="tc-field" data-mirror="{key}" {extra_attrs}>'
+    if kind == "tel":
+        return f'<input type="tel" data-mirror="{key}" {extra_attrs}>'
     return f'<input type="text" data-mirror="{key}" {extra_attrs}>'
 
 

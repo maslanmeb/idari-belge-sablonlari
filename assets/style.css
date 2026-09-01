@@ -110,7 +110,7 @@ h1{ text-align:center; font-size:15.5pt; letter-spacing:.5px; margin: 2px 0 4px;
 table.meta{ width:100%; border-collapse:collapse; margin-bottom:14px; font-size:11pt; }
 table.meta td{ border:1px solid var(--line); padding:6px 8px; vertical-align:middle; }
 table.meta td.label{ font-weight:bold; width:36%; background:var(--accent-bg); font-family: Arial, sans-serif; font-size: 10pt;}
-table.meta input[type=text], table.meta input[type=date], table.meta input[type=time], table.meta input[type=email], table.meta select{
+table.meta input[type=text], table.meta input[type=date], table.meta input[type=time], table.meta input[type=email], table.meta input[type=tel], table.meta select{
   width:100%; border:none; background:transparent; font-family:inherit; font-size:11pt; outline:none; padding:2px;
 }
 table.meta textarea{ border:none; background:transparent; padding:2px; }

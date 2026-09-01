@@ -63,7 +63,7 @@ ekler = '''    <div class="ekler-block" data-ekler-block>
     </div>'''
 
 contact = '''    <table class="meta contact-table">
-      <tr><td class="label">Telefon</td><td><input type="text" placeholder="05xx xxx xx xx"></td></tr>
+      <tr><td class="label">Telefon</td><td><input type="tel" placeholder="0532 - 123 45 67"></td></tr>
       <tr><td class="label">Adres</td><td><textarea rows="2" placeholder="Adres..."></textarea></td></tr>
       <tr><td class="label">E-posta</td><td><input type="email" placeholder="ornek@meb.gov.tr"></td></tr>
     </table>'''
