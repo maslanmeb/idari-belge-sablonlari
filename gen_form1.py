@@ -83,11 +83,12 @@ def teblig_signatures(editable):
     </table>'''
 
 
-def nusha_block(no_label, editable):
+def nusha_block(no_label, editable, rotate=False):
     school = ('<div class="school-line" data-persist="okulAdi" contenteditable="true" spellcheck="false" style="font-size:11.5pt; margin-bottom:2px;"></div>'
               if editable else
               '<div class="school-line" data-persist="okulAdi" style="font-size:11.5pt; margin-bottom:2px; border-bottom:1px solid #000; text-align:center; font-weight:bold; text-transform:uppercase; padding-bottom:4px;"></div>')
-    return f'''    <div class="nusha">
+    cls = "nusha nusha-rotate-print" if rotate else "nusha"
+    return f'''    <div class="{cls}">
       <span class="nusha-label">{no_label}</span>
       {school}
       <h1 class="doc-title">TEBLİĞ &ndash; TEBELLÜĞ BELGESİ</h1>
@@ -99,7 +100,7 @@ def nusha_block(no_label, editable):
 
 body = nusha_block("1. NÜSHA — Kurumda Kalacak", True) + \
     '\n    <hr class="nusha-divider">\n' + \
-    nusha_block("2. NÜSHA — Tebellüğ Edende Kalacak", False)
+    nusha_block("2. NÜSHA — Tebellüğ Edende Kalacak", False, rotate=True)
 
 html = page("Tebliğ – Tebellüğ Belgesi", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "teblig-tebellug.html"), "w", encoding="utf-8") as f:

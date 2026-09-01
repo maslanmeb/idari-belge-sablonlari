@@ -275,6 +275,15 @@ table.imza td{ width:33.33%; vertical-align:top; padding:0 6px; text-align:cente
 }
 @media print{ .nusha-divider::after{ content: "✂"; } }
 
+/* ---- 2. nüsha yazdırmada 180° döndürülür ----
+   Amaç: sayfa kesim çizgisinden ikiye ayrıldığında, 2. parça 180° çevrilip
+   okunduğunda kenar boşlukları 1. nüsha ile birebir eşleşsin (üstte geniş,
+   kesim tarafında dar boşluk — matbaacılıkta fiş/makbuz defterlerindeki
+   standart teknik). Sadece yazdırmada uygulanır; ekranda düz görünmeye devam eder. */
+@media print{
+  .nusha-rotate-print{ transform: rotate(180deg); transform-origin: center; }
+}
+
 /* ---- Mirror (canlı yansıyan salt-okunur alan) ---- */
 .mirror-span{
   display:inline; font-family: inherit; color: inherit;

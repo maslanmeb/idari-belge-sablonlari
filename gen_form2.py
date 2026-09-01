@@ -94,8 +94,9 @@ def beyan_bottom(editable):
     </table>'''
 
 
-def nusha_block(no_label, editable):
-    return f'''    <div class="nusha">
+def nusha_block(no_label, editable, rotate=False):
+    cls = "nusha nusha-rotate-print" if rotate else "nusha"
+    return f'''    <div class="{cls}">
       <span class="nusha-label">{no_label}</span>
       <h1 class="doc-title">MİLLÎ EĞİTİM BAKANLIĞI PERSONELİ</h1>
       <div class="doc-subtitle">Ayakta Tedavi Beyan Belgesi</div>
@@ -107,7 +108,7 @@ def nusha_block(no_label, editable):
 
 body = nusha_block("1. NÜSHA", True) + \
     '\n    <hr class="nusha-divider">\n' + \
-    nusha_block("2. NÜSHA", False)
+    nusha_block("2. NÜSHA", False, rotate=True)
 
 html = page("Ayakta Tedavi Beyan Belgesi", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "ayakta-tedavi-beyan.html"), "w", encoding="utf-8") as f:
