@@ -334,9 +334,16 @@ function formatPhoneDisplay(raw) {
   if (d.length > 9) out += " " + d.slice(9, 11);
   return out;
 }
+function getFieldText(el) {
+  return el.matches("[contenteditable]") ? el.textContent : el.value;
+}
+function setFieldText(el, val) {
+  if (el.matches("[contenteditable]")) el.textContent = val;
+  else el.value = val;
+}
 function applyFieldFormatting() {
   document.querySelectorAll(".tc-field").forEach((el) => {
-    el.value = formatTCDisplay(el.value);
+    setFieldText(el, formatTCDisplay(getFieldText(el)));
     if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
   });
   document.querySelectorAll('input[type="tel"]').forEach((el) => {
@@ -350,13 +357,24 @@ function applyFieldFormatting() {
 }
 function initFieldFormatting() {
   // Yazarken: sadece rakamları sınırlar (11 hane), boşluklu biçim alandan çıkınca uygulanır.
-  document.querySelectorAll(".tc-field, input[type=\"tel\"]").forEach((el) => {
+  document.querySelectorAll('.tc-field, input[type="tel"]').forEach((el) => {
+    const isCE = el.matches("[contenteditable]");
     el.addEventListener("input", () => {
-      const capped = onlyDigits(el.value, 11);
-      if (el.value !== capped) el.value = capped;
+      const capped = onlyDigits(getFieldText(el), 11);
+      if (getFieldText(el) !== capped) {
+        setFieldText(el, capped);
+        if (isCE) { // imleci sona al (contenteditable'da textContent değişince imleç başa sıçrar)
+          const range = document.createRange();
+          const sel = window.getSelection();
+          range.selectNodeContents(el);
+          range.collapse(false);
+          sel.removeAllRanges();
+          sel.addRange(range);
+        }
+      }
     });
     el.addEventListener("blur", () => {
-      el.value = el.classList.contains("tc-field") ? formatTCDisplay(el.value) : formatPhoneDisplay(el.value);
+      setFieldText(el, el.classList.contains("tc-field") ? formatTCDisplay(getFieldText(el)) : formatPhoneDisplay(getFieldText(el)));
       if (el.dataset.mirror && typeof updateMirror === "function") updateMirror(el.dataset.mirror);
     });
   });

@@ -1,0 +1,63 @@
+# -*- coding: utf-8 -*-
+from gen_common import *
+import os
+
+OUT = "/home/claude/idari-belge-sablonlari/belgeler"
+os.makedirs(OUT, exist_ok=True)
+
+EXTRA_STYLE = """<style>
+  .doc-title{ text-align:center; font-size:14pt; line-height:1.4; color:var(--navy); margin: 4px 0 18px; }
+  .para{ font-size:11pt; line-height:1.7; text-align:justify; margin: 14px 0; }
+  .para.lead-in{ margin: 10px 0; }
+  .sig-wrap{ width:52%; margin-left:48%; margin-top:24px; box-sizing:border-box; }
+  .sig-wrap .sig-date-row{ text-align:center; margin-bottom:12px; }
+  .sig-wrap .sig-date-row input[type=date]{ text-align:center; }
+  .sig-heading{ font-weight:bold; margin-bottom:6px; font-family:Arial,sans-serif; font-size:10.5pt; color:#222; }
+  table.sig-id td.label{ width:44%; font-size:9.7pt; }
+  table.sig-id td{ font-size:10pt; }
+  table.sig-id .imza-row-cell{ height: 30px; border-bottom: 1px dotted #888; }
+  @media print{ table.sig-id .imza-row-cell{ border-bottom: 1px dotted #888; } }
+</style>
+"""
+
+title = ('    <h1 class="doc-title">ÖĞRENCİ SERVİSİ PLANLAMA, TAKİP, KONTROL,<br>'
+         'BİLGİLENDİRME VE YÖNETİM SİSTEMİ AÇIK RIZA ONAYI</h1>')
+
+intro = ('    <div class="para">'
+         '6698 sayılı Kişisel Verilerin Korunması Kanunu uyarınca; Millî Eğitim Bakanlığı '
+         'Öğrenci Servisi Planlama, Takip, Kontrol, Bilgilendirme ve Yönetim Sistemi Yönergesi '
+         'hakkında tarafıma gerekli açıklamalar yapılmış, konu hakkında ayrıntılı olarak '
+         'bilgilendirilmiş bulunmaktayım.'
+         '</div>')
+
+lead_in = '    <div class="para lead-in">Bu doğrultuda;</div>'
+
+consent = f'''    <div class="para">
+      Veli/vasisi bulunduğum, okulunuz <span class="inline-fit" contenteditable="true" data-placeholder="sınıf/şube"></span> sınıfında
+      öğrenim gören, <span class="inline-fit tc-field" contenteditable="true" data-placeholder="T.C. Kimlik No" style="min-width:9em;"></span> T.C.
+      Kimlik Numaralı, <span class="inline-fit" contenteditable="true" data-placeholder="öğrencinin adı soyadı" style="min-width:11em;"></span> isimli
+      öğrencimin; Millî Eğitim Bakanlığı tarafından yürürlüğe konulan &ldquo;Öğrenci Servisi Planlama, Takip, Kontrol, Bilgilendirme ve
+      Yönetim Sistemi Yönergesi&rdquo; kapsamında yürütülecek tüm hizmetler çerçevesinde, servis sürecine ilişkin biniş&ndash;iniş, zaman,
+      güzergâh, konum ve yoklama bilgilerinin, bilgilendirme, bildirim, duyuru ve destek süreçleri ile güvenlik, acil durum ve denetim
+      amaçlı veri paylaşımlarının; tarafıma mobil uygulama, kısa mesaj, sesli arama veya elektronik iletişim kanalları üzerinden
+      yapılmasına; bu kapsamda öğrencime ve tarafıma ait kişisel verilerin işlenmesine ve yetkili kişi, kurum ve hizmet sağlayıcılarla
+      paylaşılmasına özgür irademle açık rıza verdiğimi kabul ve beyan ederim.
+    </div>'''
+
+signature = '''    <div class="sig-wrap">
+      <div class="sig-date-row"><input type="date"></div>
+      <div class="sig-heading">Veli/Vasi:</div>
+      <table class="meta sig-id">
+        <tr><td class="label">Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+        <tr><td class="label">T.C. Kimlik No</td><td><input type="text" inputmode="numeric" class="tc-field" placeholder="T.C. Kimlik No"></td></tr>
+        <tr><td class="label">Veli Telefon No</td><td><input type="tel" placeholder="0532 - 123 45 67"></td></tr>
+        <tr><td class="label">Veli İmzası</td><td class="imza-row-cell"></td></tr>
+      </table>
+    </div>'''
+
+body = "\n".join([title, intro, lead_in, consent, signature])
+
+html = page("Öğrenci Servisi KVKK Açık Rıza Onayı", body, extra_style=EXTRA_STYLE)
+with open(os.path.join(OUT, "ogrenci-servisi-kvkk-onay.html"), "w", encoding="utf-8") as f:
+    f.write(html)
+print("wrote ogrenci-servisi-kvkk-onay.html")
