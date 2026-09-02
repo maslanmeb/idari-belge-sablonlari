@@ -6,28 +6,31 @@ OUT = "/home/claude/idari-belge-sablonlari/belgeler"
 os.makedirs(OUT, exist_ok=True)
 
 EXTRA_STYLE = """<style>
-  .doc-title{ text-align:center; font-size:15pt; color:var(--navy); margin: 4px 0 16px; letter-spacing:.5px; }
-  .para{ font-size:10.6pt; line-height:1.6; text-align:justify; margin: 6px 0 10px; text-indent: 1.25cm; }
-  .section{ margin-top: 18px; }
-  .section-heading{ font-weight:bold; font-size:11pt; color:var(--navy); margin: 0 0 4px; font-family: Arial, sans-serif; }
-  .section-note{ font-size:9.3pt; color:#666; font-family:Arial,sans-serif; margin: -2px 0 8px; font-style:italic; }
-  .choice-row{ display:flex; gap: 26px; margin: 4px 0 4px 1.25cm; font-family: Arial, sans-serif; font-size:10.3pt; flex-wrap:wrap; }
-  .choice-row label{ display:flex; align-items:center; gap:6px; cursor:pointer; white-space:nowrap; flex:0 0 auto; }
-  .choice-row input{ width:15px; height:15px; accent-color: var(--navy); }
-  hr.section-rule{ border:none; border-top:1px solid #e2e2e2; margin: 14px 0 0; }
-  .closing-line{ text-indent: 1.25cm; }
-  .sig-block{ margin-top: 26px; }
-  .sig-block .row{ display:flex; align-items:baseline; gap:10px; margin: 10px 0; font-size:10.6pt; }
-  .sig-block .row .lbl{ font-weight:bold; flex:0 0 auto; }
-  .sig-block .row input[type=text]{ flex:1 1 auto; border:none; border-bottom:1px dotted #888; font-family:inherit; font-size:inherit; outline:none; padding:2px; }
-  .sig-block .row .imza-line{ flex:1 1 auto; border-bottom:1px dotted #888; height:1.3em; }
-  .sig-block .row input[type=date]{ border:none; font-family:inherit; font-size:inherit; }
+  .page{ padding: 11mm 16mm 9mm; }
+  .doc-title{ text-align:center; font-size:13pt; color:var(--navy); margin: 2px 0 8px; letter-spacing:.3px; }
+  table.meta.ident-compact td{ padding:2px 6px; font-size:9.4pt; }
+  table.meta.ident-compact td.label{ font-size:8.8pt; }
+  table.meta.ident-compact{ margin-bottom:8px; }
+  .para{ font-size:9pt; line-height:1.36; text-align:justify; margin: 2px 0 5px; text-indent: 1.25cm; }
+  .section{ margin-top: 7px; }
+  .section-heading{ font-weight:bold; font-size:9.7pt; color:var(--navy); margin: 0 0 2px; font-family: Arial, sans-serif; }
+  .section-note{ font-size:8pt; color:#666; font-family:Arial,sans-serif; margin: -1px 0 4px; font-style:italic; line-height:1.25; }
+  .choice-row{ display:flex; gap: 22px; margin: 1px 0 1px 1.25cm; font-family: Arial, sans-serif; font-size:9pt; flex-wrap:wrap; }
+  .choice-row label{ display:flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap; flex:0 0 auto; }
+  .choice-row input{ width:12px; height:12px; accent-color: var(--navy); }
+  hr.section-rule{ border:none; border-top:1px solid #e2e2e2; margin: 6px 0 0; }
+  .closing-line{ text-indent: 1.25cm; font-size:9pt; line-height:1.36; margin: 8px 0 5px; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:8px; box-sizing:border-box; }
+  .sig-wrap table.meta td{ padding:2px 6px; font-size:9.4pt; }
+  .sig-wrap table.meta td.label{ font-size:8.8pt; width:40%; }
+  .sig-wrap .imza-row-cell{ height: 20px; }
+  @media print{ .page{ padding: 9mm 15mm 11mm; } }
 </style>
 """
 
 title = '    <h1 class="doc-title">VELİ MUVAFAKATNAMESİ</h1>'
 
-ident_table = '''    <table class="meta">
+ident_table = '''    <table class="meta ident-compact">
       <tr><td class="label" style="width:32%">Öğrencinin Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
       <tr><td class="label">Sınıfı / Numarası</td><td style="white-space:nowrap;">
         <input type="text" placeholder="Sınıfı" style="width:48%; display:inline-block;">
@@ -117,10 +120,12 @@ sections.append(section(
 closing = ('    <div class="closing-line" contenteditable="true">Yukarıda belirtilen tüm maddeleri okuduğumu, '
            'anladığımı ve gerektiğinde yazılı beyan ile değiştirebileceğimi kabul ederim.</div>')
 
-signature = '''    <div class="sig-block">
-      <div class="row"><span class="lbl">Tarih:</span> <input type="date"></div>
-      <div class="row"><span class="lbl">Veli Adı Soyadı:</span> <input type="text" placeholder="Adı Soyadı"></div>
-      <div class="row"><span class="lbl">İmza:</span> <span class="imza-line"></span></div>
+signature = '''    <div class="sig-wrap">
+      <table class="meta">
+        <tr><td class="label">Tarih</td><td><input type="date"></td></tr>
+        <tr><td class="label">Veli Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+        <tr><td class="label">İmza</td><td class="imza-row-cell"></td></tr>
+      </table>
     </div>'''
 
 body = "\n".join([title, ident_table] + sections + [closing, signature])
