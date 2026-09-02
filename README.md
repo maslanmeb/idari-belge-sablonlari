@@ -12,6 +12,7 @@ belgeler/ayakta-tedavi-beyan.html   → Ayakta Tedavi Beyan Belgesi (2 nüsha)
 belgeler/personel-dilekce.html      → Personel Dilekçe Şablonu
 belgeler/diploma-kayit-ornegi.html  → Diploma Kayıt Örneği Dilekçesi
 belgeler/ogrenci-servisi-kvkk-onay.html → Öğrenci Servisi KVKK Açık Rıza Onayı
+belgeler/veli-muvafakatnamesi.html  → Veli Muvafakatnamesi (6 bölümlü izin/onay formu)
 assets/style.css                    → Ortak stil (kumkale-yaptirim-kiti projesiyle aynı temel)
 assets/app.js                       → Ortak davranışlar + bu projeye özgü mekanizmalar
 netlify.toml                        → Netlify yayın ayarları
