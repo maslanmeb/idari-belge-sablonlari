@@ -64,6 +64,18 @@
   .card.purple{ border-top-color:#7D3C98; }
   .card.teal{ border-top-color:#148F77; }
 
+  .mevzuat-section{ margin-top: 38px; }
+  .mevzuat-list{ display:flex; flex-direction:column; gap:10px; }
+  .mevzuat-item{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    background:#fff; border:1px solid #e3e6ea; border-radius:8px; padding:13px 18px;
+    text-decoration:none; color:inherit; transition: border-color .12s ease, box-shadow .12s ease;
+  }
+  .mevzuat-item:hover{ border-color:#8a95a5; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+  .mevzuat-item .mevzuat-name{ font-size:14px; font-weight:600; color:#222; }
+  .mevzuat-item .mevzuat-arrow{ font-size:15px; color:#8a95a5; flex-shrink:0; }
+  .mevzuat-note{ font-size:12px; color:#9aa0a6; margin: 8px 4px 0; font-style:italic; }
+
   footer{ text-align:center; font-size:12px; color:#9aa0a6; margin-top: 44px; padding: 0 16px; line-height:1.6;}
 </style>
 </head>
@@ -118,6 +130,33 @@
         <span class="sub">Gezi, öğle çıkışı, sağlık müdahalesi, fotoğraf/video, kermes ve etkinlik izinlerini tek belgede toplar</span>
       </a>
 
+    </div>
+
+    <div class="mevzuat-section">
+      <h2 class="grid-title">Kanun ve Yönetmelikler</h2>
+      <div class="mevzuat-list">
+        <a class="mevzuat-item" href="https://www.mevzuat.gov.tr/aramasonuc?AranacakMetin=%C3%96%C4%9Fretmenlik%20Mesle%C4%9Fi%20Kanunu" target="_blank" rel="noopener">
+          <span class="mevzuat-name">Öğretmenlik Mesleği Kanunu</span>
+          <span class="mevzuat-arrow">↗</span>
+        </a>
+        <a class="mevzuat-item" href="https://www.mevzuat.gov.tr/aramasonuc?AranacakMetin=Orta%C3%B6%C4%9Fretim%20Kurumlar%C4%B1%20Y%C3%B6netmeli%C4%9Fi" target="_blank" rel="noopener">
+          <span class="mevzuat-name">Ortaöğretim Kurumları Yönetmeliği</span>
+          <span class="mevzuat-arrow">↗</span>
+        </a>
+        <a class="mevzuat-item" href="https://www.mevzuat.gov.tr/aramasonuc?AranacakMetin=Okul%20%C3%96ncesi%20E%C4%9Fitim%20ve%20%C4%B0lk%C3%B6%C4%9Fretim%20Kurumlar%C4%B1%20Y%C3%B6netmeli%C4%9Fi" target="_blank" rel="noopener">
+          <span class="mevzuat-name">Okul Öncesi Eğitim ve İlköğretim Kurumları Yönetmeliği</span>
+          <span class="mevzuat-arrow">↗</span>
+        </a>
+        <a class="mevzuat-item" href="https://www.mevzuat.gov.tr/aramasonuc?AranacakMetin=Mill%C3%AE%20E%C4%9Fitim%20Temel%20Kanunu" target="_blank" rel="noopener">
+          <span class="mevzuat-name">Millî Eğitim Temel Kanunu</span>
+          <span class="mevzuat-arrow">↗</span>
+        </a>
+        <a class="mevzuat-item" href="https://www.mevzuat.gov.tr/aramasonuc?AranacakMetin=Devlet%20Memurlar%C4%B1%20Kanunu" target="_blank" rel="noopener">
+          <span class="mevzuat-name">Devlet Memurları Kanunu</span>
+          <span class="mevzuat-arrow">↗</span>
+        </a>
+      </div>
+      <p class="mevzuat-note">Bağlantılar mevzuat.gov.tr üzerinde arama sonucuna gider ve yeni sekmede açılır.</p>
     </div>
 
     <footer>
