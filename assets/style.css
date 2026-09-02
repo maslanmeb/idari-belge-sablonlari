@@ -249,6 +249,22 @@ table.imza td{ width:33.33%; vertical-align:top; padding:0 6px; text-align:cente
   a.hotspot{ outline:none !important; }
 }
 
+/* ---------------- Alt bilgi: yazdırmada her sayfanın altına sabitlenir ----------------
+   position:fixed, yazdırma motorunda (Chrome/Firefox) sayfa kutusuna göre konumlanır ve
+   her fiziksel sayfada otomatik olarak tekrarlanır. .page'in alt boşluğu, içeriğin bu
+   sabit alt bilgiyle çakışmaması için ayrılmıştır. */
+@media print{
+  .foot{
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin-top: 0;
+    background: var(--paper);
+  }
+  .page{ padding-bottom: 16mm; }
+}
+
 @media (max-width: 780px){
   .page{ width:100%; padding:16px; }
   body{ padding:12px 8px 40px; }

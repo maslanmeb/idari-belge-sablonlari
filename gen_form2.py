@@ -30,7 +30,7 @@ EXTRA_STYLE = """<style>
   .two-col td{ vertical-align:top; width:50%; padding:0 6px; }
   .two-col td:first-child{ padding-left:0; }
   .two-col td:last-child{ padding-right:0; }
-  @media print{ .page{ padding: 6mm 12mm 5mm; } }
+  @media print{ .page{ padding: 6mm 12mm 13mm; } }
 </style>
 """
 
