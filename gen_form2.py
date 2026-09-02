@@ -24,7 +24,7 @@ EXTRA_STYLE = """<style>
   .field-line.bold{ font-weight:bold; border-bottom:none; }
   .two-col .field-line{ font-family: Arial, sans-serif; font-size: 10.3pt; }
   .two-col .field-line.bold{ font-weight: normal; }
-  .nusha-divider{ margin: 8px 0; }
+  .nusha-divider{ margin: 8px 0 0; }
   .barcode-box{ min-height:54px; font-size:8.3pt; }
   .two-col{ width:100%; border-collapse:collapse; margin-top:6px; }
   .two-col td{ vertical-align:top; width:50%; padding:0 6px; }
@@ -94,9 +94,8 @@ def beyan_bottom(editable):
     </table>'''
 
 
-def nusha_block(no_label, editable, rotate=False):
-    cls = "nusha nusha-rotate-print" if rotate else "nusha"
-    return f'''    <div class="{cls}">
+def nusha_block(no_label, editable):
+    return f'''    <div class="nusha">
       <span class="nusha-label">{no_label}</span>
       <h1 class="doc-title">MİLLÎ EĞİTİM BAKANLIĞI PERSONELİ</h1>
       <div class="doc-subtitle">Ayakta Tedavi Beyan Belgesi</div>
@@ -107,8 +106,8 @@ def nusha_block(no_label, editable, rotate=False):
 
 
 body = nusha_block("1. NÜSHA", True) + \
-    '\n    <hr class="nusha-divider">\n' + \
-    nusha_block("2. NÜSHA", False, rotate=True)
+    '\n    <hr class="nusha-divider">\n    <div class="nusha-second-gap"></div>\n' + \
+    nusha_block("2. NÜSHA", False)
 
 html = page("Ayakta Tedavi Beyan Belgesi", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "ayakta-tedavi-beyan.html"), "w", encoding="utf-8") as f:

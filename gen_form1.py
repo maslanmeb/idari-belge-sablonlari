@@ -23,7 +23,7 @@ EXTRA_STYLE = """<style>
   table.imza.compact .imza-label{ font-size:7.6pt; }
   .field-line{ display:block; text-align:center; border-bottom:1px dotted #888; padding:2px; min-height:1.2em; }
   .field-line.bold{ font-weight:bold; border-bottom:none; }
-  .nusha-divider{ margin: 8px 0; }
+  .nusha-divider{ margin: 8px 0 0; }
   .school-line{ padding: 1px 4px 3px !important; }
   @media print{ .page{ padding: 6mm 12mm 5mm; } }
 </style>
@@ -83,12 +83,11 @@ def teblig_signatures(editable):
     </table>'''
 
 
-def nusha_block(no_label, editable, rotate=False):
+def nusha_block(no_label, editable):
     school = ('<div class="school-line" data-persist="okulAdi" contenteditable="true" spellcheck="false" style="font-size:11.5pt; margin-bottom:2px;"></div>'
               if editable else
               '<div class="school-line" data-persist="okulAdi" style="font-size:11.5pt; margin-bottom:2px; border-bottom:1px solid #000; text-align:center; font-weight:bold; text-transform:uppercase; padding-bottom:4px;"></div>')
-    cls = "nusha nusha-rotate-print" if rotate else "nusha"
-    return f'''    <div class="{cls}">
+    return f'''    <div class="nusha">
       <span class="nusha-label">{no_label}</span>
       {school}
       <h1 class="doc-title">TEBLİĞ &ndash; TEBELLÜĞ BELGESİ</h1>
@@ -99,8 +98,8 @@ def nusha_block(no_label, editable, rotate=False):
 
 
 body = nusha_block("1. NÜSHA — Kurumda Kalacak", True) + \
-    '\n    <hr class="nusha-divider">\n' + \
-    nusha_block("2. NÜSHA — Tebellüğ Edende Kalacak", False, rotate=True)
+    '\n    <hr class="nusha-divider">\n    <div class="nusha-second-gap"></div>\n' + \
+    nusha_block("2. NÜSHA — Tebellüğ Edende Kalacak", False)
 
 html = page("Tebliğ – Tebellüğ Belgesi", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "teblig-tebellug.html"), "w", encoding="utf-8") as f:
