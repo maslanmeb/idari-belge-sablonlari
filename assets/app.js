@@ -132,31 +132,45 @@ async function downloadPDF() {
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF("p", "mm", "a4");
-    const imgWidth = 210;
-    const pageHeightMm = 297;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
-    const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
-    // İçerik tek sayfadan az bir miktar (%5'e kadar) taşıyorsa, gereksiz ve
-    // içeriği tekrar eden bir "2. sayfa" açmak yerine görüntüyü hafifçe
-    // küçültüp tek sayfaya sığdır (yazıcıların "sığdır" davranışı gibi).
-    // Gerçekten çok sayfalı belgelerde ise normal şekilde dilimlenir.
-    if (imgHeight <= pageHeightMm * 1.05) {
-      const scale = Math.min(1, pageHeightMm / imgHeight);
-      const w = imgWidth * scale;
-      const h = imgHeight * scale;
-      pdf.addImage(imgData, "JPEG", (imgWidth - w) / 2, 0, w, h);
-    } else {
-      let heightLeft = imgHeight;
-      let position = 0;
-      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-      heightLeft -= pageHeightMm;
-      while (heightLeft > 0) {
-        position = heightLeft - imgHeight;
-        pdf.addPage();
-        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-        heightLeft -= pageHeightMm;
-      }
+    // Her sayfada (kaç sayfa olursa olsun) sabit kenar boşluğu bırakılır.
+    // Görüntü gerçek dilimlere bölünür, her dilim kendi sayfasına aynı
+    // boşlukla yerleştirilir — böylece sayfa geçişlerinde de üst/alt boşluk
+    // her zaman korunur (yazdırma ile tutarlı görünüm).
+    const marginMm = 12;
+    const pageWidthMm = 210;
+    const pageHeightMmFull = 297;
+    const drawWidthMm = pageWidthMm - marginMm * 2;
+    const drawHeightMm = pageHeightMmFull - marginMm * 2;
+
+    let pxPerMm = canvas.width / drawWidthMm;
+    const totalHeightMm = canvas.height / pxPerMm;
+
+    // Tek sayfadan az bir miktar (%5'e kadar) taşıyorsa, gereksiz bir "2.
+    // sayfa" açmak yerine görüntüyü hafifçe küçültüp tek sayfaya sığdır.
+    if (totalHeightMm > drawHeightMm && totalHeightMm <= drawHeightMm * 1.05) {
+      pxPerMm = canvas.height / drawHeightMm;
+    }
+
+    const sliceHeightPx = Math.floor(drawHeightMm * pxPerMm);
+    const totalSlices = Math.max(1, Math.ceil(canvas.height / sliceHeightPx));
+
+    for (let i = 0; i < totalSlices; i++) {
+      const sy = i * sliceHeightPx;
+      const sh = Math.min(sliceHeightPx, canvas.height - sy);
+      const sliceCanvas = document.createElement("canvas");
+      sliceCanvas.width = canvas.width;
+      sliceCanvas.height = sh;
+      const ctx = sliceCanvas.getContext("2d");
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, sliceCanvas.width, sliceCanvas.height);
+      ctx.drawImage(canvas, 0, sy, canvas.width, sh, 0, 0, canvas.width, sh);
+      const sliceData = sliceCanvas.toDataURL("image/jpeg", 0.95);
+      const sliceWidthMm = canvas.width / pxPerMm;
+      const sliceHeightMmVal = sh / pxPerMm;
+      const xOffset = marginMm + (drawWidthMm - sliceWidthMm) / 2;
+      if (i > 0) pdf.addPage();
+      pdf.addImage(sliceData, "JPEG", xOffset, marginMm, sliceWidthMm, sliceHeightMmVal);
     }
 
     const cleanTitle = document.title.replace(/[\\/:*?"<>|]/g, "").trim() || "belge";
