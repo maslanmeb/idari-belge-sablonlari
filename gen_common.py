@@ -12,10 +12,11 @@ PAGE_TMPL = """<!DOCTYPE html>
 
   <div class="toolbar">
     <a class="back" href="../index.html">&larr; Ana Sayfa</a>
-    <span class="hint">Alanları doldurun, ardından &quot;Yazdır / PDF Al&quot; ile A4 boyutunda PDF olarak kaydedin.</span>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
     <div class="btns">
       <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
-      <button type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button type="button" id="pdfDownloadBtn" onclick="downloadPDF()">⬇️ PDF İndir</button>
     </div>
   </div>
 
@@ -27,6 +28,8 @@ PAGE_TMPL = """<!DOCTYPE html>
     </div>
   </div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script src="../assets/app.js"></script>
 </body>
 </html>

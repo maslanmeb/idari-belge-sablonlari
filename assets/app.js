@@ -84,6 +84,83 @@ function printForm() {
   });
 }
 
+/* ---------- PDF İndir (tarayıcı bağımsız, doğrudan indirme) ----------
+   window.print()'e değil html2canvas + jsPDF'e dayanır: sayfa bir görüntüye
+   dönüştürülüp A4 ölçülerinde bir PDF'e gömülür ve doğrudan indirilir.
+   Bu sayede kenar boşluğu/hizalama hangi tarayıcı/cihazda açılırsa açılsın
+   birebir aynı kalır. Bedeli: PDF içindeki metin artık seçilebilir/aranabilir
+   değildir (görüntü olarak gömülüdür). Tüm işlem tarayıcıda yapılır, hiçbir
+   veri sunucuya gönderilmez.
+*/
+async function downloadPDF() {
+  const btn = document.getElementById("pdfDownloadBtn");
+  const pageEl = document.querySelector(".page");
+  if (!pageEl || !window.html2canvas || typeof window.jspdf === "undefined") {
+    alert("PDF indirme kütüphaneleri yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin, ya da 'Yazdır / PDF Al' seçeneğini kullanın.");
+    return;
+  }
+
+  if (typeof applyFieldFormatting === "function") applyFieldFormatting();
+  document.querySelectorAll("textarea").forEach(autoGrow);
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Hazırlanıyor…";
+
+  // Ekran-only etkileşim öğelerini (ekle/sil butonları, ipuçları) geçici gizle
+  const hideSelector = [
+    ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
+    ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
+    ".school-hint",
+  ].join(",");
+  const hidden = [];
+  pageEl.querySelectorAll(hideSelector).forEach((el) => {
+    hidden.push([el, el.style.display]);
+    el.style.display = "none";
+  });
+  const prevShadow = pageEl.style.boxShadow;
+  pageEl.style.boxShadow = "none";
+
+  await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+
+  try {
+    const canvas = await window.html2canvas(pageEl, {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff",
+    });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF("p", "mm", "a4");
+    const imgWidth = 210;
+    const pageHeightMm = 297;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const imgData = canvas.toDataURL("image/jpeg", 0.95);
+
+    let heightLeft = imgHeight;
+    let position = 0;
+    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeightMm;
+    while (heightLeft > 0) {
+      position = heightLeft - imgHeight;
+      pdf.addPage();
+      pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+      heightLeft -= pageHeightMm;
+    }
+
+    const cleanTitle = document.title.replace(/[\\/:*?"<>|]/g, "").trim() || "belge";
+    pdf.save(cleanTitle + ".pdf");
+  } catch (err) {
+    console.error(err);
+    alert("PDF oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin ya da 'Yazdır / PDF Al' seçeneğini kullanın.");
+  } finally {
+    hidden.forEach(([el, disp]) => { el.style.display = disp; });
+    pageEl.style.boxShadow = prevShadow;
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
 /* ---------- Kapatılabilir bilgi kutuları ---------- */
 function initNoteBoxes() {
   document.querySelectorAll(".note-box").forEach((box) => {
