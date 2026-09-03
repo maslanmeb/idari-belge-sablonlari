@@ -121,14 +121,29 @@ async function downloadPDF() {
   const prevShadow = pageEl.style.boxShadow;
   pageEl.style.boxShadow = "none";
 
+  // Alt bilgi (okul adı / kit adı) ayrı yakalanır; ana içerikten geçici
+  // gizlenir ki her sayfaya biz kendimiz, sayfanın en altına sabit şekilde
+  // ekleyelim (yazdırmadaki position:fixed davranışını taklit eder).
+  const footEl = pageEl.querySelector(".foot");
+  const footPrevDisplay = footEl ? footEl.style.display : null;
+
   await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
 
   try {
+    let footCanvas = null;
+    if (footEl) {
+      footCanvas = await window.html2canvas(footEl, { scale: 2, useCORS: true, backgroundColor: "#ffffff" });
+      footEl.style.display = "none";
+      await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+    }
+
     const canvas = await window.html2canvas(pageEl, {
       scale: 2,
       useCORS: true,
       backgroundColor: "#ffffff",
     });
+
+    if (footEl) footEl.style.display = footPrevDisplay;
 
     const { jsPDF } = window.jspdf;
     const pdf = new jsPDF("p", "mm", "a4");
@@ -152,6 +167,14 @@ async function downloadPDF() {
       pxPerMm = canvas.height / drawHeightMm;
     }
 
+    // Alt bilginin mm cinsinden boyutu (varsa) — her sayfada aynı yerde durur.
+    let footWidthMm = 0, footHeightMm = 0, footData = null;
+    if (footCanvas) {
+      footWidthMm = drawWidthMm;
+      footHeightMm = (footCanvas.height * footWidthMm) / footCanvas.width;
+      footData = footCanvas.toDataURL("image/jpeg", 0.95);
+    }
+
     const sliceHeightPx = Math.floor(drawHeightMm * pxPerMm);
     const totalSlices = Math.max(1, Math.ceil(canvas.height / sliceHeightPx));
 
@@ -171,6 +194,10 @@ async function downloadPDF() {
       const xOffset = marginMm + (drawWidthMm - sliceWidthMm) / 2;
       if (i > 0) pdf.addPage();
       pdf.addImage(sliceData, "JPEG", xOffset, marginMm, sliceWidthMm, sliceHeightMmVal);
+      if (footData) {
+        const footY = pageHeightMmFull - marginMm - footHeightMm;
+        pdf.addImage(footData, "JPEG", marginMm, footY, footWidthMm, footHeightMm);
+      }
     }
 
     const cleanTitle = document.title.replace(/[\\/:*?"<>|]/g, "").trim() || "belge";
@@ -179,6 +206,7 @@ async function downloadPDF() {
     console.error(err);
     alert("PDF oluşturulurken bir sorun oluştu. Lütfen tekrar deneyin ya da 'Yazdır / PDF Al' seçeneğini kullanın.");
   } finally {
+    if (footEl) footEl.style.display = footPrevDisplay;
     hidden.forEach(([el, disp]) => { el.style.display = disp; });
     pageEl.style.boxShadow = prevShadow;
     btn.disabled = false;
