@@ -137,15 +137,26 @@ async function downloadPDF() {
     const imgHeight = (canvas.height * imgWidth) / canvas.width;
     const imgData = canvas.toDataURL("image/jpeg", 0.95);
 
-    let heightLeft = imgHeight;
-    let position = 0;
-    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
-    heightLeft -= pageHeightMm;
-    while (heightLeft > 0) {
-      position = heightLeft - imgHeight;
-      pdf.addPage();
+    // İçerik tek sayfadan az bir miktar (%5'e kadar) taşıyorsa, gereksiz ve
+    // içeriği tekrar eden bir "2. sayfa" açmak yerine görüntüyü hafifçe
+    // küçültüp tek sayfaya sığdır (yazıcıların "sığdır" davranışı gibi).
+    // Gerçekten çok sayfalı belgelerde ise normal şekilde dilimlenir.
+    if (imgHeight <= pageHeightMm * 1.05) {
+      const scale = Math.min(1, pageHeightMm / imgHeight);
+      const w = imgWidth * scale;
+      const h = imgHeight * scale;
+      pdf.addImage(imgData, "JPEG", (imgWidth - w) / 2, 0, w, h);
+    } else {
+      let heightLeft = imgHeight;
+      let position = 0;
       pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
       heightLeft -= pageHeightMm;
+      while (heightLeft > 0) {
+        position = heightLeft - imgHeight;
+        pdf.addPage();
+        pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+        heightLeft -= pageHeightMm;
+      }
     }
 
     const cleanTitle = document.title.replace(/[\\/:*?"<>|]/g, "").trim() || "belge";
