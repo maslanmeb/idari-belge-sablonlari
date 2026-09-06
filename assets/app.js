@@ -327,7 +327,7 @@ function initMirrors() {
 function makeParagraphRow() {
   const row = document.createElement("div");
   row.className = "p-row";
-  row.innerHTML = `<textarea rows="2" placeholder="Paragraf yazınız..."></textarea><button type="button" class="p-remove">&times;</button>`;
+  row.innerHTML = `<textarea rows="2" placeholder="Paragraf yazınız..." autocomplete="off"></textarea><button type="button" class="p-remove">&times;</button>`;
   bindParagraphRow(row);
   return row;
 }
@@ -373,7 +373,7 @@ function renumberEkList(list) {
 function makeEkRow(list) {
   const row = document.createElement("div");
   row.className = "ek-row";
-  row.innerHTML = `<span class="ek-no"></span><input type="text" placeholder="ek adı"><button type="button" class="ek-remove">&times;</button>`;
+  row.innerHTML = `<span class="ek-no"></span><input type="text" placeholder="ek adı" autocomplete="off"><button type="button" class="ek-remove">&times;</button>`;
   row.querySelector(".ek-remove").addEventListener("click", () => {
     row.remove();
     renumberEkList(list);
@@ -552,8 +552,17 @@ function clearForm() {
   keys.forEach(updateMirror);
 }
 
+/* ---------- Gizlilik: paylaşılan bilgisayarlarda tarayıcı otomatik-doldurma
+   önerilerinin önceki kullanıcının verilerini göstermesini engelle ---------- */
+function disableAutofill() {
+  document.querySelectorAll("input, textarea, select").forEach((el) => {
+    if (!el.hasAttribute("autocomplete")) el.setAttribute("autocomplete", "off");
+  });
+}
+
 /* ---------- Başlat ---------- */
 document.addEventListener("DOMContentLoaded", () => {
+  disableAutofill();
   initPersistentFields();
   initAutoGrow();
   initNoteBoxes();
