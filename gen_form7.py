@@ -1,0 +1,84 @@
+# -*- coding: utf-8 -*-
+from gen_common import *
+import os
+
+OUT = "/home/claude/idari-belge-sablonlari/belgeler"
+os.makedirs(OUT, exist_ok=True)
+
+EXTRA_STYLE = """<style>
+  .doc-title{ text-align:center; font-size:15pt; color:var(--navy); margin: 4px 0 16px; }
+  .section-title{ font-weight:bold; font-size:11.5pt; color:var(--navy); margin: 18px 0 4px; font-family: Arial, sans-serif; }
+  .section-sub{ font-size:10px; color:#777; font-family:Arial,sans-serif; margin: 0 0 8px; font-style:italic; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:20px; box-sizing:border-box; }
+  .sig-wrap table.meta td{ padding:3px 6px; font-size:9.6pt; }
+  .sig-wrap table.meta td.label{ font-size:9pt; width:44%; }
+  .sig-wrap .imza-row-cell{ height: 22px; }
+</style>
+"""
+
+ident_table = '''    <table class="meta">
+      <tr><td class="label" style="width:32%">Zümre Adı</td><td><input type="text" placeholder="ör. Matematik Zümresi / Sınıf Öğretmenleri Zümresi"></td></tr>
+      <tr><td class="label">Toplantı Sırası</td><td><input type="text" placeholder="ör. 1. Dönem 1. Toplantı" style="width:60%; display:inline-block;"></td></tr>
+      <tr><td class="label">Tarih / Saat / Yer</td><td style="white-space:nowrap;">
+        <input type="date" style="width:32%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="time" style="width:22%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="text" placeholder="Yer (ör. Öğretmenler Odası)" style="width:34%; display:inline-block;">
+      </td></tr>
+      <tr><td class="label">Zümre Başkanı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+    </table>'''
+
+gundem_section = '''    <div class="section-title">Gündem Maddeleri ve Alınan Kararlar</div>
+    <div class="section-sub">Her madde için görüşme özetini/kararı yazın. Sıra numarası otomatik verilir, madde ekleyip çıkarabilirsiniz.</div>
+    <datalist id="gundemOnerileri">
+      <option value="Bir önceki toplantıda alınan kararların değerlendirilmesi">
+      <option value="Yıllık plan ve ders planlarının görüşülmesi">
+      <option value="Bireyselleştirilmiş Eğitim Programlarının (BEP) görüşülmesi">
+      <option value="Ortak yazılı/uygulamalı sınavların planlanması">
+      <option value="Sınav sonuçlarının analizi ve eylem planı">
+      <option value="Ders araç-gereç ve eğitim materyali ihtiyaçlarının belirlenmesi">
+      <option value="Okul dışı öğrenme ortamları, gezi ve gözlem planlaması">
+      <option value="Proje ve performans çalışmalarının belirlenmesi">
+      <option value="İş sağlığı ve güvenliği tedbirlerinin değerlendirilmesi">
+      <option value="Diğer">
+    </datalist>
+    <div class="gundem-list" id="gundemList"></div>
+    <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>'''
+
+uye_section = '''    <div class="section-title">Toplantıya Katılan / Katılmayan Üyeler</div>
+    <div class="section-sub">Md.12/7 uyarınca tutanak, toplantıya katılmayanlar dâhil tüm zümre üyeleri tarafından imzalanır.</div>
+    <table class="uye-table">
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:38%">Adı Soyadı</th>
+          <th style="width:20%">Durumu</th>
+          <th style="width:22%">İmza</th>
+          <th style="width:6%"></th>
+        </tr>
+      </thead>
+      <tbody id="uyeBody"></tbody>
+    </table>
+    <button type="button" class="uye-add" data-target="uyeBody">+ Üye Ekle</button>'''
+
+signature = '''    <div class="sig-wrap">
+      <table class="meta">
+        <tr><td class="label">Onay Tarihi</td><td><input type="date"></td></tr>
+        <tr><td class="label">Okul Müdürü</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+        <tr><td class="label">İmza</td><td class="imza-row-cell"></td></tr>
+      </table>
+    </div>'''
+
+body = "\n".join([
+    '    <h1 class="doc-title">ZÜMRE TOPLANTI TUTANAĞI</h1>',
+    ident_table,
+    gundem_section,
+    uye_section,
+    signature,
+])
+
+html = page("Zümre Toplantı Tutanağı", body, extra_style=EXTRA_STYLE)
+with open(os.path.join(OUT, "zumre-toplanti-tutanagi.html"), "w", encoding="utf-8") as f:
+    f.write(html)
+print("wrote zumre-toplanti-tutanagi.html")

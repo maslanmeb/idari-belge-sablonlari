@@ -111,6 +111,7 @@ async function downloadPDF() {
   const hideSelector = [
     ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
     ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
+    ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
     ".school-hint",
   ].join(",");
   const hidden = [];
@@ -403,6 +404,124 @@ function resetEkList(list) {
   renumberEkList(list);
 }
 
+/* ---------- Gündem listesi (başlık + karar metni, ekle/sil, otomatik numaralı) ----------
+   HTML: <div class="gundem-list" id="gundemList"></div>
+         <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>
+*/
+function renumberGundemList(list) {
+  list.querySelectorAll(".gundem-item").forEach((item, i) => {
+    item.querySelector(".gundem-num").textContent = (i + 1) + ".";
+  });
+}
+function bindGundemItem(item) {
+  const ta = item.querySelector("textarea");
+  ta.addEventListener("input", () => autoGrow(ta));
+  autoGrow(ta);
+  item.querySelector(".gundem-remove").addEventListener("click", () => {
+    const list = item.closest(".gundem-list");
+    if (list.querySelectorAll(".gundem-item").length <= 1) {
+      item.querySelector(".gundem-title").value = "";
+      ta.value = "";
+      autoGrow(ta);
+      return;
+    }
+    item.remove();
+    renumberGundemList(list);
+  });
+}
+function makeGundemItem() {
+  const item = document.createElement("div");
+  item.className = "gundem-item";
+  item.innerHTML = `
+    <div class="gundem-item-head">
+      <span class="gundem-num"></span>
+      <input type="text" class="gundem-title" list="gundemOnerileri" placeholder="Gündem maddesi başlığı" autocomplete="off">
+      <button type="button" class="gundem-remove">&times;</button>
+    </div>
+    <textarea rows="2" placeholder="Görüşme özeti / alınan karar..." autocomplete="off"></textarea>`;
+  bindGundemItem(item);
+  return item;
+}
+function initGundemLists() {
+  document.querySelectorAll(".gundem-list").forEach((list) => {
+    const existing = list.querySelectorAll(".gundem-item");
+    if (existing.length) existing.forEach(bindGundemItem);
+    else list.appendChild(makeGundemItem());
+    renumberGundemList(list);
+  });
+  document.querySelectorAll(".gundem-add").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const list = document.getElementById(btn.dataset.target);
+      if (!list) return;
+      const item = makeGundemItem();
+      list.appendChild(item);
+      renumberGundemList(list);
+      item.querySelector(".gundem-title").focus();
+    });
+  });
+}
+function resetGundemList(list) {
+  list.innerHTML = "";
+  list.appendChild(makeGundemItem());
+  renumberGundemList(list);
+}
+
+/* ---------- Katılımcı/üye tablosu (Ad Soyad + Katıldı mı + İmza, ekle/sil) ----------
+   HTML: <table class="uye-table"><tbody id="uyeBody"></tbody></table>
+         <button type="button" class="uye-add" data-target="uyeBody">+ Üye Ekle</button>
+*/
+function renumberUyeTable(tbody) {
+  tbody.querySelectorAll(".uye-row").forEach((row, i) => {
+    row.querySelector(".uye-num").textContent = i + 1;
+    row.querySelector(".uye-remove").classList.toggle("show", tbody.querySelectorAll(".uye-row").length > 1);
+  });
+}
+function bindUyeRow(row) {
+  row.querySelector(".uye-remove").addEventListener("click", () => {
+    const tbody = row.closest("tbody");
+    if (tbody.querySelectorAll(".uye-row").length <= 1) {
+      row.querySelectorAll("input").forEach((i) => (i.value = ""));
+      row.querySelector("select").selectedIndex = 0;
+      return;
+    }
+    row.remove();
+    renumberUyeTable(tbody);
+  });
+}
+function makeUyeRow() {
+  const row = document.createElement("tr");
+  row.className = "uye-row";
+  row.innerHTML = `
+    <td class="uye-num"></td>
+    <td><input type="text" placeholder="Adı Soyadı" autocomplete="off"></td>
+    <td><select><option value="katildi">Katıldı</option><option value="katilmadi">Katılmadı</option></select></td>
+    <td class="uye-imza"></td>
+    <td><button type="button" class="uye-remove">&times;</button></td>`;
+  bindUyeRow(row);
+  return row;
+}
+function initUyeTables() {
+  document.querySelectorAll(".uye-table tbody").forEach((tbody) => {
+    tbody.querySelectorAll(".uye-row").forEach(bindUyeRow);
+    renumberUyeTable(tbody);
+  });
+  document.querySelectorAll(".uye-add").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tbody = document.getElementById(btn.dataset.target);
+      if (!tbody) return;
+      const row = makeUyeRow();
+      tbody.appendChild(row);
+      renumberUyeTable(tbody);
+      row.querySelector("input").focus();
+    });
+  });
+}
+function resetUyeTable(tbody) {
+  tbody.innerHTML = "";
+  tbody.appendChild(makeUyeRow());
+  renumberUyeTable(tbody);
+}
+
 /* ---------- Yıl kutuları: ilk kutu doldurulunca ikinci otomatik +1 ---------- */
 function initYearAutoIncrement() {
   document.querySelectorAll("[data-year-pair]").forEach((pairEl) => {
@@ -535,6 +654,8 @@ function clearForm() {
 
   document.querySelectorAll(".paragraph-list").forEach(resetParagraphList);
   document.querySelectorAll(".ek-list").forEach(resetEkList);
+  document.querySelectorAll(".gundem-list").forEach(resetGundemList);
+  document.querySelectorAll(".uye-table tbody").forEach(resetUyeTable);
   resetYearPairs();
   resetClosingLines();
 
@@ -571,6 +692,8 @@ document.addEventListener("DOMContentLoaded", () => {
   initMirrors();
   initParagraphLists();
   initEkLists();
+  initGundemLists();
+  initUyeTables();
   initYearAutoIncrement();
   initClosingLines();
 });

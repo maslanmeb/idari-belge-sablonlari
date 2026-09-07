@@ -390,6 +390,50 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 }
 .ekler-add:hover{ background:#dde6f3; }
 
+/* ---- Gündem listesi (başlık + karar metni, ekle/sil) ---- */
+.gundem-list{ margin: 8px 0; }
+.gundem-item{
+  border: 1px solid var(--line); border-radius: 7px; padding: 10px 12px; margin-bottom: 10px; background:#fbfbfa;
+}
+.gundem-item-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
+.gundem-num{ font-family: Arial, sans-serif; font-weight:700; color: var(--navy); flex:0 0 auto; min-width:1.4em; }
+.gundem-title{
+  flex:1 1 auto; border:none; border-bottom:1px solid #bbb; background:transparent; font-family:inherit;
+  font-weight:700; font-size:11pt; padding:2px; outline:none;
+}
+.gundem-item textarea{ width:100%; border:1px solid var(--line); border-radius:5px; font-family:inherit; font-size:10.6pt; padding:6px; resize:none; overflow:hidden; }
+.gundem-remove{
+  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer; opacity:.5; padding:2px 4px;
+}
+.gundem-remove:hover{ opacity:1; }
+.gundem-add{
+  font-family: Arial, sans-serif; font-size:12.5px; font-weight:700; color: var(--navy);
+  background:#eef2f8; border:1px solid #c7d3e3; border-radius:6px; padding:6px 12px; cursor:pointer;
+}
+.gundem-add:hover{ background:#dde6f3; }
+
+/* ---- Katılımcı/üye tablosu ---- */
+table.uye-table{ width:100%; border-collapse:collapse; margin: 10px 0 8px; font-size:10.3pt; table-layout:fixed; }
+table.uye-table th{
+  background: var(--navy); color:#fff; font-family: Arial, sans-serif; font-size:9.5pt; font-weight:700;
+  padding:6px; text-align:left; border:1px solid var(--navy);
+}
+table.uye-table td{ border:1px solid var(--line); padding:4px 6px; vertical-align:middle; }
+table.uye-table td.uye-num{ text-align:center; font-weight:700; color:var(--navy); width:6%; }
+table.uye-table input[type=text]{ width:100%; border:none; background:transparent; font-family:inherit; font-size:10.3pt; outline:none; padding:2px; }
+table.uye-table select{ width:100%; border:none; background:transparent; font-family:inherit; font-size:10.3pt; outline:none; padding:2px; }
+table.uye-table td.uye-imza{ width:22%; }
+.uye-remove{
+  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:15px; cursor:pointer; opacity:.35; padding:2px 4px;
+}
+.uye-remove:hover{ opacity:1; }
+.uye-remove.show{ display:inline-block; }
+.uye-add{
+  font-family: Arial, sans-serif; font-size:12.5px; font-weight:700; color: var(--navy);
+  background:#eef2f8; border:1px solid #c7d3e3; border-radius:6px; padding:6px 12px; cursor:pointer; margin-bottom:14px;
+}
+.uye-add:hover{ background:#dde6f3; }
+
 /* ---- Barkod alanı ---- */
 .barcode-box{
   border: 2px dashed #999; border-radius:6px; min-height: 70px;
@@ -406,7 +450,7 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 .persist-field:empty::before{ content: attr(data-placeholder); color:#aaa; font-style:italic; }
 
 @media print{
-  .paragraph-list-add, .p-remove, .ekler-add, .ek-remove{ display:none !important; }
+  .paragraph-list-add, .p-remove, .ekler-add, .ek-remove, .gundem-add, .gundem-remove, .uye-add, .uye-remove{ display:none !important; }
   .paragraph-list textarea{ border:none !important; text-indent: 1.25cm; }
   .ekler-empty .ekler-title{ display:none !important; }
   .nusha-label{ background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
