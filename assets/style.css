@@ -395,15 +395,15 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 .gundem-item{
   border: 1px solid var(--line); border-radius: 7px; padding: 10px 12px; margin-bottom: 10px; background:#fbfbfa;
 }
-.gundem-item-head{ display:flex; align-items:center; gap:8px; margin-bottom:6px; }
-.gundem-num{ font-family: Arial, sans-serif; font-weight:700; color: var(--navy); flex:0 0 auto; min-width:1.4em; }
+.gundem-item-head{ display:flex; align-items:flex-start; gap:8px; margin-bottom:6px; }
+.gundem-num{ font-family: Arial, sans-serif; font-weight:700; color: var(--navy); flex:0 0 auto; min-width:1.4em; padding-top:3px; }
 .gundem-title{
   flex:1 1 auto; border:none; border-bottom:1px solid #bbb; background:transparent; font-family:inherit;
-  font-weight:700; font-size:11pt; padding:2px; outline:none;
+  font-weight:700; font-size:11pt; padding:2px 2px 4px; outline:none; resize:none; overflow:hidden; line-height:1.35;
 }
-.gundem-item textarea{ width:100%; border:1px solid var(--line); border-radius:5px; font-family:inherit; font-size:10.6pt; padding:6px; resize:none; overflow:hidden; }
+.gundem-item .gundem-karar{ width:100%; border:1px solid var(--line); border-radius:5px; font-family:inherit; font-size:10.6pt; padding:6px; resize:none; overflow:hidden; }
 .gundem-remove{
-  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer; opacity:.5; padding:2px 4px;
+  flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer; opacity:.5; padding:2px 4px; margin-top:1px;
 }
 .gundem-remove:hover{ opacity:1; }
 .gundem-add{

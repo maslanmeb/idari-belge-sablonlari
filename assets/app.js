@@ -468,25 +468,29 @@ function bindGundemSuggest(input) {
     dropdown.style.display = "block";
   }
   input.addEventListener("focus", renderList);
-  input.addEventListener("input", renderList);
+  input.addEventListener("input", () => { autoGrow(input); renderList(); });
+  autoGrow(input);
   input.addEventListener("blur", () => setTimeout(() => { dropdown.style.display = "none"; }, 150));
   dropdown.addEventListener("mousedown", (e) => {
     const item = e.target.closest(".suggest-item");
     if (!item) return;
     input.value = item.dataset.value;
+    autoGrow(input);
     dropdown.style.display = "none";
     input.focus();
   });
 }
 function bindGundemItem(item) {
-  const ta = item.querySelector("textarea");
+  const ta = item.querySelector(".gundem-karar");
   ta.addEventListener("input", () => autoGrow(ta));
   autoGrow(ta);
   bindGundemSuggest(item.querySelector(".gundem-title"));
   item.querySelector(".gundem-remove").addEventListener("click", () => {
     const list = item.closest(".gundem-list");
     if (list.querySelectorAll(".gundem-item").length <= 1) {
-      item.querySelector(".gundem-title").value = "";
+      const titleEl = item.querySelector(".gundem-title");
+      titleEl.value = "";
+      autoGrow(titleEl);
       ta.value = "";
       autoGrow(ta);
       return;
@@ -501,10 +505,10 @@ function makeGundemItem() {
   item.innerHTML = `
     <div class="gundem-item-head">
       <span class="gundem-num"></span>
-      <input type="text" class="gundem-title" placeholder="Gündem maddesi başlığı" autocomplete="off">
+      <textarea rows="1" class="gundem-title" placeholder="Gündem maddesi başlığı" autocomplete="off"></textarea>
       <button type="button" class="gundem-remove">&times;</button>
     </div>
-    <textarea rows="2" placeholder="Görüşme özeti / alınan karar..." autocomplete="off"></textarea>`;
+    <textarea rows="2" class="gundem-karar" placeholder="Görüşme özeti / alınan karar..." autocomplete="off"></textarea>`;
   bindGundemItem(item);
   return item;
 }
