@@ -30,19 +30,7 @@ ident_table = '''    <table class="meta">
     </table>'''
 
 gundem_section = '''    <div class="section-title">Gündem Maddeleri ve Alınan Kararlar</div>
-    <div class="section-sub">Her madde için görüşme özetini/kararı yazın. Sıra numarası otomatik verilir, madde ekleyip çıkarabilirsiniz.</div>
-    <datalist id="gundemOnerileri">
-      <option value="Bir önceki toplantıda alınan kararların değerlendirilmesi">
-      <option value="Yıllık plan ve ders planlarının görüşülmesi">
-      <option value="Bireyselleştirilmiş Eğitim Programlarının (BEP) görüşülmesi">
-      <option value="Ortak yazılı/uygulamalı sınavların planlanması">
-      <option value="Sınav sonuçlarının analizi ve eylem planı">
-      <option value="Ders araç-gereç ve eğitim materyali ihtiyaçlarının belirlenmesi">
-      <option value="Okul dışı öğrenme ortamları, gezi ve gözlem planlaması">
-      <option value="Proje ve performans çalışmalarının belirlenmesi">
-      <option value="İş sağlığı ve güvenliği tedbirlerinin değerlendirilmesi">
-      <option value="Diğer">
-    </datalist>
+    <div class="section-sub">Her madde için görüşme özetini/kararı yazın. Sıra numarası otomatik verilir, madde ekleyip çıkarabilirsiniz. Başlık alanına tıklayınca 27 hazır gündem maddesi ve "Diğer" seçeneği önerilir; sık kullanılanlar "(önerilir)" etiketiyle işaretlidir, ancak seçildiğinde bu etiket belgeye yazılmaz.</div>
     <div class="gundem-list" id="gundemList"></div>
     <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>'''
 

@@ -111,7 +111,7 @@ async function downloadPDF() {
   const hideSelector = [
     ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
     ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
-    ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
+    ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove", ".gundem-suggest-dropdown",
     ".school-hint",
   ].join(",");
   const hidden = [];
@@ -408,15 +408,81 @@ function resetEkList(list) {
    HTML: <div class="gundem-list" id="gundemList"></div>
          <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>
 */
+
+// MEB Eğitim Kurulları ve Zümreleri Yönergesi Md.12/8 — eğitim kurumu sınıf/alan
+// zümreleri gündem maddelerinin tamamı (27 bent) + "Diğer". "recommended:true"
+// olanlar en sık kullanılanlardır; öneri kutusunda "(önerilir)" etiketiyle
+// gösterilir ama seçildiğinde belgeye sadece temiz başlık yazılır.
+const GUNDEM_ONERILERI = [
+  { text: "Bir önceki toplantıda alınan kararların değerlendirilmesi", recommended: true },
+  { text: "Planlamaların ilgili mevzuata ve öğretim programına uygun yapılması", recommended: false },
+  { text: "Yıllık plan ve ders planlarının hazırlanması (konu/kazanım ağırlıkları)", recommended: true },
+  { text: "Ders işleniş yöntem/tekniklerinin ve okul temelli faaliyetlerin planlanması", recommended: false },
+  { text: "Bireyselleştirilmiş Eğitim Programları (BEP) ve farklılaştırılmış uygulamaların görüşülmesi", recommended: true },
+  { text: "Zümre içi ders ziyareti yapılması ve geri dönütlerin değerlendirilmesi", recommended: false },
+  { text: "Alanla ilgili akademik ve teknolojik gelişmelerin takip edilmesi", recommended: false },
+  { text: "Öğrencilerde girişimcilik, araştırma-geliştirme-tasarım becerilerinin geliştirilmesi", recommended: false },
+  { text: "Ders araç-gereç ve eğitim materyali ihtiyaçlarının belirlenmesi", recommended: true },
+  { text: "Gezi, gözlem ve okul dışı öğrenme ortamlarının planlanması", recommended: true },
+  { text: "Sınav sonuçlarının analizi ve eylem planlarının hazırlanması", recommended: true },
+  { text: "Ortak sınav soru/cevap anahtarı, dereceli puanlama anahtarı ve beceri sınavlarının planlanması", recommended: true },
+  { text: "Ulusal/uluslararası sınav ve yarışma sonuçlarının değerlendirilmesi", recommended: false },
+  { text: "Uygulamalı derslerde (görsel sanatlar, müzik, beden eğitimi vb.) değerlendirme ölçütlerinin belirlenmesi", recommended: false },
+  { text: "Proje ve performans çalışmalarının belirlenmesi ve değerlendirme ölçeklerinin hazırlanması", recommended: true },
+  { text: "İş sağlığı ve güvenliği tedbirlerinin değerlendirilmesi", recommended: true },
+  { text: "İlçe geneli ortak yazılı sınavların değerlendirme işlemlerinin yapılması", recommended: false },
+  { text: "Merkezi mazeret sınavlarının uygulanması", recommended: false },
+  { text: "Okul geneli mazeret sınavı soru ve cevap anahtarının hazırlanması", recommended: false },
+  { text: "Öğrencilerin üst düzey düşünme ve sosyal-duygusal becerilerinin geliştirilmesi", recommended: false },
+  { text: "Millî, manevi ve ahlaki değerlerin örtük öğrenme yoluyla işlenmesi", recommended: false },
+  { text: "Önleme, müdahale ve yönlendirme komisyonu çalışmalarının planlanması", recommended: false },
+  { text: "Disiplinler arası yaklaşımla ortak çalışmaların planlanması", recommended: false },
+  { text: "Çoklu okuryazarlık ve öğrencinin bütüncül gelişimine yönelik çalışmalar", recommended: false },
+  { text: "Sosyal sorumluluk programı kapsamında ders bazlı faaliyetlerin planlanması", recommended: false },
+  { text: "Faaliyetler için araç-gereç ve mali kaynak ihtiyacının belirlenmesi", recommended: false },
+  { text: "Okul öncesi/ilkokulda öğrenci gelişim takibinin planlanması (gözlem formları, oyun temelli değerlendirme)", recommended: false },
+  { text: "Diğer", recommended: false },
+];
+
 function renumberGundemList(list) {
   list.querySelectorAll(".gundem-item").forEach((item, i) => {
     item.querySelector(".gundem-num").textContent = (i + 1) + ".";
+  });
+}
+function bindGundemSuggest(input) {
+  if (input.dataset.suggestBound) return;
+  input.dataset.suggestBound = "1";
+  const wrap = input.parentElement;
+  wrap.style.position = "relative";
+  const dropdown = document.createElement("div");
+  dropdown.className = "gundem-suggest-dropdown";
+  wrap.appendChild(dropdown);
+
+  function renderList() {
+    const f = input.value.toLocaleLowerCase("tr");
+    const matches = GUNDEM_ONERILERI.filter((o) => o.text.toLocaleLowerCase("tr").includes(f));
+    if (!matches.length) { dropdown.style.display = "none"; return; }
+    dropdown.innerHTML = matches
+      .map((o) => `<div class="suggest-item" data-value="${o.text.replace(/"/g, "&quot;")}">${o.text}${o.recommended ? ' <span class="suggest-tag">(önerilir)</span>' : ""}</div>`)
+      .join("");
+    dropdown.style.display = "block";
+  }
+  input.addEventListener("focus", renderList);
+  input.addEventListener("input", renderList);
+  input.addEventListener("blur", () => setTimeout(() => { dropdown.style.display = "none"; }, 150));
+  dropdown.addEventListener("mousedown", (e) => {
+    const item = e.target.closest(".suggest-item");
+    if (!item) return;
+    input.value = item.dataset.value;
+    dropdown.style.display = "none";
+    input.focus();
   });
 }
 function bindGundemItem(item) {
   const ta = item.querySelector("textarea");
   ta.addEventListener("input", () => autoGrow(ta));
   autoGrow(ta);
+  bindGundemSuggest(item.querySelector(".gundem-title"));
   item.querySelector(".gundem-remove").addEventListener("click", () => {
     const list = item.closest(".gundem-list");
     if (list.querySelectorAll(".gundem-item").length <= 1) {
@@ -435,7 +501,7 @@ function makeGundemItem() {
   item.innerHTML = `
     <div class="gundem-item-head">
       <span class="gundem-num"></span>
-      <input type="text" class="gundem-title" list="gundemOnerileri" placeholder="Gündem maddesi başlığı" autocomplete="off">
+      <input type="text" class="gundem-title" placeholder="Gündem maddesi başlığı" autocomplete="off">
       <button type="button" class="gundem-remove">&times;</button>
     </div>
     <textarea rows="2" placeholder="Görüşme özeti / alınan karar..." autocomplete="off"></textarea>`;
