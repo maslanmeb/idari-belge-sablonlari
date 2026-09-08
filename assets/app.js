@@ -215,6 +215,98 @@ async function downloadPDF() {
   }
 }
 
+/* ---------- Word'e Kopyala (panoya HTML + düz metin yazar) ----------
+   Sayfanın doldurulmuş hâlini, form alanlarının GÜNCEL değerleriyle statik
+   metne çevirip panoya kopyalar. Word'ün kendi "HTML'den yapıştır" motoru
+   (bir web sayfasından tablo kopyalayıp Word'e yapıştırmakla aynı mekanizma)
+   bunu gerçek Word tablosu/paragrafına dönüştürür. Ek kütüphane gerekmez,
+   tarayıcının Clipboard API'si kullanılır; hiçbir veri sunucuya gitmez.
+*/
+function formatFieldForCopy(el) {
+  if (el.tagName === "SELECT") {
+    return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
+  }
+  if (el.type === "checkbox" || el.type === "radio") {
+    return el.checked ? "☒" : "☐";
+  }
+  if (el.type === "date") {
+    if (!el.value) return "";
+    const [y, m, d] = el.value.split("-");
+    return `${d}.${m}.${y}`;
+  }
+  return el.value || "";
+}
+async function copyForWord() {
+  const btn = document.getElementById("copyWordBtn");
+  const pageEl = document.querySelector(".page");
+  if (!pageEl || !navigator.clipboard || typeof ClipboardItem === "undefined") {
+    alert("Tarayıcınız bu özelliği desteklemiyor. Lütfen 'Yazdır / PDF Al' ya da 'PDF İndir' seçeneğini kullanın.");
+    return;
+  }
+
+  if (typeof applyFieldFormatting === "function") applyFieldFormatting();
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Hazırlanıyor…";
+
+  try {
+    const clone = pageEl.cloneNode(true);
+
+    clone.querySelectorAll([
+      ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
+      ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
+      ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
+      ".gundem-suggest-dropdown", ".school-hint",
+    ].join(",")).forEach((el) => el.remove());
+
+    // Form alanlarının canlı değerlerini klondaki karşılığıyla eşleştirip
+    // düz metne çeviriyoruz (cloneNode form alanlarının GÜNCEL .value'sunu
+    // değil, ilk HTML özniteliğini kopyalar).
+    const liveFields = pageEl.querySelectorAll("input, textarea, select");
+    const cloneFields = clone.querySelectorAll("input, textarea, select");
+    liveFields.forEach((liveEl, i) => {
+      const cloneEl = cloneFields[i];
+      if (!cloneEl) return;
+      const span = document.createElement("span");
+      span.textContent = formatFieldForCopy(liveEl);
+      cloneEl.replaceWith(span);
+    });
+
+    clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
+
+    // Tablo/etiket hücrelerine temel görsel biçim ekle (Word dış CSS'imizi
+    // göremez, sadece satır-içi style'ı okur).
+    clone.querySelectorAll("table").forEach((t) => { t.style.borderCollapse = "collapse"; t.style.width = "100%"; });
+    clone.querySelectorAll("td, th").forEach((c) => {
+      c.style.border = "1px solid #999";
+      c.style.padding = "4px 8px";
+    });
+    clone.querySelectorAll("td.label, th").forEach((c) => {
+      c.style.fontWeight = "bold";
+      c.style.background = "#f0f0f0";
+    });
+
+    const htmlString = `<div>${clone.innerHTML}</div>`;
+    const plainString = clone.innerText || clone.textContent || "";
+
+    await navigator.clipboard.write([
+      new ClipboardItem({
+        "text/html": new Blob([htmlString], { type: "text/html" }),
+        "text/plain": new Blob([plainString], { type: "text/plain" }),
+      }),
+    ]);
+
+    btn.textContent = "✅ Kopyalandı!";
+    setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2200);
+  } catch (err) {
+    console.error(err);
+    alert("Kopyalama sırasında bir sorun oluştu. Tarayıcınız panoya erişim izni istemiş olabilir, tekrar deneyin.");
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
+}
+
 /* ---------- Kapatılabilir bilgi kutuları ---------- */
 function initNoteBoxes() {
   document.querySelectorAll(".note-box").forEach((box) => {

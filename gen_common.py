@@ -16,6 +16,7 @@ PAGE_TMPL = """<!DOCTYPE html>
     <div class="btns">
       <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
       <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
       <button type="button" id="pdfDownloadBtn" onclick="downloadPDF()">⬇️ PDF İndir</button>
     </div>
   </div>
