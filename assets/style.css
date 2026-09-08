@@ -243,7 +243,7 @@ table.imza td{ width:33.33%; vertical-align:top; padding:0 6px; text-align:cente
   .page{ box-shadow:none; margin:0; width:auto; min-height:0; padding: 0; }
   @page{ size: A4; margin: 13mm 15mm; }
   textarea, input{ border-color:#000 !important; }
-  textarea{ overflow: visible !important; resize: none !important; }
+  textarea{ overflow: hidden !important; resize: none !important; }
   .dyn-remove{ display:none; }
   .note-close{ display:none; }
   a.hotspot{ outline:none !important; }
@@ -401,7 +401,30 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
   flex:1 1 auto; border:none; border-bottom:1px solid #bbb; background:transparent; font-family:inherit;
   font-weight:700; font-size:11pt; padding:2px 2px 4px; outline:none; resize:none; overflow:hidden; line-height:1.35;
 }
-.gundem-item .gundem-karar{ width:100%; border:1px solid var(--line); border-radius:5px; font-family:inherit; font-size:10.6pt; padding:6px; resize:none; overflow:hidden; }
+.gundem-item .gundem-ozet, .gundem-item .gundem-karar{ width:100%; border:1px solid var(--line); border-radius:5px; font-family:inherit; font-size:10.6pt; padding:6px; resize:none; overflow:hidden; }
+.gundem-item .gundem-ozet{ margin-bottom:6px; }
+.gundem-sub-label{ font-family:Arial,sans-serif; font-size:9pt; font-weight:700; color:#666; margin:4px 0 2px; }
+
+/* ---- Zümre Toplantı Onay Sayfası (yalnızca yazdırmada görünür, JS ile
+   eklenip kaldırılır) ---- */
+.zumre-onay-cover{ display:none; }
+@media print{
+  .zumre-onay-cover{
+    display:block; page-break-after: always; break-after: page;
+  }
+  .zumre-onay-cover .doc-title{ margin-top: 6mm; }
+  .zumre-onay-sub{
+    text-align:center; font-family:Arial,sans-serif; font-size:11pt; color:#666;
+    margin: -8px 0 18px; letter-spacing:.5px;
+  }
+  .zumre-onay-gundem{ margin: 4px 0 20px; }
+  .zumre-onay-gundem-row{ font-size:11pt; padding:4px 0; border-bottom:1px dotted #ccc; }
+  .zumre-onay-signature{ margin-top: 40mm; text-align:center; }
+  .zumre-onay-imza-box{ height: 60px; }
+  .zumre-onay-name{ font-size:11pt; border-top:1px solid #000; width:260px; margin:0 auto; padding-top:6px; }
+  .zumre-onay-label{ font-weight:bold; font-size:10pt; margin-top:2px; }
+}
+.gundem-item .gundem-karar{ border-color:#d9c48a; background:#fffdf6; }
 .gundem-remove{
   flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:16px; cursor:pointer; opacity:.5; padding:2px 4px; margin-top:1px;
 }

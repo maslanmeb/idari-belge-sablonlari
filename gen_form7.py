@@ -30,7 +30,7 @@ ident_table = '''    <table class="meta">
     </table>'''
 
 gundem_section = '''    <div class="section-title">Gündem Maddeleri ve Alınan Kararlar</div>
-    <div class="section-sub">Her madde için görüşme özetini/kararı yazın. Sıra numarası otomatik verilir, madde ekleyip çıkarabilirsiniz. Başlık alanına tıklayınca 27 hazır gündem maddesi ve "Diğer" seçeneği önerilir; sık kullanılanlar "(önerilir)" etiketiyle işaretlidir, ancak seçildiğinde bu etiket belgeye yazılmaz.</div>
+    <div class="section-sub">Her madde için görüşme özetini ve alınan kararı ayrı kutulara yazın. Sıra numarası otomatik verilir, madde ekleyip çıkarabilirsiniz. Başlık alanına tıklayınca 27 hazır gündem maddesi ve "Diğer" seçeneği önerilir; sık kullanılanlar "(önerilir)" etiketiyle işaretlidir, ancak seçildiğinde bu etiket belgeye yazılmaz.</div>
     <div class="gundem-list" id="gundemList"></div>
     <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>'''
 

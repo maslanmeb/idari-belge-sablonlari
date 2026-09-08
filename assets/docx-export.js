@@ -318,11 +318,14 @@
     const out = [];
     items.forEach((item, i) => {
       const titleEl = item.querySelector(".gundem-title");
+      const ozetEl = item.querySelector(".gundem-ozet");
       const kararEl = item.querySelector(".gundem-karar");
       const title = titleEl ? liveText(titleEl) : "";
+      const ozet = ozetEl ? liveText(ozetEl) : "";
       const karar = kararEl ? liveText(kararEl) : "";
       out.push(para([run(`${i + 1}.  `, { bold: true, color: NAVY, size: 21 }), run(title || "(başlıksız)", { bold: true, underline: {}, size: 21 })], { spacing: { before: 160, after: 40 } }));
-      out.push(para([run(karar || "—", { size: 20 })], { spacing: { after: 160 } }));
+      if (ozet) out.push(para([run(ozet, { size: 20 })], { spacing: { after: 100 } }));
+      out.push(para([run("KARAR: ", { bold: true, size: 20 }), run(karar || "—", { size: 20 })], { spacing: { after: 160 } }));
     });
     return out;
   }
@@ -466,6 +469,67 @@
     return [];
   }
 
+  // ---- Zümre Toplantı Onay Sayfası: sadece .gundem-list içeren belgede
+  // (Zümre Toplantı Tutanağı) devreye girer; başlık + zümre bilgisi +
+  // seçilen gündem başlıkları (karar yok) + ortalanmış müdür onayından
+  // oluşan bir kapak sayfası, ardından kesin sayfa sonu ekler.
+  function buildZumreCoverBlocks(pageEl) {
+    const gundemList = pageEl.querySelector(".gundem-list");
+    if (!gundemList) return null;
+
+    const blocks = [];
+    const titleEl = pageEl.querySelector(".doc-title, h1");
+    blocks.push(titlePara(titleEl ? collectText(titleEl) : "ZÜMRE TOPLANTI TUTANAĞI"));
+    blocks.push(para([run("Toplantı Onay Sayfası", { size: 21, color: MUTED })], { alignment: docx.AlignmentType.CENTER, spacing: { after: 260 } }));
+
+    const metaTable = pageEl.querySelector(":scope > table.meta");
+    if (metaTable) {
+      const t = convertMetaTable(metaTable);
+      if (t) blocks.push(t);
+    }
+
+    blocks.push(headingPara("Gündem Maddeleri"));
+    const items = Array.from(pageEl.querySelectorAll(".gundem-item"));
+    let n = 0;
+    items.forEach((item) => {
+      const t = item.querySelector(".gundem-title");
+      const title = t ? liveText(t) : "";
+      if (!title) return;
+      n++;
+      blocks.push(para([run(`${n}. `, { bold: true, color: NAVY, size: 20 }), run(title, { size: 20 })], {
+        spacing: { after: 90 },
+        border: { bottom: { style: "single", size: 2, color: LINE, space: 4 } },
+      }));
+    });
+    if (!n) blocks.push(para([run("(Gündem maddesi girilmemiş)", { italics: true, color: "999999", size: 19 })]));
+
+    // Ortalanmış müdür onay/imza alanı
+    const sigWrap = pageEl.querySelector(".sig-wrap");
+    let onayTarihi = "", okulMuduru = "";
+    if (sigWrap) {
+      const rows = Array.from(sigWrap.querySelectorAll("table.meta tr"));
+      rows.forEach((tr) => {
+        const labelTd = tr.querySelector("td.label");
+        const valueTd = tr.querySelectorAll("td")[1];
+        const label = labelTd ? labelTd.textContent.trim() : "";
+        const value = valueTd ? collectText(valueTd) : "";
+        if (/tarih/i.test(label)) onayTarihi = value;
+        if (/müdür/i.test(label)) okulMuduru = value;
+      });
+    }
+    blocks.push(para([run("")], { spacing: { before: 1200 } }));
+    blocks.push(para([run(okulMuduru || " ", { size: 20 })], {
+      alignment: docx.AlignmentType.CENTER,
+      border: { top: { style: "single", size: 4, color: "000000", space: 4 } },
+      spacing: { after: 30 },
+    }));
+    blocks.push(para([run("Okul Müdürü" + (onayTarihi ? "  ·  " + onayTarihi : ""), { bold: true, size: 18 })], { alignment: docx.AlignmentType.CENTER }));
+
+    // Kapak sayfasından sonra kesin sayfa sonu
+    blocks.push(new docx.Paragraph({ children: [new docx.PageBreak()] }));
+    return blocks;
+  }
+
   window.downloadWord = async function downloadWord() {
     const btn = document.getElementById("wordDownloadBtn");
     const pageEl = document.querySelector(".page");
@@ -480,6 +544,8 @@
       const footText = footEl ? collectText(footEl) : "";
 
       const children = [];
+      const cover = buildZumreCoverBlocks(pageEl);
+      if (cover) children.push(...cover);
       Array.from(pageEl.children).forEach((child) => {
         if (child === footEl) return;
         if (child.classList && child.classList.contains("btns")) return;

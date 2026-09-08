@@ -68,10 +68,132 @@ function initAutoGrow() {
   document.querySelectorAll("textarea").forEach((ta) => {
     autoGrow(ta);
     ta.addEventListener("input", () => autoGrow(ta));
+    ta.addEventListener("paste", () => setTimeout(() => autoGrow(ta), 0));
   });
   window.addEventListener("beforeprint", () => {
     document.querySelectorAll("textarea").forEach(autoGrow);
   });
+}
+
+/* ---------- Zümre Toplantı Onay Sayfası (yalnızca .gundem-list içeren
+   belgede, yani Zümre Toplantı Tutanağı'nda otomatik devreye girer) ----------
+   Yazdırmadan/PDF'ten hemen önce sayfanın en başına; başlık, zümre bilgi
+   tablosu, seçilen gündem maddelerinin SADECE başlıkları (görüşme/karar yok)
+   ve ortalanmış müdür onay/imza alanından oluşan tek sayfalık bir "ön onay"
+   sayfası eklenir; ardından kesin bir sayfa sonu ile asıl tutanak başlar.
+   Yazdırma bitince ekran görünümünü bozmasın diye kaldırılır. */
+function readMetaTableForCover(table) {
+  if (!table) return [];
+  return Array.from(table.querySelectorAll(":scope > tbody > tr, :scope > tr")).map((tr) => {
+    const labelTd = tr.querySelector("td.label");
+    const valueTd = tr.querySelectorAll("td")[1];
+    const label = labelTd ? labelTd.textContent.trim() : "";
+    let value = "";
+    if (valueTd) {
+      const inputs = valueTd.querySelectorAll("input, select, textarea");
+      if (inputs.length) {
+        value = Array.from(inputs).map((el) => {
+          if (el.type === "date") {
+            if (!el.value) return "";
+            const [y, m, d] = el.value.split("-");
+            return `${d}.${m}.${y}`;
+          }
+          return el.value || "";
+        }).filter(Boolean).join("   ");
+      } else {
+        value = valueTd.textContent.trim();
+      }
+    }
+    return { label, value };
+  }).filter((row) => row.label);
+}
+function buildZumreOnayCover() {
+  const gundemList = document.querySelector(".gundem-list");
+  if (!gundemList) return null; // bu belge Zümre Toplantı Tutanağı değil
+
+  const cover = document.createElement("div");
+  cover.className = "zumre-onay-cover";
+
+  const titleEl = document.querySelector(".doc-title, h1");
+  const h1 = document.createElement("h1");
+  h1.className = "doc-title";
+  h1.textContent = titleEl ? titleEl.textContent.trim() : "ZÜMRE TOPLANTI TUTANAĞI";
+  cover.appendChild(h1);
+
+  const coverSub = document.createElement("div");
+  coverSub.className = "zumre-onay-sub";
+  coverSub.textContent = "Toplantı Onay Sayfası";
+  cover.appendChild(coverSub);
+
+  const metaTable = document.querySelector(".page > table.meta");
+  const rows = readMetaTableForCover(metaTable);
+  if (rows.length) {
+    const table = document.createElement("table");
+    table.className = "meta";
+    rows.forEach((r) => {
+      const tr = document.createElement("tr");
+      tr.innerHTML = `<td class="label" style="width:32%">${r.label}</td><td>${r.value}</td>`;
+      table.appendChild(tr);
+    });
+    cover.appendChild(table);
+  }
+
+  const gHeading = document.createElement("div");
+  gHeading.className = "section-title";
+  gHeading.textContent = "Gündem Maddeleri";
+  cover.appendChild(gHeading);
+
+  const gList = document.createElement("div");
+  gList.className = "zumre-onay-gundem";
+  const items = Array.from(document.querySelectorAll(".gundem-item"));
+  let n = 0;
+  items.forEach((item) => {
+    const t = item.querySelector(".gundem-title");
+    const title = t ? t.value.trim() : "";
+    if (!title) return;
+    n++;
+    const row = document.createElement("div");
+    row.className = "zumre-onay-gundem-row";
+    row.textContent = `${n}. ${title}`;
+    gList.appendChild(row);
+  });
+  if (!n) {
+    const row = document.createElement("div");
+    row.className = "zumre-onay-gundem-row";
+    row.style.fontStyle = "italic";
+    row.style.color = "#999";
+    row.textContent = "(Gündem maddesi girilmemiş)";
+    gList.appendChild(row);
+  }
+  cover.appendChild(gList);
+
+  // Ortalanmış müdür onay/imza alanı
+  const sigWrap = document.querySelector(".sig-wrap");
+  const sigRows = sigWrap ? readMetaTableForCover(sigWrap.querySelector("table.meta")) : [];
+  const onayTarihi = (sigRows.find((r) => /tarih/i.test(r.label)) || {}).value || "";
+  const okulMuduru = (sigRows.find((r) => /müdür/i.test(r.label)) || {}).value || "";
+
+  const sig = document.createElement("div");
+  sig.className = "zumre-onay-signature";
+  sig.innerHTML = `
+    <div class="zumre-onay-imza-box"></div>
+    <div class="zumre-onay-name">${okulMuduru || "&nbsp;"}</div>
+    <div class="zumre-onay-label">Okul Müdürü${onayTarihi ? " &middot; " + onayTarihi : ""}</div>
+  `;
+  cover.appendChild(sig);
+
+  return cover;
+}
+function withZumreCover(fn) {
+  const cover = buildZumreOnayCover();
+  const pageEl = document.querySelector(".page");
+  if (cover && pageEl) pageEl.insertBefore(cover, pageEl.firstChild);
+  fn();
+  if (cover) {
+    const cleanup = () => { cover.remove(); window.removeEventListener("afterprint", cleanup); };
+    window.addEventListener("afterprint", cleanup);
+    setTimeout(cleanup, 4000); // afterprint tetiklenmezse yine de temizle
+  }
 }
 
 /* ---------- Yazdır / PDF Al ---------- */
@@ -80,8 +202,161 @@ function printForm() {
   document.querySelectorAll("textarea").forEach(autoGrow);
   requestAnimationFrame(() => {
     document.querySelectorAll("textarea").forEach(autoGrow);
-    setTimeout(() => window.print(), 30);
+    requestAnimationFrame(() => {
+      document.querySelectorAll("textarea").forEach(autoGrow);
+      withZumreCover(() => {
+        setTimeout(() => window.print(), 50);
+      });
+    });
   });
+}
+
+/* ---------- Word'e Kopyala (panoya HTML + düz metin yazar) ----------
+   Sayfanın doldurulmuş hâlini, form alanlarının GÜNCEL değerleriyle statik
+   metne çevirip panoya kopyalar. Word'ün kendi "HTML'den yapıştır" motoru
+   (bir web sayfasından tablo kopyalayıp Word'e yapıştırmakla aynı mekanizma)
+   bunu gerçek Word tablosu/paragrafına dönüştürür. Ek kütüphane gerekmez,
+   tarayıcının Clipboard API'si kullanılır; hiçbir veri sunucuya gitmez.
+
+   Not: Site bir iframe içine gömülü açıldığında modern Clipboard API bazı
+   tarayıcılarda izin vermeyebilir (iframe'in allow="clipboard-write" ile
+   izin devretmesi gerekir). Bu durumda eski/legacy execCommand("copy")
+   yöntemine otomatik geçilir; o da başarısız olursa kullanıcıya siteyi tam
+   sayfada açması önerilir.
+*/
+function formatFieldForCopy(el) {
+  if (el.tagName === "SELECT") {
+    return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
+  }
+  if (el.type === "checkbox" || el.type === "radio") {
+    return el.checked ? "☒" : "☐";
+  }
+  if (el.type === "date") {
+    if (!el.value) return "";
+    const [y, m, d] = el.value.split("-");
+    return `${d}.${m}.${y}`;
+  }
+  return el.value || "";
+}
+function legacyCopyHTML(htmlString) {
+  const container = document.createElement("div");
+  // Ekranda konumlandırıp opacity:0 ile gizliyoruz (aşırı negatif offset yerine)
+  // — bazı tarayıcılar ekran dışına çok uzak taşınan içeriği tam olarak
+  // düzenlemeyip (layout) tablo gibi karmaşık yapıları kopyalarken eksik/kesik
+  // bırakabiliyor.
+  container.style.position = "absolute";
+  container.style.left = "0";
+  container.style.top = "0";
+  container.style.width = "900px";
+  container.style.opacity = "0";
+  container.style.pointerEvents = "none";
+  container.style.zIndex = "-1";
+  container.setAttribute("contenteditable", "true");
+  container.innerHTML = htmlString;
+  document.body.appendChild(container);
+  // Tarayıcının içeriği tam olarak düzenlemesi (layout/reflow) için zorla
+  // okuma yapıyoruz, sonra seçiyoruz.
+  void container.offsetHeight;
+
+  const range = document.createRange();
+  range.selectNodeContents(container);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch (e) {
+    ok = false;
+  }
+  selection.removeAllRanges();
+  document.body.removeChild(container);
+  return ok;
+}
+async function copyForWord() {
+  const btn = document.getElementById("copyWordBtn");
+  const pageEl = document.querySelector(".page");
+  if (!pageEl) return;
+
+  if (typeof applyFieldFormatting === "function") applyFieldFormatting();
+
+  const originalText = btn.textContent;
+  btn.disabled = true;
+  btn.textContent = "Hazırlanıyor…";
+
+  const clone = pageEl.cloneNode(true);
+
+  clone.querySelectorAll([
+    ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
+    ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
+    ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
+    ".gundem-suggest-dropdown", ".school-hint",
+  ].join(",")).forEach((el) => el.remove());
+
+  // Form alanlarının canlı değerlerini klondaki karşılığıyla eşleştirip
+  // düz metne çeviriyoruz (cloneNode form alanlarının GÜNCEL .value'sunu
+  // değil, ilk HTML özniteliğini kopyalar).
+  const liveFields = pageEl.querySelectorAll("input, textarea, select");
+  const cloneFields = clone.querySelectorAll("input, textarea, select");
+  liveFields.forEach((liveEl, i) => {
+    const cloneEl = cloneFields[i];
+    if (!cloneEl) return;
+    const span = document.createElement("span");
+    span.textContent = formatFieldForCopy(liveEl);
+    cloneEl.replaceWith(span);
+  });
+
+  clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
+
+  // Tablo/etiket hücrelerine temel görsel biçim ekle (Word dış CSS'imizi
+  // göremez, sadece satır-içi style'ı okur).
+  clone.querySelectorAll("table").forEach((t) => { t.style.borderCollapse = "collapse"; t.style.width = "100%"; });
+  clone.querySelectorAll("td, th").forEach((c) => {
+    c.style.border = "1px solid #999";
+    c.style.padding = "4px 8px";
+  });
+  clone.querySelectorAll("td.label, th").forEach((c) => {
+    c.style.fontWeight = "bold";
+    c.style.background = "#f0f0f0";
+  });
+
+  const htmlString = `<div>${clone.innerHTML}</div>`;
+  const plainString = clone.innerText || clone.textContent || "";
+  let success = false;
+
+  // 1) Önce modern Clipboard API'yi dene
+  if (navigator.clipboard && typeof ClipboardItem !== "undefined") {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html": new Blob([htmlString], { type: "text/html" }),
+          "text/plain": new Blob([plainString], { type: "text/plain" }),
+        }),
+      ]);
+      success = true;
+    } catch (err) {
+      console.warn("Clipboard API başarısız, eski yönteme geçiliyor:", err);
+    }
+  }
+
+  // 2) Başarısızsa eski (execCommand) yöntemi dene — iframe içinde bazen
+  //    bu, izin kısıtlamalarından etkilenmeyebilir.
+  if (!success) {
+    success = legacyCopyHTML(htmlString);
+  }
+
+  if (success) {
+    btn.textContent = "✅ Kopyalandı!";
+    setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2200);
+  } else {
+    alert(
+      "Kopyalama şu an çalışmadı. Bu sayfa bir web sitesine gömülü (iframe) açıldığında bazı tarayıcılar panoya erişimi kısıtlayabilir.\n\n" +
+      "Öneri: Sayfayı 'Tam sayfada açmak için tıklayın' bağlantısından doğrudan açıp tekrar deneyin, ya da 'Yazdır / PDF Al' / 'PDF İndir' seçeneklerini kullanın."
+    );
+    btn.disabled = false;
+    btn.textContent = originalText;
+  }
 }
 
 /* ---------- Kapatılabilir bilgi kutuları ---------- */
@@ -350,9 +625,16 @@ function bindGundemSuggest(input) {
   });
 }
 function bindGundemItem(item) {
-  const ta = item.querySelector(".gundem-karar");
-  ta.addEventListener("input", () => autoGrow(ta));
-  autoGrow(ta);
+  const ozet = item.querySelector(".gundem-ozet");
+  const karar = item.querySelector(".gundem-karar");
+  [ozet, karar].forEach((ta) => {
+    // 'input' anlık yazarken, 'paste' büyük metin yapıştırıldığında (bazı
+    // tarayıcılarda input olayı yapıştırmadan hemen sonra tam boyu
+    // yansıtmayabiliyor, bu yüzden paste'te bir sonraki tick'te tekrar ölçüyoruz)
+    ta.addEventListener("input", () => autoGrow(ta));
+    ta.addEventListener("paste", () => setTimeout(() => autoGrow(ta), 0));
+    autoGrow(ta);
+  });
   bindGundemSuggest(item.querySelector(".gundem-title"));
   item.querySelector(".gundem-remove").addEventListener("click", () => {
     const list = item.closest(".gundem-list");
@@ -360,8 +642,10 @@ function bindGundemItem(item) {
       const titleEl = item.querySelector(".gundem-title");
       titleEl.value = "";
       autoGrow(titleEl);
-      ta.value = "";
-      autoGrow(ta);
+      ozet.value = "";
+      autoGrow(ozet);
+      karar.value = "";
+      autoGrow(karar);
       return;
     }
     item.remove();
@@ -377,7 +661,10 @@ function makeGundemItem() {
       <textarea rows="1" class="gundem-title" placeholder="Gündem maddesi başlığı" autocomplete="off"></textarea>
       <button type="button" class="gundem-remove">&times;</button>
     </div>
-    <textarea rows="2" class="gundem-karar" placeholder="Görüşme özeti / alınan karar..." autocomplete="off"></textarea>`;
+    <div class="gundem-sub-label">Görüşme Özeti</div>
+    <textarea rows="2" class="gundem-ozet" placeholder="Görüşme özeti..." autocomplete="off"></textarea>
+    <div class="gundem-sub-label">KARAR:</div>
+    <textarea rows="2" class="gundem-karar" placeholder="Alınan karar..." autocomplete="off"></textarea>`;
   bindGundemItem(item);
   return item;
 }
