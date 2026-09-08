@@ -65,6 +65,11 @@
   function collectText(container) {
     const clone = container.cloneNode(true);
     clone.querySelectorAll(SKIP_SELECTOR).forEach((el) => el.remove());
+    // <br> etiketlerini boşluğa çeviriyoruz, yoksa yan yana satırlar
+    // boşluksuz birleşir (ör. başlıklardaki çok satırlı <br> kullanımı).
+    clone.querySelectorAll("br").forEach((el) => {
+      el.replaceWith(clone.ownerDocument.createTextNode(" "));
+    });
     // ÖNEMLİ: hem orijinal hem klon alan listelerini SABİT (statik) diziler
     // olarak BİR KEZ alıyoruz. Klon DOM'unu elemanları teker teker
     // değiştirerek dolaşırsak, her adımda yeniden sorgulama yapmak kalan

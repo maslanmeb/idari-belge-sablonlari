@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sendika Üyelikten Çekilme Bildirimi Formu (EK-3)</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .page{ padding: 9mm 16mm 8mm; }
+  .doc-title{ text-align:center; font-size:12pt; color:var(--navy); margin: 0 0 2px; line-height:1.3; }
+  .doc-subtitle{ text-align:center; font-size:9.5pt; color:#777; font-family:Arial,sans-serif; margin: 0 0 8px; }
+  .section-title{ font-weight:bold; font-size:10pt; color:#fff; background:var(--navy); margin: 7px 0 0; padding:3px 10px; font-family: Arial, sans-serif; }
+  table.meta.attach-title{ margin-top:0; margin-bottom:2px; }
+  table.meta.attach-title td{ padding:2px 8px; font-size:9.6pt; }
+  table.meta.attach-title td.label{ font-size:9pt; }
+  .choice-row{ display:flex; gap: 22px; margin: 3px 0 4px; font-family: Arial, sans-serif; font-size:9.4pt; flex-wrap:wrap; align-items:center; }
+  .choice-row label{ display:flex; align-items:center; gap:5px; cursor:pointer; white-space:nowrap; }
+  .choice-row input{ width:12px; height:12px; accent-color: var(--navy); }
+  .kurum-note{ font-size:8.2pt; color:#888; font-family:Arial,sans-serif; font-style:italic; margin:1px 0 3px; }
+  .para{ font-size:10pt; line-height:1.4; text-align:center; margin: 8px 0 3px; }
+  .closing-line{ text-align:center; margin: 2px 0 8px; }
+  .sig-row{ display:flex; justify-content:center; gap:40px; margin-top: 9px; font-size:9.7pt; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
+      <button type="button" id="wordDownloadBtn" onclick="downloadWord()">📄 Word İndir</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <h1 class="doc-title">EK-3 &ndash; KAMU GÖREVLİLERİ SENDİKALARI<br>KAMU GÖREVLİSİNİN ÜYELİKTEN ÇEKİLME BİLDİRİMİ FORMU</h1>
+    <div class="section-title">Sendika Bilgileri</div>
+    <table class="meta attach-title">
+      <tr><td class="label" style="width:32%">Hizmet Kolu (Sıra No)</td><td><input type="text" placeholder="ör. 5"></td></tr>
+      <tr><td class="label">Sendika Adı</td><td><input type="text" placeholder="Sendika adı"></td></tr>
+      <tr><td class="label">Sendika Adresi</td><td><textarea rows="2" placeholder="Sendika adresi..."></textarea></td></tr>
+      <tr><td class="label">Dosya No</td><td><input type="text" placeholder="Çalışma ve Sosyal Güvenlik Bakanlığınca verilen dosya no"></td></tr>
+    </table>
+    <div class="section-title">Kurum Bilgileri</div>
+    <table class="meta attach-title">
+      <tr><td class="label" style="width:32%">Kurumun Adı</td><td><input type="text" placeholder="ör. Kumkale Ortaokulu Müdürlüğü"></td></tr>
+      <tr><td class="label">Görev Yapılan Birimin Adı</td><td><input type="text"></td></tr>
+      <tr><td class="label">Görev Yapılan Birimin Adresi</td><td><textarea rows="2"></textarea></td></tr>
+      <tr><td class="label">Hizmet Kolu / Kurum Kodu</td><td style="white-space:nowrap;">
+        <input type="text" placeholder="Hizmet Kolu" style="width:48%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="text" placeholder="Kurum Kodu" style="width:38%; display:inline-block;">
+      </td></tr>
+      <tr><td class="label">İl Adı / İl Kodu / İlçe Adı</td><td style="white-space:nowrap;">
+        <input type="text" placeholder="İl Adı" style="width:38%; display:inline-block;">
+        <span style="display:inline-block;width:5px;"></span>
+        <input type="text" placeholder="İl Kodu" style="width:22%; display:inline-block;">
+        <span style="display:inline-block;width:5px;"></span>
+        <input type="text" placeholder="İlçe Adı" style="width:28%; display:inline-block;">
+      </td></tr>
+    </table>
+    <div class="section-title">Üyelik Bilgileri</div>
+    <table class="meta attach-title">
+      <tr><td class="label" style="width:32%">Adı</td><td><input type="text"></td></tr>
+      <tr><td class="label">Soyadı</td><td><input type="text"></td></tr>
+      <tr><td class="label">TC Kimlik No</td><td><input type="text" inputmode="numeric" class="tc-field" data-mirror="uye_tc" placeholder="11 haneli TC Kimlik No (MERNİS)"></td></tr>
+      <tr><td class="label">Baba Adı / Ana Adı</td><td style="white-space:nowrap;">
+        <input type="text" placeholder="Baba Adı" style="width:48%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="text" placeholder="Ana Adı" style="width:38%; display:inline-block;">
+      </td></tr>
+      <tr><td class="label">Doğum Tarihi / Yeri</td><td style="white-space:nowrap;">
+        <input type="date" style="width:38%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="text" placeholder="Doğum Yeri" style="width:48%; display:inline-block;">
+      </td></tr>
+      <tr><td class="label">Kurum Sicil No</td><td><input type="text"></td></tr>
+      <tr><td class="label">Kadro Unvanı / Unvan Kodu</td><td style="white-space:nowrap;">
+        <input type="text" placeholder="Kadro Unvanı" style="width:58%; display:inline-block;">
+        <span style="display:inline-block;width:6px;"></span>
+        <input type="text" placeholder="Unvan Kodu" style="width:28%; display:inline-block;">
+      </td></tr>
+    </table>
+    <div class="choice-row">
+      <strong style="font-family:Arial,sans-serif; font-size:10.3pt;">Cinsiyeti:</strong>
+      <label><input type="radio" name="cinsiyet"> Erkek (1)</label>
+      <label><input type="radio" name="cinsiyet"> Kadın (2)</label>
+    </div>
+    <div class="choice-row">
+      <strong style="font-family:Arial,sans-serif; font-size:10.3pt;">Öğrenim:</strong>
+      <label><input type="radio" name="ogrenim"> İlköğretim (1)</label>
+      <label><input type="radio" name="ogrenim"> Lise (2)</label>
+      <label><input type="radio" name="ogrenim"> Yüksek Okul (3)</label>
+    </div>
+    <div class="kurum-note">Öğrenim: en son bitirilen okul işaretlenir; ilkokul/ortaokul mezunları "İlköğretim" seçeneğini işaretler.</div>
+    <div class="section-title">Sosyal Güvenlik Kurumu</div>
+    <table class="meta attach-title">
+      <tr><td colspan="2" style="border:none; background:transparent; padding:8px 0 2px;">
+        <div class="choice-row" style="margin:0;">
+          <label><input type="radio" name="sgk"> T.C. Emekli Sandığı (1)</label>
+          <label><input type="radio" name="sgk"> Sosyal Sigortalar Kurumu (2)</label>
+        </div>
+      </td></tr>
+      <tr><td class="label" style="width:32%">Sosyal Güvenlik Sicil No</td><td><input type="text"></td></tr>
+    </table>
+    <div class="section-title">Üyelikten Çekilme</div>
+    <div class="para">
+      Yukarıda belirttiğim Kamu Görevlileri Sendikası üyeliğinden çekiliyorum.<br>Gereğini arz ederim.
+    </div>
+    <div class="sig-row">
+      <div><strong>Tarih:</strong> <input type="date"></div>
+      <div><strong>İmza:</strong> <span style="display:inline-block; width:140px; border-bottom:1px dotted #888;">&nbsp;</span></div>
+    </div>
+    <div class="section-title">Üyelikten Çekilme Tarih ve No <span style="font-weight:normal; font-size:8.8pt;">(kurum tarafından doldurulur)</span></div>
+    <table class="meta attach-title">
+      <tr><td class="label" style="width:38%">Formun Kuruma Veriliş Tarihi</td><td><input type="date"></td></tr>
+      <tr><td class="label">Forma Kurumca Verilen Evrak No</td><td><input type="text"></td></tr>
+    </table>
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/docx.umd.js"></script>
+<script src="../assets/app.js"></script>
+<script src="../assets/docx-export.js"></script>
+</body>
+</html>
