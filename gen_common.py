@@ -16,8 +16,7 @@ PAGE_TMPL = """<!DOCTYPE html>
     <div class="btns">
       <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
       <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
-      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
-      <button type="button" id="pdfDownloadBtn" onclick="downloadPDF()">⬇️ PDF İndir</button>
+      <button type="button" id="wordDownloadBtn" onclick="downloadWord()">📄 Word İndir</button>
     </div>
   </div>
 
@@ -29,9 +28,9 @@ PAGE_TMPL = """<!DOCTYPE html>
     </div>
   </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../assets/docx.umd.js"></script>
 <script src="../assets/app.js"></script>
+<script src="../assets/docx-export.js"></script>
 </body>
 </html>
 """
