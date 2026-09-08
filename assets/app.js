@@ -244,12 +244,23 @@ function formatFieldForCopy(el) {
 }
 function legacyCopyHTML(htmlString) {
   const container = document.createElement("div");
-  container.style.position = "fixed";
-  container.style.left = "-9999px";
+  // Ekranda konumlandırıp opacity:0 ile gizliyoruz (aşırı negatif offset yerine)
+  // — bazı tarayıcılar ekran dışına çok uzak taşınan içeriği tam olarak
+  // düzenlemeyip (layout) tablo gibi karmaşık yapıları kopyalarken eksik/kesik
+  // bırakabiliyor.
+  container.style.position = "absolute";
+  container.style.left = "0";
   container.style.top = "0";
+  container.style.width = "900px";
+  container.style.opacity = "0";
+  container.style.pointerEvents = "none";
+  container.style.zIndex = "-1";
   container.setAttribute("contenteditable", "true");
   container.innerHTML = htmlString;
   document.body.appendChild(container);
+  // Tarayıcının içeriği tam olarak düzenlemesi (layout/reflow) için zorla
+  // okuma yapıyoruz, sonra seçiyoruz.
+  void container.offsetHeight;
 
   const range = document.createRange();
   range.selectNodeContents(container);
