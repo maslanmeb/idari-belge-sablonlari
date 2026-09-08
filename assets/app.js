@@ -221,6 +221,12 @@ async function downloadPDF() {
    (bir web sayfasından tablo kopyalayıp Word'e yapıştırmakla aynı mekanizma)
    bunu gerçek Word tablosu/paragrafına dönüştürür. Ek kütüphane gerekmez,
    tarayıcının Clipboard API'si kullanılır; hiçbir veri sunucuya gitmez.
+
+   Not: Site bir iframe içine gömülü açıldığında modern Clipboard API bazı
+   tarayıcılarda izin vermeyebilir (iframe'in allow="clipboard-write" ile
+   izin devretmesi gerekir). Bu durumda eski/legacy execCommand("copy")
+   yöntemine otomatik geçilir; o da başarısız olursa kullanıcıya siteyi tam
+   sayfada açması önerilir.
 */
 function formatFieldForCopy(el) {
   if (el.tagName === "SELECT") {
@@ -236,13 +242,35 @@ function formatFieldForCopy(el) {
   }
   return el.value || "";
 }
+function legacyCopyHTML(htmlString) {
+  const container = document.createElement("div");
+  container.style.position = "fixed";
+  container.style.left = "-9999px";
+  container.style.top = "0";
+  container.setAttribute("contenteditable", "true");
+  container.innerHTML = htmlString;
+  document.body.appendChild(container);
+
+  const range = document.createRange();
+  range.selectNodeContents(container);
+  const selection = window.getSelection();
+  selection.removeAllRanges();
+  selection.addRange(range);
+
+  let ok = false;
+  try {
+    ok = document.execCommand("copy");
+  } catch (e) {
+    ok = false;
+  }
+  selection.removeAllRanges();
+  document.body.removeChild(container);
+  return ok;
+}
 async function copyForWord() {
   const btn = document.getElementById("copyWordBtn");
   const pageEl = document.querySelector(".page");
-  if (!pageEl || !navigator.clipboard || typeof ClipboardItem === "undefined") {
-    alert("Tarayıcınız bu özelliği desteklemiyor. Lütfen 'Yazdır / PDF Al' ya da 'PDF İndir' seçeneğini kullanın.");
-    return;
-  }
+  if (!pageEl) return;
 
   if (typeof applyFieldFormatting === "function") applyFieldFormatting();
 
@@ -250,58 +278,75 @@ async function copyForWord() {
   btn.disabled = true;
   btn.textContent = "Hazırlanıyor…";
 
-  try {
-    const clone = pageEl.cloneNode(true);
+  const clone = pageEl.cloneNode(true);
 
-    clone.querySelectorAll([
-      ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
-      ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
-      ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
-      ".gundem-suggest-dropdown", ".school-hint",
-    ].join(",")).forEach((el) => el.remove());
+  clone.querySelectorAll([
+    ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add",
+    ".paragraph-list-add", ".note-close", ".dizi-remove", ".dizi-add-row",
+    ".gundem-add", ".gundem-remove", ".uye-add", ".uye-remove",
+    ".gundem-suggest-dropdown", ".school-hint",
+  ].join(",")).forEach((el) => el.remove());
 
-    // Form alanlarının canlı değerlerini klondaki karşılığıyla eşleştirip
-    // düz metne çeviriyoruz (cloneNode form alanlarının GÜNCEL .value'sunu
-    // değil, ilk HTML özniteliğini kopyalar).
-    const liveFields = pageEl.querySelectorAll("input, textarea, select");
-    const cloneFields = clone.querySelectorAll("input, textarea, select");
-    liveFields.forEach((liveEl, i) => {
-      const cloneEl = cloneFields[i];
-      if (!cloneEl) return;
-      const span = document.createElement("span");
-      span.textContent = formatFieldForCopy(liveEl);
-      cloneEl.replaceWith(span);
-    });
+  // Form alanlarının canlı değerlerini klondaki karşılığıyla eşleştirip
+  // düz metne çeviriyoruz (cloneNode form alanlarının GÜNCEL .value'sunu
+  // değil, ilk HTML özniteliğini kopyalar).
+  const liveFields = pageEl.querySelectorAll("input, textarea, select");
+  const cloneFields = clone.querySelectorAll("input, textarea, select");
+  liveFields.forEach((liveEl, i) => {
+    const cloneEl = cloneFields[i];
+    if (!cloneEl) return;
+    const span = document.createElement("span");
+    span.textContent = formatFieldForCopy(liveEl);
+    cloneEl.replaceWith(span);
+  });
 
-    clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
+  clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
 
-    // Tablo/etiket hücrelerine temel görsel biçim ekle (Word dış CSS'imizi
-    // göremez, sadece satır-içi style'ı okur).
-    clone.querySelectorAll("table").forEach((t) => { t.style.borderCollapse = "collapse"; t.style.width = "100%"; });
-    clone.querySelectorAll("td, th").forEach((c) => {
-      c.style.border = "1px solid #999";
-      c.style.padding = "4px 8px";
-    });
-    clone.querySelectorAll("td.label, th").forEach((c) => {
-      c.style.fontWeight = "bold";
-      c.style.background = "#f0f0f0";
-    });
+  // Tablo/etiket hücrelerine temel görsel biçim ekle (Word dış CSS'imizi
+  // göremez, sadece satır-içi style'ı okur).
+  clone.querySelectorAll("table").forEach((t) => { t.style.borderCollapse = "collapse"; t.style.width = "100%"; });
+  clone.querySelectorAll("td, th").forEach((c) => {
+    c.style.border = "1px solid #999";
+    c.style.padding = "4px 8px";
+  });
+  clone.querySelectorAll("td.label, th").forEach((c) => {
+    c.style.fontWeight = "bold";
+    c.style.background = "#f0f0f0";
+  });
 
-    const htmlString = `<div>${clone.innerHTML}</div>`;
-    const plainString = clone.innerText || clone.textContent || "";
+  const htmlString = `<div>${clone.innerHTML}</div>`;
+  const plainString = clone.innerText || clone.textContent || "";
+  let success = false;
 
-    await navigator.clipboard.write([
-      new ClipboardItem({
-        "text/html": new Blob([htmlString], { type: "text/html" }),
-        "text/plain": new Blob([plainString], { type: "text/plain" }),
-      }),
-    ]);
+  // 1) Önce modern Clipboard API'yi dene
+  if (navigator.clipboard && typeof ClipboardItem !== "undefined") {
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          "text/html": new Blob([htmlString], { type: "text/html" }),
+          "text/plain": new Blob([plainString], { type: "text/plain" }),
+        }),
+      ]);
+      success = true;
+    } catch (err) {
+      console.warn("Clipboard API başarısız, eski yönteme geçiliyor:", err);
+    }
+  }
 
+  // 2) Başarısızsa eski (execCommand) yöntemi dene — iframe içinde bazen
+  //    bu, izin kısıtlamalarından etkilenmeyebilir.
+  if (!success) {
+    success = legacyCopyHTML(htmlString);
+  }
+
+  if (success) {
     btn.textContent = "✅ Kopyalandı!";
     setTimeout(() => { btn.textContent = originalText; btn.disabled = false; }, 2200);
-  } catch (err) {
-    console.error(err);
-    alert("Kopyalama sırasında bir sorun oluştu. Tarayıcınız panoya erişim izni istemiş olabilir, tekrar deneyin.");
+  } else {
+    alert(
+      "Kopyalama şu an çalışmadı. Bu sayfa bir web sitesine gömülü (iframe) açıldığında bazı tarayıcılar panoya erişimi kısıtlayabilir.\n\n" +
+      "Öneri: Sayfayı 'Tam sayfada açmak için tıklayın' bağlantısından doğrudan açıp tekrar deneyin, ya da 'Yazdır / PDF Al' / 'PDF İndir' seçeneklerini kullanın."
+    );
     btn.disabled = false;
     btn.textContent = originalText;
   }
