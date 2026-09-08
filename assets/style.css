@@ -434,7 +434,6 @@ table.uye-table th{
 table.uye-table td{ border:1px solid var(--line); padding:4px 6px; vertical-align:middle; }
 table.uye-table td.uye-num{ text-align:center; font-weight:700; color:var(--navy); width:6%; }
 table.uye-table input[type=text]{ width:100%; border:none; background:transparent; font-family:inherit; font-size:10.3pt; outline:none; padding:2px; }
-table.uye-table select{ width:100%; border:none; background:transparent; font-family:inherit; font-size:10.3pt; outline:none; padding:2px; }
 table.uye-table td.uye-imza{ width:22%; }
 .uye-remove{
   flex:0 0 auto; border:none; background:transparent; color:#b3492f; font-size:15px; cursor:pointer; opacity:.35; padding:2px 4px;

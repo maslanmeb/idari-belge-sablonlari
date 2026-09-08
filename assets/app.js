@@ -551,7 +551,6 @@ function bindUyeRow(row) {
     const tbody = row.closest("tbody");
     if (tbody.querySelectorAll(".uye-row").length <= 1) {
       row.querySelectorAll("input").forEach((i) => (i.value = ""));
-      row.querySelector("select").selectedIndex = 0;
       return;
     }
     row.remove();
@@ -564,7 +563,7 @@ function makeUyeRow() {
   row.innerHTML = `
     <td class="uye-num"></td>
     <td><input type="text" placeholder="Adı Soyadı" autocomplete="off"></td>
-    <td><select><option value="katildi">Katıldı</option><option value="katilmadi">Katılmadı</option></select></td>
+    <td><input type="text" placeholder="Unvanı" autocomplete="off"></td>
     <td class="uye-imza"></td>
     <td><button type="button" class="uye-remove">&times;</button></td>`;
   bindUyeRow(row);

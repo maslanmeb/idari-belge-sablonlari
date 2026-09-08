@@ -34,14 +34,14 @@ gundem_section = '''    <div class="section-title">Gündem Maddeleri ve Alınan 
     <div class="gundem-list" id="gundemList"></div>
     <button type="button" class="gundem-add" data-target="gundemList">+ Gündem Maddesi Ekle</button>'''
 
-uye_section = '''    <div class="section-title">Toplantıya Katılan / Katılmayan Üyeler</div>
+uye_section = '''    <div class="section-title">Zümre Üyeleri</div>
     <div class="section-sub">Md.12/7 uyarınca tutanak, toplantıya katılmayanlar dâhil tüm zümre üyeleri tarafından imzalanır.</div>
     <table class="uye-table">
       <thead>
         <tr>
           <th style="width:6%">Sıra</th>
-          <th style="width:38%">Adı Soyadı</th>
-          <th style="width:20%">Durumu</th>
+          <th style="width:36%">Adı Soyadı</th>
+          <th style="width:22%">Unvanı</th>
           <th style="width:22%">İmza</th>
           <th style="width:6%"></th>
         </tr>
