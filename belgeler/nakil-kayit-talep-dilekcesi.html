@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nakil Yoluyla Kayıt Talep Dilekçesi</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .doc-title{ text-align:center; font-size:13pt; color:var(--navy); margin: 2px 0 14px; }
+  .section-title{ font-weight:bold; font-size:11.5pt; color:var(--navy); margin: 14px 0 6px; font-family: Arial, sans-serif; }
+  .para{ font-size:11pt; line-height:1.8; text-align:justify; margin: 14px 0; text-indent: 1.25cm; }
+  .closing-line{ margin: 10px 0 18px; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:16px; box-sizing:border-box; }
+  .sig-wrap table.meta td{ padding:3px 6px; font-size:9.8pt; }
+  .sig-wrap table.meta td.label{ font-size:9.2pt; width:42%; }
+  .contact-block{ width:50%; margin-top:20px; }
+  .contact-block table.meta td.label{ width:34%; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button type="button" id="pdfDownloadBtn" onclick="downloadPDF()">⬇️ PDF İndir</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="school-line" contenteditable="true" spellcheck="false" style="margin-bottom:4px;">KUMKALE ORTAOKULU MÜDÜRLÜĞÜNE</div>
+    <div class="school-hint">↑ Farklı okul için bu satırı tıklayıp değiştirebilirsiniz</div>
+    <div class="section-title">Öğrencinin</div>
+    <table class="meta">
+      <tr><td class="label" style="width:32%">TC Kimlik No</td><td><input type="text" inputmode="numeric" class="tc-field" placeholder="TC Kimlik No"></td></tr>
+      <tr><td class="label">Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+      <tr><td class="label">Baba Adı</td><td><input type="text" placeholder="Baba adı"></td></tr>
+      <tr><td class="label">Ana Adı</td><td><input type="text" placeholder="Ana adı"></td></tr>
+      <tr><td class="label">Doğum Yeri</td><td><input type="text" placeholder="Doğum yeri"></td></tr>
+      <tr><td class="label">Doğum Tarihi</td><td><input type="date"></td></tr>
+    </table>
+    <div class="para">
+      Yukarıda açık kimliği yazılı bulunan velisi bulunduğum
+      <span class="inline-fit" contenteditable="true" data-placeholder="önceki okulun adı" style="min-width:11em;"></span> Ortaokulu
+      <span class="inline-fit" contenteditable="true" data-placeholder="sınıfı" style="min-width:3em;"></span> sınıfı öğrencimin
+      naklini okulunuza almak istiyorum.
+    </div>
+    <div class="closing-line" contenteditable="true">Gereğini arz ederim.</div>
+    <div class="sig-wrap">
+      <table class="meta">
+        <tr><td class="label">Tarih</td><td><input type="date"></td></tr>
+        <tr><td class="label">Veli Ad Soyad</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+      </table>
+    </div>
+    <div class="contact-block">
+      <table class="meta">
+        <tr><td class="label">Adres</td><td><textarea rows="2" placeholder="Adres..."></textarea></td></tr>
+        <tr><td class="label">Tel</td><td><input type="tel" placeholder="0532 - 123 45 67"></td></tr>
+      </table>
+    </div>
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="../assets/app.js"></script>
+</body>
+</html>
