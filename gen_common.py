@@ -29,7 +29,6 @@ PAGE_TMPL = """<!DOCTYPE html>
     </div>
   </div>
 
-<script src="../assets/docx.umd.js"></script>
 <script src="../assets/app.js"></script>
 <script src="../assets/docx-export.js"></script>
 </body>

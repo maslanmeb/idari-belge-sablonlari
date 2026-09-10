@@ -535,14 +535,41 @@
     return blocks;
   }
 
+  // docx kütüphanesi artık her sayfada otomatik yüklenmiyor (1.1MB, gereksiz
+  // ağ yükü) — yalnızca "Word İndir" butonuna basıldığında, ilk kullanımda
+  // yükleniyor. Zaten yüklenmişse tekrar indirilmez.
+  let _docxLoadPromise = null;
+  function ensureDocxLoaded() {
+    if (window.docx) return Promise.resolve();
+    if (_docxLoadPromise) return _docxLoadPromise;
+    _docxLoadPromise = new Promise((resolve, reject) => {
+      const script = document.createElement("script");
+      script.src = "../assets/docx.umd.js";
+      script.onload = () => resolve();
+      script.onerror = () => { _docxLoadPromise = null; reject(new Error("docx kütüphanesi yüklenemedi")); };
+      document.head.appendChild(script);
+    });
+    return _docxLoadPromise;
+  }
+
   window.downloadWord = async function downloadWord() {
     const btn = document.getElementById("wordDownloadBtn");
     const pageEl = document.querySelector(".page");
     if (!pageEl) return;
-    if (typeof window.applyFieldFormatting === "function") window.applyFieldFormatting();
 
     const originalText = btn ? btn.textContent : "";
     if (btn) { btn.disabled = true; btn.textContent = "Hazırlanıyor…"; }
+
+    try {
+      await ensureDocxLoaded();
+    } catch (err) {
+      console.error(err);
+      alert("Word kütüphanesi yüklenemedi. İnternet bağlantınızı kontrol edip tekrar deneyin.");
+      if (btn) { btn.disabled = false; btn.textContent = originalText; }
+      return;
+    }
+
+    if (typeof window.applyFieldFormatting === "function") window.applyFieldFormatting();
 
     try {
       const footEl = pageEl.querySelector(".foot");
