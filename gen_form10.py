@@ -15,7 +15,7 @@ EXTRA_STYLE = """<style>
   .sig-wrap table.meta td.label{ font-size:9.2pt; width:42%; }
   .bottom-cols{ margin-top: 18px; display:flex; gap:24px; align-items:flex-start; }
   .half-width{ width:50%; flex:0 0 50%; }
-  .contact-table{ margin-top:0; }
+  .contact-table{ margin-top:14px; }
   .contact-table td.label{ width:34%; }
 </style>
 """
@@ -66,10 +66,9 @@ contact = '''    <table class="meta contact-table">
 bottom = f'''    <div class="bottom-cols">
       <div class="half-width">
 {ekler}
-      </div>
-      <div class="half-width">
 {contact}
       </div>
+      <div class="half-width"></div>
     </div>'''
 
 body = "\n".join([school_line, title, ident_table, paragraphs, closing, signature, bottom])
