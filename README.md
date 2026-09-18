@@ -16,6 +16,7 @@ belgeler/veli-muvafakatnamesi.html  → Veli Muvafakatnamesi (6 bölümlü izin/
 belgeler/zumre-toplanti-tutanagi.html → Zümre Toplantı Tutanağı (dinamik gündem + katılımcı listesi)
 belgeler/nakil-kayit-talep-dilekcesi.html → Nakil Yoluyla Kayıt Talep Dilekçesi
 belgeler/sendika-uyelikten-cekilme-formu.html → Sendika Üyelikten Çekilme Bildirimi Formu (EK-3)
+belgeler/veli-talep-dilekcesi.html → Veli Talep Dilekçesi (Öğrenci Hakkında) — serbest metin + ek + iletişim
 assets/style.css                    → Ortak stil (kumkale-yaptirim-kiti projesiyle aynı temel)
 assets/app.js                       → Ortak davranışlar + bu projeye özgü mekanizmalar
 netlify.toml                        → Netlify yayın ayarları
