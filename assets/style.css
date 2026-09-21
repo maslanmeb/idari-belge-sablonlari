@@ -371,6 +371,7 @@ td .mirror-span{ display:block; padding: 2px; font-size: 11pt; min-height: 1.3em
 
 /* ---- Yazdırmada gizlenmesi gereken ekran-ipuçları ---- */
 @media print{ .school-hint{ display:none !important; } }
+@media print{ .section-sub{ display:none !important; } }
 
 /* ---- Ekler listesi (Ek-1, Ek-2..., çerçevesiz) ---- */
 .ekler-block{ width:50%; }

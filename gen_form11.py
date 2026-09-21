@@ -16,6 +16,12 @@ EXTRA_STYLE = """<style>
   table.imza .imza-label{ margin-bottom:4px; }
   table.imza input{ width:90%; text-align:center; border:none; border-bottom:1px solid #999; background:transparent; font-family:inherit; font-size:9.5pt; margin-bottom:6px; padding:2px; }
   table.imza .imza-box{ height:40px; }
+  .ogrenci-veli-table{ table-layout:fixed; }
+  .ogrenci-veli-table td.grup-baslik{
+    text-align:center; font-family:Arial,sans-serif; font-weight:bold; font-size:9pt; color:#fff;
+    background:var(--navy); padding:5px;
+  }
+  table.ogrenci-veli-table td.label{ width:16% !important; }
 </style>
 """
 
@@ -33,18 +39,25 @@ ust_bilgi = '''    <table class="meta">
       <tr><td class="label">Görüşme Yeri</td><td><input type="text" value="Kumkale Ortaokulu"></td></tr>
     </table>'''
 
-ogrenci = '''    <div class="section-title">Öğrencinin</div>
-    <table class="meta">
-      <tr><td class="label" style="width:28%">Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
-      <tr><td class="label">Sınıfı / Şubesi</td><td><input type="text" placeholder="ör. 6/A" style="width:40%; display:inline-block;"></td></tr>
-      <tr><td class="label">Okul Numarası</td><td><input type="text" placeholder="Okul numarası" style="width:40%; display:inline-block;"></td></tr>
-    </table>'''
-
-veli = '''    <div class="section-title">Görüşme Yapılan Velinin</div>
-    <table class="meta">
-      <tr><td class="label" style="width:28%">Adı Soyadı</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
-      <tr><td class="label">Yakınlık Derecesi</td><td><input type="text" placeholder="ör. Anne / Baba / Vasi" style="width:50%; display:inline-block;"></td></tr>
-      <tr><td class="label">İletişim Numarası</td><td><input type="tel" placeholder="0532 - 123 45 67" style="width:50%; display:inline-block;"></td></tr>
+ogrenci_veli = '''    <div class="section-title">Öğrenci ve Veli / Vasi Bilgileri</div>
+    <table class="meta ogrenci-veli-table">
+      <colgroup><col style="width:16%"><col style="width:34%"><col style="width:16%"><col style="width:34%"></colgroup>
+      <tr>
+        <td colspan="2" class="grup-baslik">ÖĞRENCİ</td>
+        <td colspan="2" class="grup-baslik">VELİ / VASİ</td>
+      </tr>
+      <tr>
+        <td class="label">Adı Soyadı</td><td><input type="text" placeholder="Öğrenci adı soyadı"></td>
+        <td class="label">Adı Soyadı</td><td><input type="text" placeholder="Veli adı soyadı"></td>
+      </tr>
+      <tr>
+        <td class="label">Sınıfı / Şubesi</td><td><input type="text" placeholder="ör. 6/A"></td>
+        <td class="label">Yakınlık Derecesi</td><td><input type="text" placeholder="ör. Anne / Baba / Vasi"></td>
+      </tr>
+      <tr>
+        <td class="label">Okul Numarası</td><td><input type="text" placeholder="Okul numarası"></td>
+        <td class="label">İletişim Numarası</td><td><input type="tel" placeholder="0532 - 123 45 67"></td>
+      </tr>
     </table>'''
 
 tespit = '''    <div class="section-title">Görüşme Konusu ve Yapılan Tespitler</div>
@@ -85,7 +98,7 @@ signature = '''    <table class="imza">
       </tr>
     </table>'''
 
-body = "\n".join([kurum_head, title, ust_bilgi, ogrenci, veli, tespit, karar, closing, signature])
+body = "\n".join([kurum_head, title, ust_bilgi, ogrenci_veli, tespit, karar, closing, signature])
 
 html = page("Veli Görüşme Tutanağı", body, extra_style=EXTRA_STYLE)
 with open(os.path.join(OUT, "veli-gorusme-tutanagi.html"), "w", encoding="utf-8") as f:
