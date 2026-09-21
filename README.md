@@ -17,6 +17,7 @@ belgeler/zumre-toplanti-tutanagi.html → Zümre Toplantı Tutanağı (dinamik g
 belgeler/nakil-kayit-talep-dilekcesi.html → Nakil Yoluyla Kayıt Talep Dilekçesi
 belgeler/sendika-uyelikten-cekilme-formu.html → Sendika Üyelikten Çekilme Bildirimi Formu (EK-3)
 belgeler/veli-talep-dilekcesi.html → Veli Talep Dilekçesi (Öğrenci Hakkında) — serbest metin + ek + iletişim
+belgeler/veli-gorusme-tutanagi.html → Veli Görüşme Tutanağı — 3 imzalı (veli/rehber öğretmen/müdür) resmî görüşme kaydı
 assets/style.css                    → Ortak stil (kumkale-yaptirim-kiti projesiyle aynı temel)
 assets/app.js                       → Ortak davranışlar + bu projeye özgü mekanizmalar
 netlify.toml                        → Netlify yayın ayarları

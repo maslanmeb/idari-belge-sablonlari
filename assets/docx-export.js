@@ -443,6 +443,18 @@
     if (cls.contains("ek-tag")) {
       return [para([run(collectText(el), { bold: true, size: 18, color: NAVY })], { alignment: docx.AlignmentType.CENTER })];
     }
+    if (cls.contains("kurum-head")) {
+      const linesHtml = el.innerHTML.split(/<br\s*\/?>/i);
+      const runs = [];
+      linesHtml.forEach((lineHtml, i) => {
+        const tmp = el.ownerDocument.createElement("div");
+        tmp.innerHTML = lineHtml;
+        const text = collectText(tmp);
+        if (i > 0) runs.push(run("", { break: 1 }));
+        if (text) runs.push(run(text, { bold: true, size: 19 }));
+      });
+      return runs.length ? [para(runs, { alignment: docx.AlignmentType.CENTER, spacing: { after: 160 } })] : [];
+    }
     if (cls.contains("school-line")) {
       const text = liveText(el) || collectText(el);
       return [para([run(text, { bold: true, size: 24 })], { alignment: docx.AlignmentType.CENTER, spacing: { after: 120 }, border: { bottom: { style: "single", size: 6, color: "000000", space: 4 } } })];
