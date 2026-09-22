@@ -62,7 +62,8 @@
     </div>
     <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
 
-    <div class="section-title">İnceleme Komisyonu Üyeleri</div>
+    <div class="section-title">Eser İnceleme ve Seçme Kurulu Üyeleri</div>
+    <div class="section-sub">Eserler, okulun Eser İnceleme ve Seçme Kurulu (MEB Eğitim Kurumları Sosyal Etkinlikler Yönetmeliği Md.12) tarafından incelenir. Aşağıdaki üyeler varsayılan olarak eklenmiştir; düzenleyebilir, silebilir veya yeni üye ekleyebilirsiniz.</div>
     <table class="uye-table">
       <thead>
         <tr>
@@ -72,7 +73,43 @@
           <th style="width:22%">İmza</th>
         </tr>
       </thead>
-      <tbody id="yarismaUyeBody"></tbody>
+      <tbody id="yarismaUyeBody">
+        <tr class="uye-row">
+          <td class="uye-num"></td>
+          <td><input type="text" value="Mehmet ASLAN" placeholder="Adı Soyadı" autocomplete="off"></td>
+          <td><input type="text" value="Başkan (Müdür Yardımcısı)" placeholder="Unvanı" autocomplete="off"></td>
+          <td class="uye-imza"></td>
+          <td><button type="button" class="uye-remove">&times;</button></td>
+        </tr>
+        <tr class="uye-row">
+          <td class="uye-num"></td>
+          <td><input type="text" value="Serkan ASLAN" placeholder="Adı Soyadı" autocomplete="off"></td>
+          <td><input type="text" value="Öğretmen" placeholder="Unvanı" autocomplete="off"></td>
+          <td class="uye-imza"></td>
+          <td><button type="button" class="uye-remove">&times;</button></td>
+        </tr>
+        <tr class="uye-row">
+          <td class="uye-num"></td>
+          <td><input type="text" value="Çiğdem BULUT CANBOLAT" placeholder="Adı Soyadı" autocomplete="off"></td>
+          <td><input type="text" value="Öğretmen" placeholder="Unvanı" autocomplete="off"></td>
+          <td class="uye-imza"></td>
+          <td><button type="button" class="uye-remove">&times;</button></td>
+        </tr>
+        <tr class="uye-row">
+          <td class="uye-num"></td>
+          <td><input type="text" value="Kübra SOYLU" placeholder="Adı Soyadı" autocomplete="off"></td>
+          <td><input type="text" value="Kulüp Danışman Öğretmeni" placeholder="Unvanı" autocomplete="off"></td>
+          <td class="uye-imza"></td>
+          <td><button type="button" class="uye-remove">&times;</button></td>
+        </tr>
+        <tr class="uye-row">
+          <td class="uye-num"></td>
+          <td><input type="text" value="Hanife Minel ORHANİYE" placeholder="Adı Soyadı" autocomplete="off"></td>
+          <td><input type="text" value="Öğrenci Temsilcisi" placeholder="Unvanı" autocomplete="off"></td>
+          <td class="uye-imza"></td>
+          <td><button type="button" class="uye-remove">&times;</button></td>
+        </tr>
+      </tbody>
     </table>
     <button type="button" class="uye-add" data-target="yarismaUyeBody">+ Üye Ekle</button>
 
