@@ -747,6 +747,78 @@ function resetUyeTable(tbody) {
   renumberUyeTable(tbody);
 }
 
+/* ---------- Çok sütunlu dinamik tablo (dizi-table): metin sütunları + isteğe bağlı seçim sütunu ----------
+   HTML iskeleti:
+   <table class="dizi-table" data-cols='["Sütun 1","Sütun 2"]' data-select-options="Seçenek 1,Seçenek 2">
+     <thead>...</thead>
+     <tbody id="xBody"></tbody>
+   </table>
+   <button type="button" class="dizi-add-row" data-target="xBody">+ Satır Ekle</button>
+*/
+function makeDiziRow(table) {
+  let cols = [];
+  try { cols = JSON.parse(table.dataset.cols || "[]"); } catch (e) { cols = []; }
+  const selectOptions = (table.dataset.selectOptions || "")
+    .split(",").map((s) => s.trim()).filter(Boolean);
+  const row = document.createElement("tr");
+  row.className = "dizi-row";
+  let html = `<td class="dizi-num"></td>`;
+  cols.forEach((ph) => {
+    html += `<td><input type="text" placeholder="${ph}" autocomplete="off"></td>`;
+  });
+  if (selectOptions.length) {
+    html += `<td><select><option value="">Seçiniz</option>${selectOptions
+      .map((o) => `<option>${o}</option>`).join("")}</select></td>`;
+  }
+  html += `<td><button type="button" class="dizi-remove">&times;</button></td>`;
+  row.innerHTML = html;
+  bindDiziRow(row);
+  return row;
+}
+function renumberDiziTable(tbody) {
+  let n = 1;
+  tbody.querySelectorAll(".dizi-row").forEach((row) => {
+    row.querySelector(".dizi-num").textContent = n++;
+    row.querySelector(".dizi-remove").classList.toggle("show", tbody.querySelectorAll(".dizi-row").length > 1);
+  });
+}
+function bindDiziRow(row) {
+  row.querySelector(".dizi-remove").addEventListener("click", () => {
+    const tbody = row.closest("tbody");
+    if (tbody.querySelectorAll(".dizi-row").length <= 1) {
+      row.querySelectorAll("input").forEach((i) => (i.value = ""));
+      row.querySelectorAll("select").forEach((s) => (s.selectedIndex = 0));
+      return;
+    }
+    row.remove();
+    renumberDiziTable(tbody);
+  });
+}
+function initDiziTables() {
+  document.querySelectorAll(".dizi-table tbody").forEach((tbody) => {
+    tbody.querySelectorAll(".dizi-row").forEach(bindDiziRow);
+    renumberDiziTable(tbody);
+  });
+  document.querySelectorAll(".dizi-add-row").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const tbody = document.getElementById(btn.dataset.target);
+      if (!tbody) return;
+      const table = tbody.closest("table");
+      const row = makeDiziRow(table);
+      tbody.appendChild(row);
+      renumberDiziTable(tbody);
+      const firstField = row.querySelector("input, select");
+      if (firstField) firstField.focus();
+    });
+  });
+}
+function resetDiziTable(tbody) {
+  const table = tbody.closest("table");
+  tbody.innerHTML = "";
+  tbody.appendChild(makeDiziRow(table));
+  renumberDiziTable(tbody);
+}
+
 /* ---------- Yıl kutuları: ilk kutu doldurulunca ikinci otomatik +1 ---------- */
 function initYearAutoIncrement() {
   document.querySelectorAll("[data-year-pair]").forEach((pairEl) => {
@@ -881,6 +953,7 @@ function clearForm() {
   document.querySelectorAll(".ek-list").forEach(resetEkList);
   document.querySelectorAll(".gundem-list").forEach(resetGundemList);
   document.querySelectorAll(".uye-table tbody").forEach(resetUyeTable);
+  document.querySelectorAll(".dizi-table tbody").forEach(resetDiziTable);
   resetYearPairs();
   resetClosingLines();
 
@@ -919,6 +992,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initEkLists();
   initGundemLists();
   initUyeTables();
+  initDiziTables();
   initYearAutoIncrement();
   initClosingLines();
 });
