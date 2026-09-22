@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Okul Yayını Eser İnceleme ve Seçme Kurulu Tutanağı</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .doc-title{ text-align:center; font-size:14pt; color:var(--navy); margin: 4px 0 16px; }
+  .section-title{ font-weight:bold; font-size:11.5pt; color:var(--navy); margin: 18px 0 4px; font-family: Arial, sans-serif; }
+  .section-sub{ font-size:10px; color:#777; font-family:Arial,sans-serif; margin: 0 0 8px; font-style:italic; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:20px; box-sizing:border-box; }
+  .sig-wrap table.meta td{ padding:3px 6px; font-size:9.6pt; }
+  .sig-wrap table.meta td.label{ font-size:9pt; width:44%; }
+  .sig-wrap .imza-row-cell{ height: 22px; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
+      <button type="button" id="wordDownloadBtn" onclick="downloadWord()">📄 Word İndir</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <h1 class="doc-title">OKUL YAYINI ESER İNCELEME VE SEÇME KURULU TUTANAĞI</h1>
+    <table class="meta">
+      <tr><td class="label" style="width:30%">Yayının Adı</td><td><input type="text" placeholder="ör. Kumkale Sesi Okul Dergisi"></td></tr>
+      <tr><td class="label">Yayın Türü</td><td>
+        <select style="width:60%; display:inline-block;">
+          <option value="">Seçiniz</option>
+          <option>Okul Dergisi</option>
+          <option>Okul Gazetesi</option>
+          <option>Duvar Gazetesi</option>
+          <option>Kulüp Bülteni</option>
+          <option>Diğer</option>
+        </select>
+      </td></tr>
+      <tr><td class="label">Sayı / Dönem</td><td><input type="text" placeholder="ör. Sayı 3 — 2026-2027 Eğitim Öğretim Yılı 1. Dönem" style="width:75%;"></td></tr>
+      <tr><td class="label">Sorumlu Öğretmen (Danışman)</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
+    </table>
+
+    <div class="section-title">İncelenen Yazı / Eserler</div>
+    <div class="section-sub">Yayında yer alması teklif edilen öğrenci ve öğretmen yazılarını/eserlerini sırayla ekleyin; her biri için kurulun kararını seçin.</div>
+    <table class="dizi-table" data-cols='["Yazar Adı Soyadı","Sınıfı / Görevi","Yazı / Eser Başlığı"]' data-select-options="Yayımlanabilir,Düzeltilerek Yayımlanabilir,Yayımlanamaz">
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:23%">Yazar Adı Soyadı</th>
+          <th style="width:15%">Sınıfı / Görevi</th>
+          <th style="width:30%">Yazı / Eser Başlığı</th>
+          <th style="width:20%">Kurul Kararı</th>
+          <th style="width:6%"></th>
+        </tr>
+      </thead>
+      <tbody id="yayinEserBody"></tbody>
+    </table>
+    <button type="button" class="dizi-add-row" data-target="yayinEserBody">+ Satır Ekle</button>
+
+    <div class="section-title">Kurul Değerlendirmesi</div>
+    <div class="section-sub">Yukarıdaki kararlara ilişkin gerekçeyi, istenen düzeltmeleri veya genel değerlendirmeyi buraya yazınız.</div>
+    <div class="paragraph-list" id="pList1">
+      <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    </div>
+    <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+
+    <div class="section-title">Eser İnceleme ve Seçme Kurulu Üyeleri</div>
+    <div class="section-sub">MEB Eğitim Kurumları Sosyal Etkinlikler Yönetmeliği Md.12 uyarınca yayın, kurulun inceleme ve seçme işlemi tamamlanmadan çıkarılamaz.</div>
+    <table class="uye-table">
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:40%">Adı Soyadı</th>
+          <th style="width:32%">Unvanı / Görevi</th>
+          <th style="width:22%">İmza</th>
+        </tr>
+      </thead>
+      <tbody id="yayinUyeBody"></tbody>
+    </table>
+    <button type="button" class="uye-add" data-target="yayinUyeBody">+ Üye Ekle</button>
+
+    <div class="closing-line" contenteditable="true">İşbu tutanak, Eser İnceleme ve Seçme Kurulunun yapmış olduğu inceleme, değerlendirme ve seçme işlemine ilişkin kaydı oluşturmak amacıyla düzenlenmiş olup, yayımlanan eserin bir örneğiyle birlikte ilgili dosyasında iki (2) yıl süreyle saklanır.</div>
+
+    <div class="sig-wrap">
+      <table class="meta">
+        <tr><td class="label">Onay Tarihi</td><td><input type="date"></td></tr>
+        <tr><td class="label">Okul Müdürü</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+        <tr><td class="label">İmza</td><td class="imza-row-cell"></td></tr>
+      </table>
+    </div>
+
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/app.js"></script>
+<script src="../assets/docx-export.js"></script>
+</body>
+</html>
