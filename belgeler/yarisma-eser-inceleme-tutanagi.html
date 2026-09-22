@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yarışmaya Gönderilecek Öğrenci Eseri İnceleme Tutanağı</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .doc-title{ text-align:center; font-size:13.5pt; color:var(--navy); margin: 4px 0 16px; }
+  .section-title{ font-weight:bold; font-size:11.5pt; color:var(--navy); margin: 18px 0 4px; font-family: Arial, sans-serif; }
+  .section-sub{ font-size:10px; color:#777; font-family:Arial,sans-serif; margin: 0 0 8px; font-style:italic; }
+  .sig-wrap{ width:50%; margin-left:50%; margin-top:20px; box-sizing:border-box; }
+  .sig-wrap table.meta td{ padding:3px 6px; font-size:9.6pt; }
+  .sig-wrap table.meta td.label{ font-size:9pt; width:44%; }
+  .sig-wrap .imza-row-cell{ height: 22px; }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
+      <button type="button" id="wordDownloadBtn" onclick="downloadWord()">📄 Word İndir</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <h1 class="doc-title">YARIŞMAYA GÖNDERİLECEK ÖĞRENCİ ESERİ İNCELEME TUTANAĞI</h1>
+    <table class="meta">
+      <tr><td class="label" style="width:30%">Yarışmanın Adı</td><td><input type="text" placeholder="ör. TÜBİTAK 4006 Bilim Fuarı"></td></tr>
+      <tr><td class="label">Düzenleyen Kurum</td><td><input type="text" placeholder="ör. Çanakkale İl Millî Eğitim Müdürlüğü"></td></tr>
+      <tr><td class="label">Yarışma Konusu / Kategorisi</td><td><input type="text"></td></tr>
+      <tr><td class="label">Son Gönderim Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
+      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
+    </table>
+
+    <div class="section-title">İncelenen Eserler</div>
+    <div class="section-sub">Yarışmaya gönderilmek üzere teslim edilen öğrenci eserlerini sırayla ekleyin; her biri için komisyonun sonucunu seçin.</div>
+    <table class="dizi-table" data-cols='["Öğrenci Adı Soyadı","Sınıfı / Numarası","Eser Adı / Konusu"]' data-select-options="Gönderime Uygun,Gönderime Uygun Değil,Düzeltme İstendi">
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:25%">Öğrenci Adı Soyadı</th>
+          <th style="width:16%">Sınıfı / Numarası</th>
+          <th style="width:27%">Eser Adı / Konusu</th>
+          <th style="width:20%">Sonuç</th>
+          <th style="width:6%"></th>
+        </tr>
+      </thead>
+      <tbody id="yarismaEserBody"></tbody>
+    </table>
+    <button type="button" class="dizi-add-row" data-target="yarismaEserBody">+ Satır Ekle</button>
+
+    <div class="section-title">Değerlendirme Gerekçesi / Notlar</div>
+    <div class="section-sub">Uygun görülmeyen veya düzeltme istenen eserler için gerekçeyi, ayrıca varsa özgünlük/telif kontrolüne ilişkin notları yazınız.</div>
+    <div class="paragraph-list" id="pList1">
+      <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    </div>
+    <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+
+    <div class="section-title">İnceleme Komisyonu Üyeleri</div>
+    <table class="uye-table">
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:40%">Adı Soyadı</th>
+          <th style="width:32%">Unvanı / Görevi</th>
+          <th style="width:22%">İmza</th>
+        </tr>
+      </thead>
+      <tbody id="yarismaUyeBody"></tbody>
+    </table>
+    <button type="button" class="uye-add" data-target="yarismaUyeBody">+ Üye Ekle</button>
+
+    <div class="closing-line" contenteditable="true">İşbu tutanak, yarışmaya gönderilecek öğrenci eserlerinin gönderim öncesinde incelendiğini ve komisyon kararını belgelemek amacıyla düzenlenmiştir.</div>
+
+    <div class="sig-wrap">
+      <table class="meta">
+        <tr><td class="label">Onay Tarihi</td><td><input type="date"></td></tr>
+        <tr><td class="label">Okul Müdürü</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+        <tr><td class="label">İmza</td><td class="imza-row-cell"></td></tr>
+      </table>
+    </div>
+
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/app.js"></script>
+<script src="../assets/docx-export.js"></script>
+</body>
+</html>
