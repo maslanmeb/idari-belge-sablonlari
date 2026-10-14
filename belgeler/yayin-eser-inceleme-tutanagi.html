@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Okul Yayını Eser İnceleme ve Seçme Kurulu Tutanağı</title>
+<title>Okul Yayını ve Pano İçeriği İnceleme Tutanağı</title>
 <link rel="stylesheet" href="../assets/style.css">
 <style>
   .doc-title{ text-align:center; font-size:14pt; color:var(--navy); margin: 4px 0 16px; }
@@ -29,33 +29,37 @@
   </div>
 
   <div class="page">
-    <h1 class="doc-title">OKUL YAYINI ESER İNCELEME VE SEÇME KURULU TUTANAĞI</h1>
+    <h1 class="doc-title">OKUL YAYINI VE PANO İÇERİĞİ İNCELEME TUTANAĞI</h1>
     <table class="meta">
-      <tr><td class="label" style="width:30%">Yayının Adı</td><td><input type="text" placeholder="ör. Kumkale Sesi Okul Dergisi"></td></tr>
+      <tr><td class="label" style="width:30%">Yayın / Pano Adı</td><td><input type="text" placeholder="ör. Okul Dijital Panosu — Kumkale Sesi Okul Dergisi"></td></tr>
       <tr><td class="label">Yayın Türü</td><td>
         <select style="width:60%; display:inline-block;">
           <option value="">Seçiniz</option>
+          <option>Okul Panosu (Dijital)</option>
+          <option>Okul Panosu (Duvar / Koridor)</option>
           <option>Okul Dergisi</option>
           <option>Okul Gazetesi</option>
           <option>Duvar Gazetesi</option>
           <option>Kulüp Bülteni</option>
+          <option>Okul İnternet Sitesi</option>
           <option>Diğer</option>
         </select>
       </td></tr>
-      <tr><td class="label">Sayı / Dönem</td><td><input type="text" placeholder="ör. Sayı 3 — 2026-2027 Eğitim Öğretim Yılı 1. Dönem" style="width:75%;"></td></tr>
-      <tr><td class="label">Sorumlu Öğretmen (Danışman)</td><td><input type="text" placeholder="Adı Soyadı"></td></tr>
+      <tr><td class="label">Yayın Dönemi / Süresi</td><td><input type="text" placeholder="ör. Ekim 2026 ayı — 2026-2027 Eğitim Öğretim Yılı 1. Dönem" style="width:75%;"></td></tr>
+      <tr><td class="label">Hazırlayan / Derleyen Öğretmen</td><td><input type="text" placeholder="Adı Soyadı — Branşı"></td></tr>
+      <tr><td class="label">Teklif Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
       <tr><td class="label">İnceleme Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
     </table>
 
-    <div class="section-title">İncelenen Yazı / Eserler</div>
-    <div class="section-sub">Yayında yer alması teklif edilen öğrenci ve öğretmen yazılarını/eserlerini sırayla ekleyin; her biri için kurulun kararını seçin.</div>
-    <table class="dizi-table" data-cols='["Yazar Adı Soyadı","Sınıfı / Görevi","Yazı / Eser Başlığı"]' data-select-options="Yayımlanabilir,Düzeltilerek Yayımlanabilir,Yayımlanamaz">
+    <div class="section-title">Yayın İçeriği</div>
+    <div class="section-sub">Yayında / panoda yer alması teklif edilen içerikleri bölüm bölüm yazın (ör. "Ayın Duyuruları", "29 Ekim Cumhuriyet Bayramı köşesi", "Öğrenci şiirleri — 3 eser"). İçerik türünü listeden seçebilir veya kendiniz yazabilirsiniz. "Kurul Kararı" sütununu boş bırakırsanız çıktıda boş hücre olarak basılır, kurul toplantıda elle doldurur.</div>
+    <table class="dizi-table" data-cols='["İçerik Başlığı / Bölüm",{"ph":"İçerik Türü","list":["Duyuru","Haber","Belirli Gün ve Hafta","Öğrenci Eseri (Yazı / Şiir)","Öğrenci Eseri (Resim / Görsel)","Fotoğraf / Etkinlik Görseli","Bilgilendirme / Afiş","Başarı / Tebrik","Bilgi Köşesi","Video / Animasyon"]},"Hazırlayan / Kaynak"]' data-select-options="Yayımlanabilir,Düzeltilerek Yayımlanabilir,Yayımlanamaz">
       <thead>
         <tr>
           <th style="width:6%">Sıra</th>
-          <th style="width:23%">Yazar Adı Soyadı</th>
-          <th style="width:15%">Sınıfı / Görevi</th>
-          <th style="width:30%">Yazı / Eser Başlığı</th>
+          <th style="width:30%">İçerik Başlığı / Bölüm</th>
+          <th style="width:19%">İçerik Türü</th>
+          <th style="width:19%">Hazırlayan / Kaynak</th>
           <th style="width:20%">Kurul Kararı</th>
           <th style="width:6%"></th>
         </tr>
@@ -65,11 +69,15 @@
     <button type="button" class="dizi-add-row" data-target="yayinEserBody">+ Satır Ekle</button>
 
     <div class="section-title">Kurul Değerlendirmesi</div>
-    <div class="section-sub">Yukarıdaki kararlara ilişkin gerekçeyi, istenen düzeltmeleri veya genel değerlendirmeyi buraya yazınız.</div>
-    <div class="paragraph-list" id="pList1">
-      <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    <div class="section-sub">Değerlendirme kurul toplantısında yapılacaksa kutuyu işaretleyin ya da alanı boş bırakın; çıktıda elle yazılmak üzere boş satırlar basılır. Değerlendirme önceden biliniyorsa buraya yazabilirsiniz.</div>
+    <div class="manual-fill" data-lines="7">
+      <label class="manual-toggle"><input type="checkbox"> Kurul değerlendirmesi elle doldurulacak (boş satırlı çıktı)</label>
+      <div class="paragraph-list" id="pList1">
+        <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
+      </div>
+      <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+      <div class="manual-lines"></div>
     </div>
-    <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
 
     <div class="section-title">Eser İnceleme ve Seçme Kurulu Üyeleri</div>
     <div class="section-sub">MEB Eğitim Kurumları Sosyal Etkinlikler Yönetmeliği Md.12 uyarınca yayın, kurulun inceleme ve seçme işlemi tamamlanmadan çıkarılamaz. Aşağıdaki üyeler varsayılan olarak eklenmiştir; düzenleyebilir, silebilir veya yeni üye ekleyebilirsiniz.</div>
@@ -122,7 +130,7 @@
     </table>
     <button type="button" class="uye-add" data-target="yayinUyeBody">+ Üye Ekle</button>
 
-    <div class="closing-line" contenteditable="true">İşbu tutanak, Eser İnceleme ve Seçme Kurulunun yapmış olduğu inceleme, değerlendirme ve seçme işlemine ilişkin kaydı oluşturmak amacıyla düzenlenmiş olup, yayımlanan eserin bir örneğiyle birlikte ilgili dosyasında iki (2) yıl süreyle saklanır.</div>
+    <div class="closing-line" contenteditable="true">İşbu tutanak, yukarıda belirtilen yayın / pano içeriğinin yayımlanmadan önce Eser İnceleme ve Seçme Kurulunca incelendiğini ve verilen kararları kayıt altına almak amacıyla düzenlenmiş olup, yayımlanan içeriğin bir örneğiyle birlikte ilgili dosyasında iki (2) yıl süreyle saklanır.</div>
 
     <div class="sig-wrap">
       <table class="meta">

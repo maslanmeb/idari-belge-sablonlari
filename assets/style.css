@@ -491,6 +491,26 @@ table.dizi-table select{ width:100%; border:none; background:transparent; font-f
 }
 .dizi-add-row:hover{ background:#dde6f3; }
 
+/* ---- Elle doldurulacak alan (.manual-fill) ---- */
+.manual-toggle{
+  display:inline-flex; align-items:center; gap:8px; font-family:Arial, sans-serif; font-size:12.5px; color:#7a5a00;
+  background:#fff8e6; border:1px solid #f0d58c; border-radius:6px; padding:6px 10px; margin:0 0 10px; cursor:pointer;
+}
+.manual-toggle input{ margin:0; }
+.manual-lines{ display:none; margin: 4px 0 12px; }
+.manual-line{ border-bottom:1px dotted #555; height:28px; }
+.manual-fill[data-manual-forced] .manual-lines{ display:block; }
+.manual-fill[data-manual-forced] .paragraph-list,
+.manual-fill[data-manual-forced] .paragraph-list-add{ display:none; }
+@media print{
+  .manual-toggle{ display:none !important; }
+  .manual-fill[data-manual] .manual-lines{ display:block !important; }
+  .manual-fill[data-manual] .paragraph-list,
+  .manual-fill[data-manual] .paragraph-list-add{ display:none !important; }
+  select{ -webkit-appearance:none; appearance:none; }
+  select[data-blank]{ color:transparent !important; }
+}
+
 /* ---- Barkod alanı ---- */
 .barcode-box{
   border: 2px dashed #999; border-radius:6px; min-height: 70px;

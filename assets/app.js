@@ -199,6 +199,7 @@ function withZumreCover(fn) {
 /* ---------- Yazdır / PDF Al ---------- */
 function printForm() {
   if (typeof applyFieldFormatting === "function") applyFieldFormatting();
+  syncManualFills();
   document.querySelectorAll("textarea").forEach(autoGrow);
   requestAnimationFrame(() => {
     document.querySelectorAll("textarea").forEach(autoGrow);
@@ -226,6 +227,7 @@ function printForm() {
 */
 function formatFieldForCopy(el) {
   if (el.tagName === "SELECT") {
+    if (el.value === "") return "";
     return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
   }
   if (el.type === "checkbox" || el.type === "radio") {
@@ -280,6 +282,7 @@ async function copyForWord() {
   if (!pageEl) return;
 
   if (typeof applyFieldFormatting === "function") applyFieldFormatting();
+  syncManualFills();
 
   const originalText = btn.textContent;
   btn.disabled = true;
@@ -306,6 +309,20 @@ async function copyForWord() {
     span.textContent = formatFieldForCopy(liveEl);
     cloneEl.replaceWith(span);
   });
+
+  clone.querySelectorAll(".manual-toggle").forEach((el) => el.remove());
+  clone.querySelectorAll(".manual-fill").forEach((wrap) => {
+    if (wrap.hasAttribute("data-manual")) {
+      wrap.querySelectorAll(".paragraph-list, .paragraph-list-add").forEach((el) => el.remove());
+      wrap.querySelectorAll(".manual-line").forEach((l) => {
+        l.style.borderBottom = "1px dotted #555";
+        l.style.height = "26px";
+      });
+    } else {
+      wrap.querySelectorAll(".manual-lines").forEach((el) => el.remove());
+    }
+  });
+  clone.querySelectorAll("datalist").forEach((el) => el.remove());
 
   clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
 
@@ -763,8 +780,24 @@ function makeDiziRow(table) {
   const row = document.createElement("tr");
   row.className = "dizi-row";
   let html = `<td class="dizi-num"></td>`;
-  cols.forEach((ph) => {
-    html += `<td><input type="text" placeholder="${ph}" autocomplete="off"></td>`;
+  cols.forEach((col, ci) => {
+    if (col && typeof col === "object") {
+      let listAttr = "";
+      if (Array.isArray(col.list) && col.list.length) {
+        if (!table.dataset.diziUid) table.dataset.diziUid = "dz" + Math.random().toString(36).slice(2, 8);
+        const listId = `${table.dataset.diziUid}-c${ci}`;
+        if (!document.getElementById(listId)) {
+          const dl = document.createElement("datalist");
+          dl.id = listId;
+          dl.innerHTML = col.list.map((o) => `<option value="${o}"></option>`).join("");
+          table.after(dl);
+        }
+        listAttr = ` list="${listId}"`;
+      }
+      html += `<td><input type="text" placeholder="${col.ph || ""}"${listAttr} autocomplete="off"></td>`;
+    } else {
+      html += `<td><input type="text" placeholder="${col}" autocomplete="off"></td>`;
+    }
   });
   if (selectOptions.length) {
     html += `<td><select><option value="">Seçiniz</option>${selectOptions
@@ -796,6 +829,7 @@ function bindDiziRow(row) {
 }
 function initDiziTables() {
   document.querySelectorAll(".dizi-table tbody").forEach((tbody) => {
+    if (!tbody.querySelector(".dizi-row")) tbody.appendChild(makeDiziRow(tbody.closest("table")));
     tbody.querySelectorAll(".dizi-row").forEach(bindDiziRow);
     renumberDiziTable(tbody);
   });
@@ -817,6 +851,56 @@ function resetDiziTable(tbody) {
   tbody.innerHTML = "";
   tbody.appendChild(makeDiziRow(table));
   renumberDiziTable(tbody);
+}
+
+/* ---------- Seçilmemiş açılır listeler: yazdırmada "Seçiniz" görünmesin ---------- */
+function syncBlankSelects() {
+  document.querySelectorAll("select").forEach((s) => s.toggleAttribute("data-blank", s.value === ""));
+}
+
+/* ---------- Elle doldurulacak alan (.manual-fill) ----------
+   <div class="manual-fill" data-lines="6">
+     <label class="manual-toggle"><input type="checkbox"> ... elle doldurulacak</label>
+     <div class="paragraph-list">...</div> <button class="paragraph-list-add">
+     <div class="manual-lines"></div>
+   </div>
+   Kutu işaretliyse VEYA içindeki metin alanlarının hepsi boşsa, yazdırma /
+   Word çıktısında metin yerine elle yazmaya uygun boş çizgili satırlar basılır. */
+function syncManualFill(wrap) {
+  const toggle = wrap.querySelector(".manual-toggle input");
+  const forced = !!(toggle && toggle.checked);
+  const texts = Array.from(wrap.querySelectorAll("textarea"));
+  const empty = texts.every((t) => !t.value.trim());
+  wrap.toggleAttribute("data-manual", forced || empty);
+  wrap.toggleAttribute("data-manual-forced", forced);
+}
+function syncManualFills() {
+  document.querySelectorAll(".manual-fill").forEach(syncManualFill);
+  syncBlankSelects();
+}
+window.syncManualFills = syncManualFills;
+function initManualFills() {
+  document.querySelectorAll(".manual-fill").forEach((wrap) => {
+    const lines = wrap.querySelector(".manual-lines");
+    if (lines && !lines.children.length) {
+      const n = parseInt(wrap.dataset.lines || "6", 10);
+      for (let i = 0; i < n; i++) {
+        const d = document.createElement("div");
+        d.className = "manual-line";
+        lines.appendChild(d);
+      }
+    }
+    wrap.addEventListener("input", () => syncManualFill(wrap));
+    wrap.addEventListener("change", () => syncManualFill(wrap));
+    wrap.addEventListener("click", () => setTimeout(() => syncManualFill(wrap), 0));
+  });
+  document.addEventListener("change", (e) => {
+    if (e.target && e.target.tagName === "SELECT") e.target.toggleAttribute("data-blank", e.target.value === "");
+  });
+  // Dinamik eklenen satırlardaki listeler için
+  document.addEventListener("click", () => setTimeout(syncBlankSelects, 0));
+  window.addEventListener("beforeprint", syncManualFills);
+  syncManualFills();
 }
 
 /* ---------- Yıl kutuları: ilk kutu doldurulunca ikinci otomatik +1 ---------- */
@@ -969,6 +1053,7 @@ function clearForm() {
   const keys = new Set();
   document.querySelectorAll("[data-mirror]").forEach((el) => keys.add(el.dataset.mirror));
   keys.forEach(updateMirror);
+  syncManualFills();
 }
 
 /* ---------- Gizlilik: paylaşılan bilgisayarlarda tarayıcı otomatik-doldurma
@@ -993,6 +1078,7 @@ document.addEventListener("DOMContentLoaded", () => {
   initGundemLists();
   initUyeTables();
   initDiziTables();
+  initManualFills();
   initYearAutoIncrement();
   initClosingLines();
 });

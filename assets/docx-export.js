@@ -26,6 +26,7 @@
     ".dyn-remove", ".p-remove", ".ek-remove", ".ekler-add", ".paragraph-list-add",
     ".note-close", ".dizi-remove", ".dizi-add-row", ".gundem-add", ".gundem-remove",
     ".uye-add", ".uye-remove", ".gundem-suggest-dropdown", ".dyn-num", ".nusha-divider",
+    ".manual-toggle", "datalist",
     "hr.section-rule",
   ].join(",");
 
@@ -46,6 +47,7 @@
   function liveText(el) {
     const tag = el.tagName;
     if (tag === "SELECT") {
+      if (el.value === "") return "";
       return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text.trim() : "";
     }
     if (tag === "INPUT") {
@@ -428,6 +430,27 @@
     if (cls.contains("uye-table") || cls.contains("dizi-table")) {
       const t = convertGenericTable(el);
       return t ? [t] : [];
+    }
+    if (cls.contains("manual-fill")) {
+      if (typeof window.syncManualFills === "function") window.syncManualFills();
+      if (el.hasAttribute("data-manual")) {
+        const n = parseInt(el.dataset.lines || "6", 10);
+        const out = [];
+        for (let i = 0; i < n; i++) {
+          out.push(new docx.Paragraph({
+            children: [run(" ", { size: 20 })],
+            spacing: { before: 200, after: 0 },
+            border: { bottom: { style: docx.BorderStyle.DOTTED, size: 6, color: "555555", space: 1 } },
+          }));
+        }
+        return out;
+      }
+      const out = [];
+      Array.from(el.children).forEach((child) => {
+        if (child.classList && child.classList.contains("manual-lines")) return;
+        out.push(...convertElement(child));
+      });
+      return out;
     }
     if (cls.contains("paragraph-list")) return convertNumberedList(el, ".p-row");
     if (cls.contains("dyn-list")) return convertNumberedList(el, ".dyn-row");
