@@ -35,12 +35,14 @@
       <tr><td class="label">Düzenleyen Kurum</td><td><input type="text" placeholder="ör. Çanakkale İl Millî Eğitim Müdürlüğü"></td></tr>
       <tr><td class="label">Yarışma Konusu / Kategorisi</td><td><input type="text"></td></tr>
       <tr><td class="label">Son Gönderim Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
-      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
+      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" data-manual-field="#kurulManuel" style="width:45%; display:inline-block;"></td></tr>
     </table>
 
+    <label class="manual-toggle manual-toggle-main"><input type="checkbox" id="kurulManuel"><span>Form kurul toplantısından önce hazırlanıyor: inceleme tarihi, sonuçlar ve değerlendirme toplantıda <b>elle doldurulacak</b>.</span></label>
+
     <div class="section-title">İncelenen Eserler</div>
-    <div class="section-sub">Yarışmaya gönderilmek üzere teslim edilen öğrenci eserlerini sırayla ekleyin; her biri için komisyonun sonucunu seçin.</div>
-    <table class="dizi-table" data-cols='["Öğrenci Adı Soyadı","Sınıfı / Numarası","Eser Adı / Konusu"]' data-select-options="Gönderime Uygun,Gönderime Uygun Değil,Düzeltme İstendi">
+    <div class="section-sub">Yarışmaya gönderilmek üzere teslim edilen öğrenci eserlerini sırayla ekleyin; her biri için kurulun sonucunu seçin. Kurul toplantısından önce dolduruyorsanız yukarıdaki kutuyu işaretleyin; "Sonuç" sütunu çıktıda boş basılır.</div>
+    <table class="dizi-table" data-cols='["Öğrenci Adı Soyadı","Sınıfı / Numarası","Eser Adı / Konusu"]' data-select-options="Gönderime Uygun,Gönderime Uygun Değil,Düzeltme İstendi" data-select-manual="#kurulManuel">
       <thead>
         <tr>
           <th style="width:6%">Sıra</th>
@@ -56,11 +58,14 @@
     <button type="button" class="dizi-add-row" data-target="yarismaEserBody">+ Satır Ekle</button>
 
     <div class="section-title">Değerlendirme Gerekçesi / Notlar</div>
-    <div class="section-sub">Uygun görülmeyen veya düzeltme istenen eserler için gerekçeyi, ayrıca varsa özgünlük/telif kontrolüne ilişkin notları yazınız.</div>
-    <div class="paragraph-list" id="pList1">
-      <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    <div class="section-sub">Uygun görülmeyen veya düzeltme istenen eserler için gerekçeyi, ayrıca varsa özgünlük/telif kontrolüne ilişkin notları yazınız. Yukarıdaki kutu işaretliyse veya alan boş bırakılırsa çıktıda elle yazılmak üzere boş satırlar basılır.</div>
+    <div class="manual-fill" data-lines="5" data-toggle="#kurulManuel">
+      <div class="paragraph-list" id="pList1">
+        <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
+      </div>
+      <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+      <div class="manual-lines"></div>
     </div>
-    <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
 
     <div class="section-title">Eser İnceleme ve Seçme Kurulu Üyeleri</div>
     <div class="section-sub">Eserler, okulun Eser İnceleme ve Seçme Kurulu (MEB Eğitim Kurumları Sosyal Etkinlikler Yönetmeliği Md.12) tarafından incelenir. Aşağıdaki üyeler varsayılan olarak eklenmiştir; düzenleyebilir, silebilir veya yeni üye ekleyebilirsiniz.</div>
@@ -113,7 +118,7 @@
     </table>
     <button type="button" class="uye-add" data-target="yarismaUyeBody">+ Üye Ekle</button>
 
-    <div class="closing-line" contenteditable="true">İşbu tutanak, yarışmaya gönderilecek öğrenci eserlerinin gönderim öncesinde incelendiğini ve komisyon kararını belgelemek amacıyla düzenlenmiştir.</div>
+    <div class="closing-line" contenteditable="true">İşbu tutanak, yarışmaya gönderilecek öğrenci eserlerinin gönderim öncesinde incelendiğini ve kurul kararını belgelemek amacıyla düzenlenmiştir.</div>
 
     <div class="sig-wrap">
       <table class="meta">

@@ -46,7 +46,7 @@
   // .value'sunu (biçimlendirilmiş), contenteditable/düz metin ise textContent'i.
   function liveText(el) {
     const tag = el.tagName;
-    if (el.hasAttribute && el.hasAttribute("data-manual-blank")) return "";
+    if (el.hasAttribute && (el.hasAttribute("data-manual-blank") || (el.tagName === "TEXTAREA" && el.hasAttribute("data-manual")))) return "";
     if (tag === "SELECT") {
       if (el.value === "") return "";
       return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text.trim() : "";
@@ -319,6 +319,20 @@
     return out;
   }
 
+  // ---- Elle doldurulacak boş noktalı satırlar ----
+  function manualLineParas(n) {
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      out.push(new docx.Paragraph({
+        children: [run(" ", { size: 20 })],
+        spacing: { before: 200, after: 0 },
+        border: { bottom: { style: docx.BorderStyle.DOTTED, size: 6, color: "555555", space: 1 } },
+      }));
+    }
+    return out;
+  }
+  function isManualText(el) { return !!(el && el.hasAttribute("data-manual")); }
+
   // ---- .gundem-list: başlık + karar ----
   function convertGundemList(list) {
     const items = Array.from(list.querySelectorAll(".gundem-item"));
@@ -332,8 +346,17 @@
       const ozet = ozetEl ? liveText(ozetEl) : "";
       const karar = kararEl ? liveText(kararEl) : "";
       out.push(para([run(`${i + 1}.  `, { bold: true, color: NAVY, size: 21 }), run(title || "(başlıksız)", { bold: true, underline: {}, size: 21 })], { spacing: { before: 160, after: 40 } }));
-      if (ozet) out.push(para([run(ozet, { size: 20 })], { spacing: { after: 100 } }));
-      out.push(para([run("KARAR: ", { bold: true, size: 20 }), run(karar || "—", { size: 20 })], { spacing: { after: 160 } }));
+      if (isManualText(ozetEl)) {
+        out.push(para([run("Görüşme Özeti:", { bold: true, size: 20 })], { spacing: { after: 0 } }));
+        out.push(...manualLineParas(parseInt(ozetEl.dataset.manualLines || "3", 10)));
+      } else if (ozet) out.push(para([run(ozet, { size: 20 })], { spacing: { after: 100 } }));
+      if (isManualText(kararEl)) {
+        out.push(para([run("KARAR:", { bold: true, size: 20 })], { spacing: { before: 120, after: 0 } }));
+        out.push(...manualLineParas(parseInt(kararEl.dataset.manualLines || "2", 10)));
+        out.push(para([run(" ", { size: 10 })], { spacing: { after: 120 } }));
+      } else {
+        out.push(para([run("KARAR: ", { bold: true, size: 20 }), run(karar || "—", { size: 20 })], { spacing: { after: 160 } }));
+      }
     });
     return out;
   }
@@ -435,16 +458,7 @@
     if (cls.contains("manual-fill")) {
       if (typeof window.syncManualFills === "function") window.syncManualFills();
       if (el.hasAttribute("data-manual")) {
-        const n = parseInt(el.dataset.lines || "6", 10);
-        const out = [];
-        for (let i = 0; i < n; i++) {
-          out.push(new docx.Paragraph({
-            children: [run(" ", { size: 20 })],
-            spacing: { before: 200, after: 0 },
-            border: { bottom: { style: docx.BorderStyle.DOTTED, size: 6, color: "555555", space: 1 } },
-          }));
-        }
-        return out;
+        return manualLineParas(parseInt(el.dataset.lines || "6", 10));
       }
       const out = [];
       Array.from(el.children).forEach((child) => {

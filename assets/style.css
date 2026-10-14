@@ -499,6 +499,9 @@ table.dizi-table select{ width:100%; border:none; background:transparent; font-f
 .manual-toggle input{ margin:0; }
 .manual-lines{ display:none; margin: 4px 0 12px; }
 .manual-line{ border-bottom:1px dotted #555; height:26px; }
+.manual-lines-inline{ display:none; margin: 2px 0 8px; }
+textarea[data-manual-forced]{ display:none !important; }
+textarea[data-manual-forced] + .manual-lines-inline{ display:block; }
 .manual-toggle-main{ display:flex; margin:14px 0 4px; font-size:13px; line-height:1.4; }
 [data-manual-blank]{ opacity:.4; }
 .manual-fill[data-manual-forced] .manual-lines{ display:block; }
@@ -509,6 +512,8 @@ table.dizi-table select{ width:100%; border:none; background:transparent; font-f
   .manual-fill[data-manual] .manual-lines{ display:block !important; }
   .manual-fill[data-manual] .paragraph-list,
   .manual-fill[data-manual] .paragraph-list-add{ display:none !important; }
+  textarea[data-manual]{ display:none !important; }
+  textarea[data-manual] + .manual-lines-inline{ display:block !important; }
   select{ -webkit-appearance:none; appearance:none; }
   select[data-blank]{ color:transparent !important; }
   [data-manual-blank]{ opacity:1 !important; }

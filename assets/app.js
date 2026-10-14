@@ -323,6 +323,18 @@ async function copyForWord() {
       wrap.querySelectorAll(".manual-lines").forEach((el) => el.remove());
     }
   });
+  const liveInline = pageEl.querySelectorAll(".manual-lines-inline");
+  clone.querySelectorAll(".manual-lines-inline").forEach((l, i) => {
+    const liveTa = liveInline[i] ? liveInline[i].previousElementSibling : null;
+    if (liveTa && liveTa.hasAttribute("data-manual")) {
+      l.querySelectorAll(".manual-line").forEach((ln) => {
+        ln.style.borderBottom = "1px dotted #555";
+        ln.style.height = "26px";
+      });
+    } else {
+      l.remove();
+    }
+  });
   clone.querySelectorAll("datalist").forEach((el) => el.remove());
 
   clone.querySelectorAll("[contenteditable]").forEach((el) => el.removeAttribute("contenteditable"));
@@ -746,6 +758,7 @@ function makeUyeRow() {
 function initUyeTables() {
   document.querySelectorAll(".uye-table tbody").forEach((tbody) => {
     tbody.querySelectorAll(".uye-row").forEach(bindUyeRow);
+    if (!tbody.querySelector(".uye-row")) tbody.appendChild(makeUyeRow()); // makeUyeRow zaten bağlar
     renumberUyeTable(tbody);
   });
   document.querySelectorAll(".uye-add").forEach((btn) => {
@@ -831,8 +844,8 @@ function bindDiziRow(row) {
 }
 function initDiziTables() {
   document.querySelectorAll(".dizi-table tbody").forEach((tbody) => {
-    if (!tbody.querySelector(".dizi-row")) tbody.appendChild(makeDiziRow(tbody.closest("table")));
     tbody.querySelectorAll(".dizi-row").forEach(bindDiziRow);
+    if (!tbody.querySelector(".dizi-row")) tbody.appendChild(makeDiziRow(tbody.closest("table"))); // makeDiziRow zaten bağlar
     renumberDiziTable(tbody);
   });
   document.querySelectorAll(".dizi-add-row").forEach((btn) => {
@@ -887,8 +900,42 @@ function syncManualFill(wrap) {
   wrap.toggleAttribute("data-manual", forced || empty);
   wrap.toggleAttribute("data-manual-forced", forced);
 }
+/* Tek tek metin alanları (ör. Zümre gündem maddelerinin özet/karar kutuları):
+   <div class="gundem-list" data-manual-toggle="#anahtar"> içindeki özet ve
+   karar kutuları, anahtar işaretliyse çıktıda boş çizgili satırlara dönüşür. */
+function syncManualTextareas() {
+  document.querySelectorAll(".gundem-list[data-manual-toggle]").forEach((list) => {
+    list.querySelectorAll(".gundem-ozet").forEach((t) => {
+      t.dataset.manualText = list.dataset.manualToggle;
+      if (!t.dataset.manualLines) t.dataset.manualLines = "3";
+    });
+    list.querySelectorAll(".gundem-karar").forEach((t) => {
+      t.dataset.manualText = list.dataset.manualToggle;
+      if (!t.dataset.manualLines) t.dataset.manualLines = "2";
+    });
+  });
+  document.querySelectorAll("textarea[data-manual-text]").forEach((ta) => {
+    let lines = ta.nextElementSibling;
+    if (!lines || !lines.classList.contains("manual-lines-inline")) {
+      lines = document.createElement("div");
+      lines.className = "manual-lines-inline";
+      const n = parseInt(ta.dataset.manualLines || "3", 10);
+      for (let i = 0; i < n; i++) {
+        const d = document.createElement("div");
+        d.className = "manual-line";
+        lines.appendChild(d);
+      }
+      ta.after(lines);
+    }
+    const t = document.querySelector(ta.dataset.manualText);
+    const forced = !!(t && t.checked);
+    ta.toggleAttribute("data-manual", forced);
+    ta.toggleAttribute("data-manual-forced", forced);
+  });
+}
 function syncManualFills() {
   document.querySelectorAll(".manual-fill").forEach(syncManualFill);
+  syncManualTextareas();
   syncBlankSelects();
 }
 window.syncManualFills = syncManualFills;

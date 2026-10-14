@@ -68,18 +68,26 @@
         <td class="label">İletişim Numarası</td><td><input type="tel" placeholder="0532 - 123 45 67"></td>
       </tr>
     </table>
+    <label class="manual-toggle manual-toggle-main"><input type="checkbox" id="gorusmeManuel"><span>Tutanak görüşmeden önce hazırlanıyor: görüşme içeriği ve alınan kararlar görüşme sırasında <b>elle yazılacak</b>.</span></label>
+
     <div class="section-title">Görüşme Konusu ve Yapılan Tespitler</div>
-    <div class="section-sub">Öğrenciyle ilgili tespit edilen durumu, hangi mevzuata/kurala aykırılık oluşturduğunu buraya yazınız. İhtiyaç kadar paragraf ekleyip çıkarabilirsiniz.</div>
-    <div class="paragraph-list" id="pList1">
-      <div class="p-row"><textarea rows="3" placeholder="Tespit edilen durumu yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    <div class="section-sub">Öğrenciyle ilgili tespit edilen durumu, hangi mevzuata/kurala aykırılık oluşturduğunu buraya yazınız. İhtiyaç kadar paragraf ekleyip çıkarabilirsiniz. Boş bırakılırsa çıktıda elle yazılmak üzere boş satırlar basılır.</div>
+    <div class="manual-fill" data-lines="4">
+      <div class="paragraph-list" id="pList1">
+        <div class="p-row"><textarea rows="3" placeholder="Tespit edilen durumu yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
+      </div>
+      <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+      <div class="manual-lines"></div>
     </div>
-    <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
     <div class="section-title">Görüşme İçeriği ve Alınan Kararlar</div>
     <div class="section-sub">Veliyle yapılan görüşmede aktarılan bilgileri, uyarıları ve velinin beyan/taahhütlerini buraya yazınız.</div>
-    <div class="paragraph-list" id="pList2">
-      <div class="p-row"><textarea rows="3" placeholder="Görüşmede aktarılanları ve alınan kararları yazınız..."></textarea><button type="button" class="p-remove">&times;</button></div>
+    <div class="manual-fill" data-lines="7" data-toggle="#gorusmeManuel">
+      <div class="paragraph-list" id="pList2">
+        <div class="p-row"><textarea rows="3" placeholder="Görüşmede aktarılanları ve alınan kararları yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
+      </div>
+      <button type="button" class="paragraph-list-add" data-target="pList2">+ Paragraf ekle</button>
+      <div class="manual-lines"></div>
     </div>
-    <button type="button" class="paragraph-list-add" data-target="pList2">+ Paragraf ekle</button>
     <div class="closing-line" contenteditable="true">İşbu tutanak, durumun tespiti ve velinin bilgilendirildiğine dair resmî kayıt oluşturulması amacıyla okul idaresi ve veli tarafından birlikte imza altına alınmıştır.</div>
     <table class="imza">
       <tr>
