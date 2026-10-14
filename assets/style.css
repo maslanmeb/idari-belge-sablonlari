@@ -498,7 +498,9 @@ table.dizi-table select{ width:100%; border:none; background:transparent; font-f
 }
 .manual-toggle input{ margin:0; }
 .manual-lines{ display:none; margin: 4px 0 12px; }
-.manual-line{ border-bottom:1px dotted #555; height:28px; }
+.manual-line{ border-bottom:1px dotted #555; height:26px; }
+.manual-toggle-main{ display:flex; margin:14px 0 4px; font-size:13px; line-height:1.4; }
+[data-manual-blank]{ opacity:.4; }
 .manual-fill[data-manual-forced] .manual-lines{ display:block; }
 .manual-fill[data-manual-forced] .paragraph-list,
 .manual-fill[data-manual-forced] .paragraph-list-add{ display:none; }
@@ -509,6 +511,10 @@ table.dizi-table select{ width:100%; border:none; background:transparent; font-f
   .manual-fill[data-manual] .paragraph-list-add{ display:none !important; }
   select{ -webkit-appearance:none; appearance:none; }
   select[data-blank]{ color:transparent !important; }
+  [data-manual-blank]{ opacity:1 !important; }
+  input::placeholder, textarea::placeholder{ color:transparent !important; }
+  input[data-blank]{ color:transparent !important; }
+  input::-webkit-calendar-picker-indicator{ display:none !important; }
 }
 
 /* ---- Barkod alanı ---- */

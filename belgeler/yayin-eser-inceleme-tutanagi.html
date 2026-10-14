@@ -48,12 +48,14 @@
       <tr><td class="label">Yayın Dönemi / Süresi</td><td><input type="text" placeholder="ör. Ekim 2026 ayı — 2026-2027 Eğitim Öğretim Yılı 1. Dönem" style="width:75%;"></td></tr>
       <tr><td class="label">Hazırlayan / Derleyen Öğretmen</td><td><input type="text" placeholder="Adı Soyadı — Branşı"></td></tr>
       <tr><td class="label">Teklif Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
-      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
+      <tr><td class="label">İnceleme Tarihi</td><td><input type="date" data-manual-field="#kurulManuel" style="width:45%; display:inline-block;"></td></tr>
     </table>
 
+    <label class="manual-toggle manual-toggle-main"><input type="checkbox" id="kurulManuel"><span>Form kurul toplantısından önce hazırlanıyor: inceleme tarihi, kurul kararları ve değerlendirme toplantıda <b>elle doldurulacak</b>.</span></label>
+
     <div class="section-title">Yayın İçeriği</div>
-    <div class="section-sub">Yayında / panoda yer alması teklif edilen içerikleri bölüm bölüm yazın (ör. "Ayın Duyuruları", "29 Ekim Cumhuriyet Bayramı köşesi", "Öğrenci şiirleri — 3 eser"). İçerik türünü listeden seçebilir veya kendiniz yazabilirsiniz. "Kurul Kararı" sütununu boş bırakırsanız çıktıda boş hücre olarak basılır, kurul toplantıda elle doldurur.</div>
-    <table class="dizi-table" data-cols='["İçerik Başlığı / Bölüm",{"ph":"İçerik Türü","list":["Duyuru","Haber","Belirli Gün ve Hafta","Öğrenci Eseri (Yazı / Şiir)","Öğrenci Eseri (Resim / Görsel)","Fotoğraf / Etkinlik Görseli","Bilgilendirme / Afiş","Başarı / Tebrik","Bilgi Köşesi","Video / Animasyon"]},"Hazırlayan / Kaynak"]' data-select-options="Yayımlanabilir,Düzeltilerek Yayımlanabilir,Yayımlanamaz">
+    <div class="section-sub">Yayında / panoda yer alması teklif edilen içerikleri bölüm bölüm yazın (ör. "Ayın Duyuruları", "29 Ekim Cumhuriyet Bayramı köşesi", "Öğrenci şiirleri — 3 eser"). İçerik türünü listeden seçebilir veya kendiniz yazabilirsiniz. Kurul toplantıdan önce dolduruyorsanız yukarıdaki kutuyu işaretleyin; "Kurul Kararı" sütunu çıktıda boş basılır.</div>
+    <table class="dizi-table" data-cols='["İçerik Başlığı / Bölüm",{"ph":"İçerik Türü","list":["Duyuru","Haber","Belirli Gün ve Hafta","Öğrenci Eseri (Yazı / Şiir)","Öğrenci Eseri (Resim / Görsel)","Fotoğraf / Etkinlik Görseli","Bilgilendirme / Afiş","Başarı / Tebrik","Bilgi Köşesi","Video / Animasyon"]},"Hazırlayan / Kaynak"]' data-select-options="Yayımlanabilir,Düzeltilerek Yayımlanabilir,Yayımlanamaz" data-select-manual="#kurulManuel">
       <thead>
         <tr>
           <th style="width:6%">Sıra</th>
@@ -69,9 +71,8 @@
     <button type="button" class="dizi-add-row" data-target="yayinEserBody">+ Satır Ekle</button>
 
     <div class="section-title">Kurul Değerlendirmesi</div>
-    <div class="section-sub">Değerlendirme kurul toplantısında yapılacaksa kutuyu işaretleyin ya da alanı boş bırakın; çıktıda elle yazılmak üzere boş satırlar basılır. Değerlendirme önceden biliniyorsa buraya yazabilirsiniz.</div>
-    <div class="manual-fill" data-lines="7">
-      <label class="manual-toggle"><input type="checkbox"> Kurul değerlendirmesi elle doldurulacak (boş satırlı çıktı)</label>
+    <div class="section-sub">Yukarıdaki kutu işaretliyse veya bu alan boş bırakılırsa çıktıda elle yazılmak üzere boş satırlar basılır.</div>
+    <div class="manual-fill" data-lines="5" data-toggle="#kurulManuel">
       <div class="paragraph-list" id="pList1">
         <div class="p-row"><textarea rows="3" placeholder="Değerlendirmeyi yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
       </div>

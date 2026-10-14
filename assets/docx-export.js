@@ -46,6 +46,7 @@
   // .value'sunu (biçimlendirilmiş), contenteditable/düz metin ise textContent'i.
   function liveText(el) {
     const tag = el.tagName;
+    if (el.hasAttribute && el.hasAttribute("data-manual-blank")) return "";
     if (tag === "SELECT") {
       if (el.value === "") return "";
       return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text.trim() : "";

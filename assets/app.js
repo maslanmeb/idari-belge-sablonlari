@@ -226,6 +226,7 @@ function printForm() {
    sayfada açması önerilir.
 */
 function formatFieldForCopy(el) {
+  if (el.hasAttribute && el.hasAttribute("data-manual-blank")) return "";
   if (el.tagName === "SELECT") {
     if (el.value === "") return "";
     return el.options[el.selectedIndex] ? el.options[el.selectedIndex].text : "";
@@ -800,7 +801,8 @@ function makeDiziRow(table) {
     }
   });
   if (selectOptions.length) {
-    html += `<td><select><option value="">Seçiniz</option>${selectOptions
+    const manualAttr = table.dataset.selectManual ? ` data-manual-field="${table.dataset.selectManual}"` : "";
+    html += `<td><select${manualAttr}><option value="">Seçiniz</option>${selectOptions
       .map((o) => `<option>${o}</option>`).join("")}</select></td>`;
   }
   html += `<td><button type="button" class="dizi-remove">&times;</button></td>`;
@@ -855,7 +857,17 @@ function resetDiziTable(tbody) {
 
 /* ---------- Seçilmemiş açılır listeler: yazdırmada "Seçiniz" görünmesin ---------- */
 function syncBlankSelects() {
-  document.querySelectorAll("select").forEach((s) => s.toggleAttribute("data-blank", s.value === ""));
+  // Kurulca elle doldurulacak alanlar: anahtar işaretliyse kilitli ve çıktıda boş
+  document.querySelectorAll("[data-manual-field]").forEach((el) => {
+    const t = document.querySelector(el.dataset.manualField);
+    const on = !!(t && t.checked);
+    el.disabled = on;
+    el.toggleAttribute("data-manual-blank", on);
+  });
+  // Seçilmemiş liste / boş metin-tarih alanları: yazdırmada yer tutucu görünmesin
+  document.querySelectorAll("select, input:not([type=checkbox]):not([type=radio])").forEach((el) => {
+    el.toggleAttribute("data-blank", el.value === "" || el.hasAttribute("data-manual-blank"));
+  });
 }
 
 /* ---------- Elle doldurulacak alan (.manual-fill) ----------
@@ -867,7 +879,8 @@ function syncBlankSelects() {
    Kutu işaretliyse VEYA içindeki metin alanlarının hepsi boşsa, yazdırma /
    Word çıktısında metin yerine elle yazmaya uygun boş çizgili satırlar basılır. */
 function syncManualFill(wrap) {
-  const toggle = wrap.querySelector(".manual-toggle input");
+  const toggle = wrap.querySelector(".manual-toggle input") ||
+    (wrap.dataset.toggle ? document.querySelector(wrap.dataset.toggle) : null);
   const forced = !!(toggle && toggle.checked);
   const texts = Array.from(wrap.querySelectorAll("textarea"));
   const empty = texts.every((t) => !t.value.trim());
@@ -894,11 +907,12 @@ function initManualFills() {
     wrap.addEventListener("change", () => syncManualFill(wrap));
     wrap.addEventListener("click", () => setTimeout(() => syncManualFill(wrap), 0));
   });
-  document.addEventListener("change", (e) => {
-    if (e.target && e.target.tagName === "SELECT") e.target.toggleAttribute("data-blank", e.target.value === "");
+  document.addEventListener("change", () => syncManualFills());
+  document.addEventListener("input", (e) => {
+    if (e.target && e.target.tagName === "INPUT") e.target.toggleAttribute("data-blank", e.target.value === "");
   });
-  // Dinamik eklenen satırlardaki listeler için
-  document.addEventListener("click", () => setTimeout(syncBlankSelects, 0));
+  // Dinamik eklenen satırlar için
+  document.addEventListener("click", () => setTimeout(syncManualFills, 0));
   window.addEventListener("beforeprint", syncManualFills);
   syncManualFills();
 }
