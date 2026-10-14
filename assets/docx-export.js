@@ -606,6 +606,7 @@
     }
 
     if (typeof window.applyFieldFormatting === "function") window.applyFieldFormatting();
+    if (typeof window.syncManualFills === "function") window.syncManualFills();
 
     try {
       const footEl = pageEl.querySelector(".foot");
