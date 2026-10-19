@@ -38,7 +38,7 @@
   .opt-grid .opt-diger{ grid-column: span 2; }
   .opt-flex{ display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center; font-family: Arial, sans-serif; font-size:9.4pt; }
   .opt-flex label{ white-space:nowrap; }
-  .opt-flex .opt-diger{ flex:1; min-width:150px; }
+  .opt-flex .opt-diger{ flex:1; min-width:90px; }
   .opt-diger input[type=text]{ flex:1; min-width:60px; width:auto !important; border:none; border-bottom:1px dotted #888 !important; font-family:inherit; font-size:9.4pt; padding:1px 2px; background:transparent; outline:none; }
   table.meta.sub-meta{ margin-top:-7px; }
   table.meta.sub-meta td{ border-top:none; }
@@ -85,7 +85,8 @@
     table.imza .imza-box{ height:24px !important; }
     table.imza input{ margin-bottom:3px; }
     .manual-line{ height:19px !important; }
-    .page{ padding-bottom: 11mm !important; }
+    .page{ padding-bottom: 11mm !important; zoom: .92; }
+    .opt-flex{ flex-wrap:nowrap !important; }
     .opt-grid{ gap:1px 8px !important; }
     table.meta td.label{ font-size:8.6pt; width:24%; white-space:nowrap; }
     .time-row{ flex-wrap:nowrap; }
@@ -149,7 +150,7 @@
 
     <div class="section-title">Hedef Kitle</div>
     <div class="section-sub">Birden fazla seçilebilir.</div>
-    <div class="opt-box"><div class="opt-grid c6 choice-row inner" data-title="Katılımcı grubu"><span class="opt-title">Katılımcı grubu:</span><label><input type="checkbox"> Öğrenciler</label><label><input type="checkbox"> Öğretmenler</label><label><input type="checkbox"> Veliler</label><label><input type="checkbox"> Destek personeli</label></div><div class="opt-grid c6 choice-row inner" data-title="Sınıf düzeyi"><span class="opt-title">Sınıf düzeyi:</span><label><input type="checkbox"> 5. sınıf</label><label><input type="checkbox"> 6. sınıf</label><label><input type="checkbox"> 7. sınıf</label><label><input type="checkbox"> 8. sınıf</label><label><input type="checkbox"> Tüm okul</label></div></div>
+    <div class="opt-box"><div class="opt-grid c6 choice-row inner" data-title="Katılımcı grubu"><span class="opt-title">Katılımcı grubu:</span><label><input type="checkbox"> Öğrenciler</label><label><input type="checkbox"> Öğretmenler</label><label><input type="checkbox"> Veliler</label><label><input type="checkbox"> Personel</label></div><div class="opt-grid c6 choice-row inner" data-title="Sınıf düzeyi"><span class="opt-title">Sınıf düzeyi:</span><label><input type="checkbox"> 5. sınıf</label><label><input type="checkbox"> 6. sınıf</label><label><input type="checkbox"> 7. sınıf</label><label><input type="checkbox"> 8. sınıf</label><label><input type="checkbox"> Tüm okul</label></div></div>
     <table class="meta sub-meta">
       <tr><td class="label">Şube(ler)</td><td><input type="text" placeholder="ör. 5/A, 6/A, 6/HZ"></td></tr>
     </table>
