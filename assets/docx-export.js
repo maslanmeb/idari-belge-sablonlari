@@ -258,7 +258,10 @@
     const footRows = Array.from(table.querySelectorAll("tfoot tr"));
     if (!theadRow && !bodyRows.length) return null;
 
-    const headTds = theadRow ? Array.from(theadRow.querySelectorAll("th, td")) : [];
+    let headTds = theadRow ? Array.from(theadRow.querySelectorAll("th, td")) : [];
+    // Satır silme düğmesi için ayrılmış, başlığı boş son sütun Word çıktısına alınmaz
+    const dropLast = table.classList.contains("dizi-table") && headTds.length > 1 && !headTds[headTds.length - 1].textContent.trim();
+    if (dropLast) headTds = headTds.slice(0, -1);
     const colCount = headTds.length || (bodyRows[0] ? bodyRows[0].querySelectorAll("td").length : 0);
     if (!colCount) return null;
     const colW = Math.floor(USABLE_W / colCount);
@@ -272,7 +275,8 @@
       }));
     }
     bodyRows.forEach((tr) => {
-      const tds = Array.from(tr.querySelectorAll("td"));
+      let tds = Array.from(tr.querySelectorAll("td"));
+      if (dropLast) tds = tds.slice(0, colCount);
       trs.push(new docx.TableRow({
         children: tds.map((td, i) => valueCell(colWidths[i] || colW, collectText(td))),
       }));
@@ -365,10 +369,15 @@
   function convertChoiceRow(row) {
     const labels = Array.from(row.querySelectorAll("label"));
     const runs = [];
+    if (row.dataset && row.dataset.title) runs.push(run(`${row.dataset.title}:  `, { bold: true, size: 20 }));
     labels.forEach((lbl, i) => {
       const input = lbl.querySelector("input");
       const mark = input ? liveText(input) : "☐";
-      const text = lbl.textContent.replace(/\s+/g, " ").trim();
+      let text = lbl.textContent.replace(/\s+/g, " ").trim();
+      lbl.querySelectorAll('input[type="text"]').forEach((t) => {
+        const v = (t.value || "").trim();
+        if (v) text += " " + v;
+      });
       if (i > 0) runs.push(run("      "));
       runs.push(run(`${mark} ${text}`, { size: 20 }));
     });

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Eğitim / Bilgilendirme Faaliyeti Tutanağı</title>
+<link rel="stylesheet" href="../assets/style.css">
+<style>
+  .kurum-head{ text-align:center; font-size:10.5pt; font-weight:bold; line-height:1.35; margin-bottom:8px; outline:none; }
+  .kurum-head[contenteditable]:hover{ background: var(--accent-bg); border-radius:4px; }
+  .doc-title{ text-align:center; font-size:14pt; color:var(--navy); margin: 0 0 12px; }
+  .section-title{ font-weight:bold; font-size:11pt; color:var(--navy); margin: 12px 0 4px; font-family: Arial, sans-serif; }
+  .section-sub{ font-size:9.5px; color:#777; font-family:Arial,sans-serif; margin: 0 0 6px; font-style:italic; }
+  table.meta{ margin-bottom:6px; }
+  table.meta{ table-layout:fixed; }
+  table.meta td.label{ width:24%; }
+  table.meta td{ padding:4px 8px; }
+  .time-row{ display:flex; gap:8px; align-items:center; flex-wrap:wrap; font-family:Arial,sans-serif; font-size:9.5pt; color:#555; }
+  .time-row input{ width:auto !important; }
+  .time-row input[type=date]{ width:118px !important; }
+  .time-row input[type=time]{ width:76px !important; }
+  .time-row input.sure{ flex:1; min-width:90px; }
+  .time-row input.hand{ border-bottom:1px dotted #999 !important; }
+
+  .opt-grid{ display:grid; gap:4px 10px; font-family: Arial, sans-serif; font-size:9.4pt;
+             border:1px solid var(--line); padding:6px 8px; margin: 0 0 6px; }
+  .opt-grid.c4{ grid-template-columns: repeat(4, 1fr); }
+  .opt-grid.c5{ grid-template-columns: repeat(5, 1fr); }
+  .opt-grid.c6{ grid-template-columns: auto repeat(5, 1fr); }
+  .opt-grid.c4 .opt-title{ grid-column: 1 / -1; }
+  .opt-title{ font-weight:bold; color:#333; white-space:nowrap; align-self:center; }
+  .opt-grid label, .opt-flex label{ display:flex; align-items:center; gap:5px; cursor:pointer; line-height:1.25; }
+  .opt-grid input[type=checkbox], .opt-flex input[type=checkbox]{ width:13px; height:13px; margin:0; flex:0 0 auto; accent-color: var(--navy); }
+  .opt-grid .opt-diger{ grid-column: span 2; }
+  .opt-flex{ display:flex; flex-wrap:wrap; gap:4px 14px; align-items:center; font-family: Arial, sans-serif; font-size:9.4pt; }
+  .opt-flex label{ white-space:nowrap; }
+  .opt-flex .opt-diger{ flex:1; min-width:150px; }
+  .opt-diger input[type=text]{ flex:1; min-width:60px; width:auto !important; border:none; border-bottom:1px dotted #888 !important; font-family:inherit; font-size:9.4pt; padding:1px 2px; background:transparent; outline:none; }
+  table.meta.sub-meta{ margin-top:-7px; }
+  table.meta.sub-meta td{ border-top:none; }
+  @media (max-width: 700px){ .opt-grid.c4, .opt-grid.c6{ grid-template-columns: repeat(2, 1fr); } }
+
+  table.say-table{ width:100%; border-collapse:collapse; margin: 4px 0 6px; table-layout:fixed; }
+  table.say-table th{ background:var(--navy); color:#fff; font-family:Arial,sans-serif; font-size:9.5pt; padding:6px; border:1px solid var(--navy); text-align:center; }
+  table.say-table th.toplam{ background:#14284a; }
+  table.say-table td{ border:1px solid var(--line); padding:4px 6px; }
+  table.say-table input{ width:100%; border:none; background:transparent; font-family:inherit; font-size:11pt; text-align:center; outline:none; }
+  table.say-table td.toplam{ background: var(--accent-bg); }
+  table.say-table td.toplam input{ font-weight:bold; color:var(--navy); }
+  table.say-table input::-webkit-outer-spin-button, table.say-table input::-webkit-inner-spin-button{ -webkit-appearance:none; margin:0; }
+  table.say-table input[type=number]{ -moz-appearance:textfield; }
+
+  .section-sub a{ color: var(--navy); font-weight:bold; }
+  .closing-line{ font-size:10pt; line-height:1.55; text-align:justify; margin: 10px 0 4px; }
+  table.imza{ margin-top:12px; }
+  table.imza .imza-label{ margin-bottom:4px; }
+  table.imza input{ width:90%; text-align:center; border:none; border-bottom:1px solid #999; background:transparent; font-family:inherit; font-size:9.5pt; margin-bottom:6px; padding:2px; }
+  table.imza .imza-box{ height:36px; }
+  @media print{
+    .opt-grid, .opt-flex{ font-size:8.7pt; gap:2px 8px; }
+    .opt-grid{ padding:4px 7px; margin-bottom:4px; }
+    table.meta td{ padding:3px 7px; font-size:10pt; }
+    table.meta{ margin-bottom:4px; }
+    table.meta.sub-meta{ margin-top:-5px; }
+    .section-title{ margin: 7px 0 3px; font-size:10.5pt; }
+    .section-sub{ display:none !important; }
+    .doc-title{ margin-bottom:8px; }
+    .kurum-head{ margin-bottom:4px; }
+    .dizi-table td, .dizi-table th{ padding:3px 6px !important; }
+    table.imza{ margin-top:6px; }
+    table.imza .imza-box{ height:30px; }
+    .time-row{ font-size:8.7pt; }
+    table.meta input, .dizi-table input, table.say-table input{ font-size:9.6pt !important; }
+    .dizi-table td{ padding:1px 6px !important; }
+    table.say-table td{ padding:2px 6px; }
+    table.say-table th{ padding:4px; font-size:8.8pt; }
+    .section-title{ margin: 5px 0 2px !important; font-size:10pt !important; }
+    .closing-line{ margin: 6px 0 2px; font-size:9.4pt; line-height:1.4; }
+    table.imza .imza-box{ height:24px !important; }
+    table.imza input{ margin-bottom:3px; }
+    .manual-line{ height:19px !important; }
+    .page{ padding-bottom: 11mm !important; }
+    .opt-grid{ gap:1px 8px !important; }
+    table.meta td.label{ font-size:9pt; width:22%; white-space:nowrap; }
+    .time-row{ flex-wrap:nowrap; }
+    .kurum-head{ font-size:9.8pt; line-height:1.25; }
+    h1.doc-title{ font-size:13pt; }
+  }
+</style>
+</head>
+<body>
+
+  <div class="toolbar">
+    <a class="back" href="../index.html">&larr; Ana Sayfa</a>
+    <span class="hint">Alanları doldurun, ardından bir indirme yöntemi seçin.</span>
+    <div class="btns">
+      <button class="secondary" type="button" onclick="window.open('pdf/egitim-faaliyeti-tutanagi-bos.pdf','_blank')">📑 Boş PDF</button>
+      <button class="secondary" type="button" onclick="clearForm()">Formu Temizle</button>
+      <button class="secondary" type="button" onclick="printForm()">🖨️ Yazdır / PDF Al</button>
+      <button class="secondary" type="button" id="copyWordBtn" onclick="copyForWord()">📋 Word'e Kopyala</button>
+      <button type="button" id="wordDownloadBtn" onclick="downloadWord()">📄 Word İndir</button>
+    </div>
+  </div>
+
+  <div class="page">
+    <div class="kurum-head" contenteditable="true" spellcheck="false">T.C.<br>ÇANAKKALE VALİLİĞİ<br>KUMKALE ORTAOKULU MÜDÜRLÜĞÜ</div>
+    <h1 class="doc-title">EĞİTİM / BİLGİLENDİRME FAALİYETİ TUTANAĞI</h1>
+
+    <table class="meta">
+      <tr><td class="label">Eğitimin Konusu / Adı</td><td><input type="text" placeholder="ör. Deprem farkındalığı ve tahliye tatbikatı"></td></tr>
+      <tr><td class="label">Tarih / Saat / Süre</td><td><div class="time-row">
+        <input type="date" class="hand"><span>Başlangıç</span><input type="time" class="hand"><span>Bitiş</span><input type="time" class="hand"><span>Süre</span><input type="text" class="hand sure" placeholder="ör. 2 ders saati">
+      </div></td></tr>
+      <tr><td class="label">Yapıldığı Yer</td><td><div class="opt-flex"><label><input type="checkbox"> Sınıf</label><label><input type="checkbox"> Çok amaçlı salon</label><label><input type="checkbox"> Okul bahçesi</label><label><input type="checkbox"> Çevrim içi</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="yer"></label></div></td></tr>
+    </table>
+
+    <div class="section-title">Eğitimi Düzenleyen / Veren Kurum</div>
+    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Okulumuz (okul içi)</label><label><input type="checkbox"> İl Millî Eğitim Müd.</label><label><input type="checkbox"> RAM</label><label><input type="checkbox"> Sağlık kuruluşu</label><label><input type="checkbox"> Emniyet / Jandarma</label><label><input type="checkbox"> AFAD / İtfaiye</label><label><input type="checkbox"> Belediye / Kaymakamlık</label><label><input type="checkbox"> Kızılay / Yeşilay</label><label><input type="checkbox"> Üniversite</label><label><input type="checkbox"> Dernek / Vakıf / STK</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="kurum türü"></label></div>
+    <table class="meta sub-meta">
+      <tr><td class="label">Kurumun Tam Adı</td><td><input type="text" placeholder="ör. Çanakkale İl Afet ve Acil Durum Müdürlüğü"></td></tr>
+    </table>
+
+    <div class="section-title">Görevliler</div>
+    <div class="section-sub">Görev adını listeden seçebilir veya kendiniz yazabilirsiniz; satır ekleyip çıkarabilirsiniz.</div>
+    <datalist id="gorevliListe"><option value="Eğitimi Veren"><option value="Okul Koordinatörü"><option value="Eşlik Eden Öğretmen"><option value="Gözlemci"></datalist>
+    <table class="dizi-table" data-cols='[{"ph":"Görevi","list":["Eğitimi Veren","Okul Koordinatörü","Eşlik Eden Öğretmen","Gözlemci"]},"Adı Soyadı","Unvanı / Kurumu"]'>
+      <thead>
+        <tr>
+          <th style="width:6%">Sıra</th>
+          <th style="width:26%">Görevi</th>
+          <th style="width:32%">Adı Soyadı</th>
+          <th style="width:30%">Unvanı / Kurumu</th>
+          <th style="width:6%"></th>
+        </tr>
+      </thead>
+      <tbody id="gorevliBody">
+        <tr class="dizi-row"><td class="dizi-num"></td><td><input type="text" value="Eğitimi Veren" placeholder="Görevi" list="gorevliListe" autocomplete="off"></td><td><input type="text" placeholder="Adı Soyadı" autocomplete="off"></td><td><input type="text" placeholder="Unvanı / Kurumu" autocomplete="off"></td><td><button type="button" class="dizi-remove">&times;</button></td></tr>
+        <tr class="dizi-row"><td class="dizi-num"></td><td><input type="text" value="Okul Koordinatörü" placeholder="Görevi" list="gorevliListe" autocomplete="off"></td><td><input type="text" placeholder="Adı Soyadı" autocomplete="off"></td><td><input type="text" placeholder="Unvanı / Kurumu" autocomplete="off"></td><td><button type="button" class="dizi-remove">&times;</button></td></tr>
+        <tr class="dizi-row"><td class="dizi-num"></td><td><input type="text" value="Eşlik Eden Öğretmen" placeholder="Görevi" list="gorevliListe" autocomplete="off"></td><td><input type="text" placeholder="Adı Soyadı" autocomplete="off"></td><td><input type="text" placeholder="Unvanı / Kurumu" autocomplete="off"></td><td><button type="button" class="dizi-remove">&times;</button></td></tr>
+      </tbody>
+    </table>
+    <button type="button" class="dizi-add-row" data-target="gorevliBody">+ Satır Ekle</button>
+
+    <div class="section-title">Hedef Kitle</div>
+    <div class="section-sub">Birden fazla seçilebilir.</div>
+    <div class="opt-grid c6 choice-row" data-title="Katılımcı grubu"><span class="opt-title">Katılımcı grubu:</span><label><input type="checkbox"> Öğrenciler</label><label><input type="checkbox"> Öğretmenler</label><label><input type="checkbox"> Veliler</label><label><input type="checkbox"> Destek personeli</label></div>
+    <div class="opt-grid c6 choice-row" data-title="Sınıf düzeyi"><span class="opt-title">Sınıf düzeyi:</span><label><input type="checkbox"> 5. sınıf</label><label><input type="checkbox"> 6. sınıf</label><label><input type="checkbox"> 7. sınıf</label><label><input type="checkbox"> 8. sınıf</label><label><input type="checkbox"> Tüm okul</label></div>
+    <table class="meta sub-meta">
+      <tr><td class="label">Şube(ler)</td><td><input type="text" placeholder="ör. 5/A, 6/A, 6/HZ"></td></tr>
+    </table>
+
+    <div class="section-title">Eğitimin Türü</div>
+    <div class="opt-grid c5 choice-row"><label><input type="checkbox"> Seminer / Konferans</label><label><input type="checkbox"> Sınıf içi sunum</label><label><input type="checkbox"> Uygulamalı eğitim</label><label><input type="checkbox"> Tatbikat</label><label><input type="checkbox"> Atölye çalışması</label><label><input type="checkbox"> Söyleşi</label><label><input type="checkbox"> Video gösterimi</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="tür"></label></div>
+
+    <div class="section-title">Eğitimin Alanı</div>
+    <div class="section-sub">Birden fazla seçilebilir.</div>
+    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Afet ve acil durum</label><label><input type="checkbox"> İlk yardım</label><label><input type="checkbox"> Sağlık / hijyen</label><label><input type="checkbox"> Ağız ve diş sağlığı</label><label><input type="checkbox"> Sağlıklı beslenme</label><label><input type="checkbox"> Bağımlılıkla mücadele</label><label><input type="checkbox"> Trafik güvenliği</label><label><input type="checkbox"> Kişisel güvenlik</label><label><input type="checkbox"> Akran zorbalığı</label><label><input type="checkbox"> Güvenli internet</label><label><input type="checkbox"> Çevre / sıfır atık</label><label><input type="checkbox"> Eğitsel / mesleki rehberlik</label><label><input type="checkbox"> İş sağlığı ve güvenliği</label><label><input type="checkbox"> Mesleki gelişim (öğretmen)</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="alan"></label></div>
+
+    <div class="section-title">Katılımcı Sayısı</div>
+    <table class="say-table">
+      <thead><tr><th>Öğrenci</th><th>Öğretmen / Personel</th><th>Veli / Diğer</th><th class="toplam">GENEL TOPLAM</th></tr></thead>
+      <tbody><tr>
+        <td><input type="number" min="0" class="say-in"></td>
+        <td><input type="number" min="0" class="say-in"></td>
+        <td><input type="number" min="0" class="say-in"></td>
+        <td class="toplam"><input type="text" class="say-toplam" readonly tabindex="-1" placeholder="otomatik"></td>
+      </tr></tbody>
+    </table>
+
+    <div class="section-title">Eğitimin İçeriği / Özeti</div>
+    <div class="section-sub">Eğitimde ele alınan başlıkları ve yapılan uygulamaları yazınız. Boş bırakılırsa çıktıda elle yazılmak üzere boş satırlar basılır.</div>
+    <div class="manual-fill" data-lines="3">
+      <div class="paragraph-list" id="pList1">
+        <div class="p-row"><textarea rows="3" placeholder="Eğitimin içeriğini yazınız... (boş bırakılırsa elle doldurulmak üzere boş satır basılır)"></textarea><button type="button" class="p-remove">&times;</button></div>
+      </div>
+      <button type="button" class="paragraph-list-add" data-target="pList1">+ Paragraf ekle</button>
+      <div class="manual-lines"></div>
+    </div>
+
+    <div class="section-title">Ekler</div>
+    <div class="section-sub">Katılımcıların imzası için <a href="pdf/egitim-faaliyeti-tutanagi-bos.pdf" target="_blank" rel="noopener">boş PDF'in 2. sayfasındaki imza listesini</a> yazdırabilirsiniz.</div>
+    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Katılımcı imza listesi</label><label><input type="checkbox"> Fotoğraflar</label><label><input type="checkbox"> Sunum / doküman</label><label><input type="checkbox"> Resmî yazı / görevlendirme</label></div>
+
+    <div class="closing-line" contenteditable="true">Yukarıda bilgileri yer alan eğitim / bilgilendirme faaliyeti belirtilen tarihte gerçekleştirilmiş olup işbu tutanak birlikte düzenlenerek imza altına alınmıştır.</div>
+
+    <table class="imza">
+      <tr>
+        <td>
+          <div class="imza-label">Eğitimi Veren</div>
+          <input type="text" placeholder="Adı Soyadı">
+          <div class="imza-box"></div>
+        </td>
+        <td>
+          <div class="imza-label">Okul Koordinatörü</div>
+          <input type="text" placeholder="Adı Soyadı">
+          <div class="imza-box"></div>
+        </td>
+        <td>
+          <div class="imza-label">Okul Müdürü</div>
+          <input type="text" placeholder="Adı Soyadı">
+          <div class="imza-box"></div>
+        </td>
+      </tr>
+    </table>
+
+    <div class="foot">
+      <span data-persist="okulAdi">…</span>
+      <span>İdari Belgeler Uygulama Kiti</span>
+    </div>
+  </div>
+
+<script src="../assets/app.js"></script>
+<script src="../assets/docx-export.js"></script>
+<script>
+  // Katılımcı sayısı: genel toplamı otomatik hesapla
+  (function () {
+    function hesapla() {
+      var ins = document.querySelectorAll(".say-in"), t = 0, dolu = false;
+      ins.forEach(function (i) { var v = parseInt(i.value, 10); if (!isNaN(v)) { t += v; dolu = true; } });
+      var out = document.querySelector(".say-toplam");
+      if (out) { out.value = dolu ? String(t) : ""; out.toggleAttribute("data-blank", !dolu); }
+    }
+    document.addEventListener("input", function (e) { if (e.target.classList && e.target.classList.contains("say-in")) hesapla(); });
+    document.addEventListener("click", function () { setTimeout(hesapla, 0); });
+    window.addEventListener("beforeprint", hesapla);
+    document.addEventListener("DOMContentLoaded", hesapla);
+  })();
+</script>
+</body>
+</html>

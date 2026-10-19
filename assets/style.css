@@ -539,6 +539,7 @@ textarea[data-manual-forced] + .manual-lines-inline{ display:block; }
 
 @media print{
   .paragraph-list-add, .p-remove, .ekler-add, .ek-remove, .gundem-add, .gundem-remove, .uye-add, .uye-remove, .dizi-add-row, .dizi-remove, .gundem-suggest-dropdown{ display:none !important; }
+  table.dizi-table tr > :last-child{ display:none !important; }
   .paragraph-list textarea{ border:none !important; text-indent: 1.25cm; }
   .ekler-empty .ekler-title{ display:none !important; }
   .nusha-label{ background:var(--navy) !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
