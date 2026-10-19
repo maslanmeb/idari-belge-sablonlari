@@ -13,6 +13,13 @@
   .sig-wrap table.meta td{ padding:3px 6px; font-size:9.6pt; }
   .sig-wrap table.meta td.label{ font-size:9pt; width:44%; }
   .sig-wrap .imza-row-cell{ height: 22px; }
+  @media print{
+    table.meta td{ padding:4px 8px; }
+    .section-title{ margin: 12px 0 4px; }
+    .closing-line{ margin: 8px 0 2px; line-height:1.45; }
+    .sig-wrap{ margin-top:12px; }
+    .manual-line{ height:24px; }
+  }
 </style>
 </head>
 <body>
@@ -46,7 +53,7 @@
         </select>
       </td></tr>
       <tr><td class="label">Yayın Dönemi / Süresi</td><td><input type="text" placeholder="ör. Ekim 2026 ayı — 2026-2027 Eğitim Öğretim Yılı 1. Dönem" style="width:75%;"></td></tr>
-      <tr><td class="label">Hazırlayan / Derleyen Öğretmen</td><td><input type="text" placeholder="Adı Soyadı — Branşı"></td></tr>
+      <tr><td class="label">Hazırlayan Öğretmen</td><td><input type="text" placeholder="Adı Soyadı — Branşı"></td></tr>
       <tr><td class="label">Teklif Tarihi</td><td><input type="date" style="width:45%; display:inline-block;"></td></tr>
       <tr><td class="label">İnceleme Tarihi</td><td><input type="date" data-manual-field="#kurulManuel" style="width:45%; display:inline-block;"></td></tr>
     </table>

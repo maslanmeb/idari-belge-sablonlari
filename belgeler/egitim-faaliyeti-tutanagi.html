@@ -26,8 +26,12 @@
              border:1px solid var(--line); padding:6px 8px; margin: 0 0 6px; }
   .opt-grid.c4{ grid-template-columns: repeat(4, 1fr); }
   .opt-grid.c5{ grid-template-columns: repeat(5, 1fr); }
-  .opt-grid.c6{ grid-template-columns: auto repeat(5, 1fr); }
   .opt-grid.c4 .opt-title{ grid-column: 1 / -1; }
+  .opt-box{ border:1px solid var(--line); padding:4px 8px; margin:0 0 6px; }
+  .opt-box .opt-grid.inner{ border:none; padding:2px 0; margin:0; }
+  .opt-grid.c6{ grid-template-columns: 110px repeat(5, 1fr); }
+  .opt-grid.tur-grid .opt-diger{ grid-column: span 1; }
+  .opt-grid label, .opt-flex label{ min-width:0; }
   .opt-title{ font-weight:bold; color:#333; white-space:nowrap; align-self:center; }
   .opt-grid label, .opt-flex label{ display:flex; align-items:center; gap:5px; cursor:pointer; line-height:1.25; }
   .opt-grid input[type=checkbox], .opt-flex input[type=checkbox]{ width:13px; height:13px; margin:0; flex:0 0 auto; accent-color: var(--navy); }
@@ -57,7 +61,9 @@
   table.imza input{ width:90%; text-align:center; border:none; border-bottom:1px solid #999; background:transparent; font-family:inherit; font-size:9.5pt; margin-bottom:6px; padding:2px; }
   table.imza .imza-box{ height:36px; }
   @media print{
-    .opt-grid, .opt-flex{ font-size:8.7pt; gap:2px 8px; }
+    .opt-grid, .opt-flex{ font-size:8.4pt; gap:2px 8px; }
+    .opt-grid input[type=checkbox], .opt-flex input[type=checkbox]{ width:11px; height:11px; }
+    .opt-box{ padding:2px 7px; margin-bottom:4px; }
     .opt-grid{ padding:4px 7px; margin-bottom:4px; }
     table.meta td{ padding:3px 7px; font-size:10pt; }
     table.meta{ margin-bottom:4px; }
@@ -81,7 +87,7 @@
     .manual-line{ height:19px !important; }
     .page{ padding-bottom: 11mm !important; }
     .opt-grid{ gap:1px 8px !important; }
-    table.meta td.label{ font-size:9pt; width:22%; white-space:nowrap; }
+    table.meta td.label{ font-size:8.6pt; width:24%; white-space:nowrap; }
     .time-row{ flex-wrap:nowrap; }
     .kurum-head{ font-size:9.8pt; line-height:1.25; }
     h1.doc-title{ font-size:13pt; }
@@ -143,18 +149,17 @@
 
     <div class="section-title">Hedef Kitle</div>
     <div class="section-sub">Birden fazla seçilebilir.</div>
-    <div class="opt-grid c6 choice-row" data-title="Katılımcı grubu"><span class="opt-title">Katılımcı grubu:</span><label><input type="checkbox"> Öğrenciler</label><label><input type="checkbox"> Öğretmenler</label><label><input type="checkbox"> Veliler</label><label><input type="checkbox"> Destek personeli</label></div>
-    <div class="opt-grid c6 choice-row" data-title="Sınıf düzeyi"><span class="opt-title">Sınıf düzeyi:</span><label><input type="checkbox"> 5. sınıf</label><label><input type="checkbox"> 6. sınıf</label><label><input type="checkbox"> 7. sınıf</label><label><input type="checkbox"> 8. sınıf</label><label><input type="checkbox"> Tüm okul</label></div>
+    <div class="opt-box"><div class="opt-grid c6 choice-row inner" data-title="Katılımcı grubu"><span class="opt-title">Katılımcı grubu:</span><label><input type="checkbox"> Öğrenciler</label><label><input type="checkbox"> Öğretmenler</label><label><input type="checkbox"> Veliler</label><label><input type="checkbox"> Destek personeli</label></div><div class="opt-grid c6 choice-row inner" data-title="Sınıf düzeyi"><span class="opt-title">Sınıf düzeyi:</span><label><input type="checkbox"> 5. sınıf</label><label><input type="checkbox"> 6. sınıf</label><label><input type="checkbox"> 7. sınıf</label><label><input type="checkbox"> 8. sınıf</label><label><input type="checkbox"> Tüm okul</label></div></div>
     <table class="meta sub-meta">
       <tr><td class="label">Şube(ler)</td><td><input type="text" placeholder="ör. 5/A, 6/A, 6/HZ"></td></tr>
     </table>
 
     <div class="section-title">Eğitimin Türü</div>
-    <div class="opt-grid c5 choice-row"><label><input type="checkbox"> Seminer / Konferans</label><label><input type="checkbox"> Sınıf içi sunum</label><label><input type="checkbox"> Uygulamalı eğitim</label><label><input type="checkbox"> Tatbikat</label><label><input type="checkbox"> Atölye çalışması</label><label><input type="checkbox"> Söyleşi</label><label><input type="checkbox"> Video gösterimi</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="tür"></label></div>
+    <div class="opt-grid c4 choice-row tur-grid"><label><input type="checkbox"> Seminer / konferans</label><label><input type="checkbox"> Sınıf içi sunum</label><label><input type="checkbox"> Uygulamalı eğitim</label><label><input type="checkbox"> Tatbikat</label><label><input type="checkbox"> Atölye çalışması</label><label><input type="checkbox"> Söyleşi</label><label><input type="checkbox"> Video gösterimi</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="tür"></label></div>
 
     <div class="section-title">Eğitimin Alanı</div>
     <div class="section-sub">Birden fazla seçilebilir.</div>
-    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Afet ve acil durum</label><label><input type="checkbox"> İlk yardım</label><label><input type="checkbox"> Sağlık / hijyen</label><label><input type="checkbox"> Ağız ve diş sağlığı</label><label><input type="checkbox"> Sağlıklı beslenme</label><label><input type="checkbox"> Bağımlılıkla mücadele</label><label><input type="checkbox"> Trafik güvenliği</label><label><input type="checkbox"> Kişisel güvenlik</label><label><input type="checkbox"> Akran zorbalığı</label><label><input type="checkbox"> Güvenli internet</label><label><input type="checkbox"> Çevre / sıfır atık</label><label><input type="checkbox"> Eğitsel / mesleki rehberlik</label><label><input type="checkbox"> İş sağlığı ve güvenliği</label><label><input type="checkbox"> Mesleki gelişim (öğretmen)</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="alan"></label></div>
+    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Afet ve acil durum</label><label><input type="checkbox"> İlk yardım</label><label><input type="checkbox"> Sağlık / hijyen</label><label><input type="checkbox"> Ağız ve diş sağlığı</label><label><input type="checkbox"> Sağlıklı beslenme</label><label><input type="checkbox"> Bağımlılıkla mücadele</label><label><input type="checkbox"> Trafik güvenliği</label><label><input type="checkbox"> Kişisel güvenlik</label><label><input type="checkbox"> Akran zorbalığı</label><label><input type="checkbox"> Güvenli internet</label><label><input type="checkbox"> Çevre / sıfır atık</label><label><input type="checkbox"> Rehberlik</label><label><input type="checkbox"> İş güvenliği (İSG)</label><label><input type="checkbox"> Mesleki gelişim</label><label class="opt-diger"><input type="checkbox"> Diğer: <input type="text" placeholder="alan"></label></div>
 
     <div class="section-title">Katılımcı Sayısı</div>
     <table class="say-table">
@@ -179,7 +184,7 @@
 
     <div class="section-title">Ekler</div>
     <div class="section-sub">Katılımcıların imzası için <a href="pdf/egitim-faaliyeti-tutanagi-bos.pdf" target="_blank" rel="noopener">boş PDF'in 2. sayfasındaki imza listesini</a> yazdırabilirsiniz.</div>
-    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> Katılımcı imza listesi</label><label><input type="checkbox"> Fotoğraflar</label><label><input type="checkbox"> Sunum / doküman</label><label><input type="checkbox"> Resmî yazı / görevlendirme</label></div>
+    <div class="opt-grid c4 choice-row"><label><input type="checkbox"> İmza listesi</label><label><input type="checkbox"> Fotoğraflar</label><label><input type="checkbox"> Sunum / doküman</label><label><input type="checkbox"> Resmî yazı</label></div>
 
     <div class="closing-line" contenteditable="true">Yukarıda bilgileri yer alan eğitim / bilgilendirme faaliyeti belirtilen tarihte gerçekleştirilmiş olup işbu tutanak birlikte düzenlenerek imza altına alınmıştır.</div>
 

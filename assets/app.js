@@ -757,6 +757,7 @@ function makeUyeRow() {
 }
 function initUyeTables() {
   document.querySelectorAll(".uye-table tbody").forEach((tbody) => {
+    tbody._initialHTML = tbody.innerHTML; // "Formu Temizle" varsayılan üyelere geri döner
     tbody.querySelectorAll(".uye-row").forEach(bindUyeRow);
     if (!tbody.querySelector(".uye-row")) tbody.appendChild(makeUyeRow()); // makeUyeRow zaten bağlar
     renumberUyeTable(tbody);
@@ -773,8 +774,9 @@ function initUyeTables() {
   });
 }
 function resetUyeTable(tbody) {
-  tbody.innerHTML = "";
-  tbody.appendChild(makeUyeRow());
+  tbody.innerHTML = tbody._initialHTML || "";
+  tbody.querySelectorAll(".uye-row").forEach(bindUyeRow);
+  if (!tbody.querySelector(".uye-row")) tbody.appendChild(makeUyeRow());
   renumberUyeTable(tbody);
 }
 
@@ -844,6 +846,7 @@ function bindDiziRow(row) {
 }
 function initDiziTables() {
   document.querySelectorAll(".dizi-table tbody").forEach((tbody) => {
+    tbody._initialHTML = tbody.innerHTML; // "Formu Temizle" hazır satırlara geri döner
     tbody.querySelectorAll(".dizi-row").forEach(bindDiziRow);
     if (!tbody.querySelector(".dizi-row")) tbody.appendChild(makeDiziRow(tbody.closest("table"))); // makeDiziRow zaten bağlar
     renumberDiziTable(tbody);
@@ -863,8 +866,9 @@ function initDiziTables() {
 }
 function resetDiziTable(tbody) {
   const table = tbody.closest("table");
-  tbody.innerHTML = "";
-  tbody.appendChild(makeDiziRow(table));
+  tbody.innerHTML = tbody._initialHTML || "";
+  tbody.querySelectorAll(".dizi-row").forEach(bindDiziRow);
+  if (!tbody.querySelector(".dizi-row")) tbody.appendChild(makeDiziRow(table));
   renumberDiziTable(tbody);
 }
 
